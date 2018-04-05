@@ -5,25 +5,25 @@ import java.util.Arrays;
  */
 public class ArrayStorage {
 
-    final private int Max_Size = 10000;
-    private int current = -1;
+    final private int MAX_SIZE = 10000;
+    private int lastResume = -1;
 
-    private Resume[] storage = new Resume[Max_Size];
+    private Resume[] storage = new Resume[MAX_SIZE];
 
     void clear() {
-        Arrays.fill(storage, 0, current, null);
-        current = -1;
+        Arrays.fill(storage, 0, lastResume, null);
+        lastResume = -1;
     }
 
     void save(Resume r) {
-        if (current < Max_Size) {
-            current++;
-            storage[current] = r;
+        if (lastResume < MAX_SIZE) {
+            lastResume++;
+            storage[lastResume] = r;
         }
     }
 
     Resume get(String uuid) {
-        for (int i = 0; i <= current; i++) {
+        for (int i = 0; i <= lastResume; i++) {
             if (storage[i].uuid.equals(uuid)) {
                 return storage[i];
             }
@@ -32,13 +32,13 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        for (int i = 0; i <= current; i++) {
+        for (int i = 0; i <= lastResume; i++) {
             if (storage[i].uuid.equals(uuid)) {
-                if (i != current) {
-                    storage[i] = storage[current];
+                if (i != lastResume) {
+                    storage[i] = storage[lastResume];
                 }
-                storage[current] = null;
-                current--;
+                storage[lastResume] = null;
+                lastResume--;
                 return;
             }
         }
@@ -52,7 +52,7 @@ public class ArrayStorage {
     }
 
     int size() {
-        return current + 1;
+        return lastResume + 1;
     }
 
 }
