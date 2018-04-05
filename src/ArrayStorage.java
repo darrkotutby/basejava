@@ -13,12 +13,18 @@ public class ArrayStorage {
         storage = new Resume[maxSize];
     }
 
+    /*
+     * Добавляем только если не заполнено все хранилище
+     * В задании не указано, что делать при переполнении
+     */
     void save(Resume r) {
         if (current<maxSize) {
             current++;
             storage[current] = r;
         }
     }
+
+
 
     Resume get(String uuid) {
        for (int i=0; i<=current; i++) {
@@ -29,6 +35,12 @@ public class ArrayStorage {
        return null;
     }
 
+    /*
+     *   В задании не указано, что нельзя менять порядок.
+     *   Поэтому наиболее эффективным мне показалось, заменять удаляемыое резуме последним, если оно не последнее.
+     *   И удалять последнее.
+     *   Так у нас никогда не будет пустых элементов в массиве.
+     */
     void delete(String uuid) {
         for (int i=0; i<=current; i++) {
             if (storage[i].uuid.equals(uuid)) {
@@ -46,6 +58,7 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
+        // У нас все элементы заполнены от 0 до текущего элемента (номер запоминается в current)
         Resume[] storage1 = new Resume[current+1];
         for (int i=0; i<=current; i++) {
             storage1[i] = storage[i];
@@ -53,6 +66,10 @@ public class ArrayStorage {
         return storage1;
     }
 
+
+    /*
+     * У нас все элементы заполнены от 0 до текущего элемента (номер запоминается в current)
+     */
     int size() {
         return current+1;
     }
