@@ -11,41 +11,45 @@ public class ArrayStorage {
     private Resume[] storage = new Resume[MAX_SIZE];
 
     public void clear() {
-        Arrays.fill(storage, 0, size - 1, null);
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
-    public void save(Resume r) {
+    public void save(Resume resume) {
         if (size >= MAX_SIZE) {
             System.out.println("Storage is full");
             return;
         }
 
-        int i = findResumeElementNumber(r.uuid);
-        if (i != -1) {
+        int resumeIndex = findResumeElementNumber(resume.uuid);
+        if (resumeIndex != -1) {
             System.out.println("Resume already exists");
             return;
         }
-        storage[size] = r;
+        storage[size] = resume;
         size++;
     }
 
     public Resume get(String uuid) {
-        int i = findResumeElementNumber(uuid);
-        if (i != -1) return storage[i];
+        int resumeIndex = findResumeElementNumber(uuid);
+        if (resumeIndex != -1) {
+            return storage[resumeIndex];
+        }
         System.out.println("Resume doesn't exists");
         return null;
     }
 
     public void delete(String uuid) {
-        int i = findResumeElementNumber(uuid);
-        if (i != -1) {
-            if (i < size - 1) {
-                storage[i] = storage[size - 1];
+        int resumeIndex = findResumeElementNumber(uuid);
+        if (resumeIndex != -1) {
+            if (resumeIndex < size - 1) {
+                storage[resumeIndex] = storage[size - 1];
             }
             storage[size - 1] = null;
             size--;
-        } else System.out.println("Resume doesn't exists");
+        } else {
+            System.out.println("Resume doesn't exists");
+        }
 
 
     }
@@ -62,9 +66,9 @@ public class ArrayStorage {
     }
 
     public void update(String oldUUID, String newUUID) {
-        int i = findResumeElementNumber(oldUUID);
-        if (i != -1) {
-            storage[i].uuid = newUUID;
+        int resumeIndex = findResumeElementNumber(oldUUID);
+        if (resumeIndex != -1) {
+            storage[resumeIndex].uuid = newUUID;
         } else System.out.println("Resume doesn't exists");
     }
 
