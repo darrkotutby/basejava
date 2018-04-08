@@ -80,20 +80,20 @@
 
 ![finish](https://user-images.githubusercontent.com/13649199/27245924-cab3618e-52f6-11e7-9655-4293149b4126.png)
 
-- Реализуйте класс `ArrayStorage` (вставте код в пустые методы класса): работа с `Resume` на основе массива (методы `clear, get, save, delete, getAll, size`)
+- Реализуйте класс `by.tut.darrko.webapp.storage.ArrayStorage` (вставте код в пустые методы класса): работа с `by.tut.darrko.webapp.model.Resume` на основе массива (методы `clear, get, save, delete, getAll, size`)
    - Не используйте в решении коллекции, реализацию на их основе мы добавим позднее
-   - Не меняйте синтаксис методов `ArrayStorage` и не меняйте класс `Resume`. Нужет только код внутри готовых методов `ArrayStorage`
+   - Не меняйте синтаксис методов `by.tut.darrko.webapp.storage.ArrayStorage` и не меняйте класс `by.tut.darrko.webapp.model.Resume`. Нужет только код внутри готовых методов `by.tut.darrko.webapp.storage.ArrayStorage`
    - [Массивы](http://study-java.ru/uroki-java/massivy-v-java/)
    - [Java массивы](http://info.javarush.ru/javarush_articles/2015/12/10/Java-%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B.html)
-- Протестируйте вашу реализацию, запустив `MainTestArrayStorage.main()`: в IDEA слева на полях зеленая стрелка.
-- Протестируйте вашу реализацию интерактивно с помощью `MainArray.main()`.
+- Протестируйте вашу реализацию, запустив `by.tut.darrko.webapp.MainTestArrayStorage.main()`: в IDEA слева на полях зеленая стрелка.
+- Протестируйте вашу реализацию интерактивно с помощью `by.tut.darrko.webapp.MainArray.main()`.
 - Дополнительные материалы по IntelliJ IDEA
   - <a href="https://github.com/JavaOPs/topjava/wiki/IDEA">Idea Wiki</a> (поставить кодировку UTF-8, поменять фонт по умолчанию на DejaVu)
   - <a href="http://learn.javajoy.net/debug-intellij-idea">Отладчик IntelliJ IDEA</a>
   - <a href="http://jeeconf.com/archive/jeeconf-2013/materials/intellij-idea/">Эффективная работа с кодом в IntelliJ IDEA</a>
 
 ### Optional
-- Модифицировать класс `ArrayStorage`: хранить все резюме в начале storage (без дырок null), чтобы не перебирать каждый раз все 10000 элементов.
+- Модифицировать класс `by.tut.darrko.webapp.storage.ArrayStorage`: хранить все резюме в начале storage (без дырок null), чтобы не перебирать каждый раз все 10000 элементов.
 ```
 Хранеие резюме в storage (от 0 до size-1 элементов null нет):
 
@@ -101,5 +101,5 @@ r1, r2, r3,..., rn, null, null,..., null
 <----  size ----->
 <----  storage.length (10000)---------->
 ```
-- Посмотреть на класс `Arrays`. Там есть полезные вещи, которые могут упростить код `ArrayStorage`.
-- Протестируйте реализацию, запустив MainArray.main(): в IDEA слева на полях зеленая стрелка.
+- Посмотреть на класс `Arrays`. Там есть полезные вещи, которые могут упростить код `by.tut.darrko.webapp.storage.ArrayStorage`.
+- Протестируйте реализацию, запустив by.tut.darrko.webapp.MainArray.main(): в IDEA слева на полях зеленая стрелка.

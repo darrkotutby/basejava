@@ -1,3 +1,7 @@
+package by.tut.darrko.webapp.storage;
+
+import by.tut.darrko.webapp.model.Resume;
+
 import java.util.Arrays;
 
 /**
@@ -21,7 +25,7 @@ public class ArrayStorage {
             return;
         }
 
-        int resumeIndex = findResumeElementNumber(resume.uuid);
+        int resumeIndex = findResumeElementNumber(resume.getUuid());
         if (resumeIndex != -1) {
             System.out.println("Resume already exists");
             return;
@@ -63,21 +67,22 @@ public class ArrayStorage {
         return size;
     }
 
-    public void update(String oldUUID, String newUUID) {
-        int resumeIndex = findResumeElementNumber(oldUUID);
+    public void update(Resume oldResume, Resume newResume) {
+        int resumeIndex = findResumeElementNumber(oldResume.getUuid());
         if (resumeIndex != -1) {
-            storage[resumeIndex].uuid = newUUID;
+            storage[resumeIndex] = newResume;
         } else System.out.println("Resume doesn't exists");
     }
 
     private int findResumeElementNumber(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (storage[i].uuid.equals(uuid)) {
+            if (storage[i].getUuid().equals(uuid)) {
                 return i;
             }
 
         }
         return -1;
     }
+
 
 }
