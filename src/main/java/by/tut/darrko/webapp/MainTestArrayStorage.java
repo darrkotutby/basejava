@@ -2,12 +2,14 @@ package by.tut.darrko.webapp;
 
 import by.tut.darrko.webapp.model.Resume;
 import by.tut.darrko.webapp.storage.ArrayStorage;
+import by.tut.darrko.webapp.storage.SortedArrayStorage;
+import by.tut.darrko.webapp.storage.Storage;
 
 /**
  * Test for ArrayStorage
  */
 public class MainTestArrayStorage {
-    private static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume();
@@ -18,8 +20,11 @@ public class MainTestArrayStorage {
         r3.setUuid("uuid3");
 
         ARRAY_STORAGE.save(r1);
-        ARRAY_STORAGE.save(r2);
+        ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r3);
+        ARRAY_STORAGE.save(r2);
+
+        printAll();
 
         System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.getUuid()));
         System.out.println("Size: " + ARRAY_STORAGE.size());
@@ -32,14 +37,14 @@ public class MainTestArrayStorage {
         r4.setUuid("uuid3");
         ARRAY_STORAGE.update(r4);
         r3 = ARRAY_STORAGE.get(r4.getUuid());
-        if (r3==r4) {
+        if (r3 == r4) {
             System.out.println("Resume updated");
         }
 
+        ARRAY_STORAGE.delete("dummy");
+
         printAll();
         ARRAY_STORAGE.delete(r1.getUuid());
-
-
 
         printAll();
         ARRAY_STORAGE.clear();
