@@ -66,7 +66,6 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-
         int resumeIndex = findResumeElementNumber(resume.getUuid());
         if (resumeIndex == -1) {
             System.out.println("Resume doesn't exists");
