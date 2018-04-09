@@ -68,10 +68,20 @@ public class ArrayStorage {
     }
 
     public void update(Resume oldResume, Resume newResume) {
-        int resumeIndex = findResumeElementNumber(oldResume.getUuid());
+
+
+        int resumeIndex = findResumeElementNumber(newResume.getUuid());
+        if (resumeIndex != -1) {
+            System.out.println("New Resume already exists");
+            return;
+        }
+        resumeIndex = findResumeElementNumber(oldResume.getUuid());
+
         if (resumeIndex != -1) {
             storage[resumeIndex] = newResume;
-        } else System.out.println("Resume doesn't exists");
+        } else {
+            System.out.println("Resume doesn't exists");
+        }
     }
 
     private int findResumeElementNumber(String uuid) {
