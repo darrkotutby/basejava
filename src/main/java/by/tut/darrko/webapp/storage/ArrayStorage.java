@@ -77,7 +77,7 @@ public class ArrayStorage {
         resumeIndex = findResumeElementNumber(oldResume.getUuid());
 
         if (resumeIndex == -1) {
-            System.out.println("Resume doesn't exists");
+            System.out.println("Old Resume doesn't exists");
             return;
         }
 
