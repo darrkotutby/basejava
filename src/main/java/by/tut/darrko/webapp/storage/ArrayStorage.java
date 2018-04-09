@@ -46,9 +46,9 @@ public class ArrayStorage {
     public void delete(String uuid) {
         int resumeIndex = findResumeElementNumber(uuid);
         if (resumeIndex != -1) {
-            storage[resumeIndex] = storage[size - 1];
-            storage[size - 1] = null;
             size--;
+            storage[resumeIndex] = storage[size];
+            storage[size] = null;
         } else {
             System.out.println("Resume doesn't exists");
         }
@@ -65,19 +65,14 @@ public class ArrayStorage {
         return size;
     }
 
-    public void update(Resume oldResume, Resume newResume) {
+    public void update(Resume resume) {
 
-        int resumeIndex = findResumeElementNumber(newResume.getUuid());
-        if (resumeIndex != -1) {
-            System.out.println("New Resume already exists");
-            return;
-        }
-        resumeIndex = findResumeElementNumber(oldResume.getUuid());
+        int resumeIndex = findResumeElementNumber(resume.getUuid());
         if (resumeIndex == -1) {
-            System.out.println("Old Resume doesn't exists");
+            System.out.println("Resume doesn't exists");
             return;
         }
-        storage[resumeIndex] = newResume;
+        storage[resumeIndex] = resume;
     }
 
     private int findResumeElementNumber(String uuid) {
