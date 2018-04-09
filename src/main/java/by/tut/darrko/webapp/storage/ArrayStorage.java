@@ -52,8 +52,6 @@ public class ArrayStorage {
         } else {
             System.out.println("Resume doesn't exists");
         }
-
-
     }
 
     /**
@@ -75,14 +73,11 @@ public class ArrayStorage {
             return;
         }
         resumeIndex = findResumeElementNumber(oldResume.getUuid());
-
         if (resumeIndex == -1) {
             System.out.println("Old Resume doesn't exists");
             return;
         }
-
         storage[resumeIndex] = newResume;
-
     }
 
     private int findResumeElementNumber(String uuid) {
@@ -90,7 +85,6 @@ public class ArrayStorage {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
             }
-
         }
         return -1;
     }
