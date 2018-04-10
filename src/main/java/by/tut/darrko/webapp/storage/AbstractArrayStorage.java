@@ -16,6 +16,10 @@ public abstract class AbstractArrayStorage implements Storage {
 
     protected abstract int findResumeElementNumber(String uuid);
 
+    public int getMaxSize(){
+        return MAX_SIZE;
+    }
+
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
@@ -44,7 +48,7 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public void save(Resume resume) {
         if (size >= MAX_SIZE) {
-            System.out.println("Storage is full");
+            System.out.println("Can't save resume with uuid=" + resume.getUuid() + ". Storage is full");
             return;
             // throw new NotExistStorageException("Storage is full", resume.getUuid());
         }

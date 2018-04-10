@@ -1,6 +1,7 @@
 package by.tut.darrko.webapp;
 
 import by.tut.darrko.webapp.model.Resume;
+import by.tut.darrko.webapp.storage.AbstractArrayStorage;
 import by.tut.darrko.webapp.storage.ArrayStorage;
 import by.tut.darrko.webapp.storage.SortedArrayStorage;
 import by.tut.darrko.webapp.storage.Storage;
@@ -49,6 +50,24 @@ public class MainTestArrayStorage {
         printAll();
 
         System.out.println("Size: " + ARRAY_STORAGE.size());
+
+        for (int i = 0; i<=((AbstractArrayStorage)ARRAY_STORAGE).getMaxSize(); i++) {
+            ARRAY_STORAGE.save(new Resume(Integer.valueOf(i).toString()));
+        }
+
+        System.out.println("Size: " + ARRAY_STORAGE.size());
+
+        ARRAY_STORAGE.delete("5");
+
+        printAll();
+
+        ARRAY_STORAGE.save(new Resume("5"));
+
+        printAll();
+
+        ARRAY_STORAGE.clear();
+
+
     }
 
     private static void printAll() {
