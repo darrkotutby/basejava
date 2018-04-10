@@ -2,14 +2,13 @@ package by.tut.darrko.webapp;
 
 import by.tut.darrko.webapp.model.Resume;
 import by.tut.darrko.webapp.storage.ArrayStorage;
-import by.tut.darrko.webapp.storage.SortedArrayStorage;
 import by.tut.darrko.webapp.storage.Storage;
 
 /**
  * Test for ArrayStorage
  */
 public class MainTestArrayStorage {
-    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
+    private static final Storage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume();

@@ -7,30 +7,15 @@ import by.tut.darrko.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public void save(Resume resume) {
-        if (size >= MAX_SIZE) {
-            System.out.println("Storage is full");
-            return;
-        }
-
-        int resumeIndex = findResumeElementNumber(resume.getUuid());
-        if (resumeIndex > -1) {
-            System.out.println("Resume " + resume.getUuid() + " already exists");
-            return;
-        }
+    public void concreteSave(Resume resume, int index) {
         storage[size] = resume;
         size++;
     }
 
-    public void delete(String uuid) {
-        int resumeIndex = findResumeElementNumber(uuid);
-        if (resumeIndex > -1) {
-            size--;
-            storage[resumeIndex] = storage[size];
-            storage[size] = null;
-        } else {
-            System.out.println("Resume " + uuid + " doesn't exists");
-        }
+    public void concreteDelete(String uuid, int index) {
+        size--;
+        storage[index] = storage[size];
+        storage[size] = null;
     }
 
     protected int findResumeElementNumber(String uuid) {

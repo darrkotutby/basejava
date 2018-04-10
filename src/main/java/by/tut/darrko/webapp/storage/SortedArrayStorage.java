@@ -10,18 +10,7 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void save(Resume resume) {
-        if (size >= MAX_SIZE) {
-            System.out.println("Storage is full");
-            return;
-        }
-
-        int resumeIndex = findResumeElementNumber(resume.getUuid());
-        if (resumeIndex > -1) {
-            System.out.println("Resume " + resume.getUuid() + " already exists");
-            return;
-        }
-
+    public void concreteSave(Resume resume, int index) {
         if (size == 0) {
             storage[size] = resume;
             size++;
@@ -34,23 +23,18 @@ public class SortedArrayStorage extends AbstractArrayStorage {
             return;
         }
 
-        resumeIndex = Math.abs(resumeIndex + 1);
+        index = Math.abs(index + 1);
 
-        System.arraycopy(storage, resumeIndex, storage, resumeIndex + 1, size - resumeIndex);
-        storage[resumeIndex] = resume;
+        System.arraycopy(storage, index, storage, index + 1, size - index);
+        storage[index] = resume;
         size++;
     }
 
     @Override
-    public void delete(String uuid) {
-        int resumeIndex = findResumeElementNumber(uuid);
-        if (resumeIndex > -1) {
-            System.arraycopy(storage, resumeIndex + 1, storage, resumeIndex, size - resumeIndex);
-            size--;
-            storage[size] = null;
-        } else {
-            System.out.println("Resume " + uuid + " doesn't exists");
-        }
+    public void concreteDelete(String uuid, int index) {
+        System.arraycopy(storage, index + 1, storage, index, size - index);
+        size--;
+        storage[size] = null;
     }
 
     protected int findResumeElementNumber(String uuid) {
