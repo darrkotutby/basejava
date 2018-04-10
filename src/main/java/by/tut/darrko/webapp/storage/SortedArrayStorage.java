@@ -16,15 +16,12 @@ public class SortedArrayStorage extends AbstractArrayStorage {
             size++;
             return;
         }
-
         if (storage[size - 1].compareTo(resume) < 0) {
             storage[size] = resume;
             size++;
             return;
         }
-
         index = Math.abs(index + 1);
-
         System.arraycopy(storage, index, storage, index + 1, size - index);
         storage[index] = resume;
         size++;

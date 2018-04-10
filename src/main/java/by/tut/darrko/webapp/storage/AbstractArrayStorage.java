@@ -5,6 +5,7 @@ import by.tut.darrko.webapp.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
+
     protected final int MAX_SIZE = 10000;
     protected int size = 0;
     protected Resume[] storage = new Resume[MAX_SIZE];
@@ -20,11 +21,11 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public Resume get(String uuid) {
         int resumeIndex = findResumeElementNumber(uuid);
-        if (resumeIndex > -1) {
-            return storage[resumeIndex];
+        if (resumeIndex < 0) {
+            System.out.println("Resume " + uuid + " doesn't exists");
+            return null;
         }
-        System.out.println("Resume " + uuid + " doesn't exists");
-        return null;
+        return storage[resumeIndex];
     }
 
     /**
@@ -34,27 +35,16 @@ public abstract class AbstractArrayStorage implements Storage {
         return Arrays.copyOf(storage, size);
     }
 
-    public void update(Resume resume) {
-        int resumeIndex = findResumeElementNumber(resume.getUuid());
-        if (resumeIndex < 0) {
-            System.out.println("Resume " + resume.getUuid() + " doesn't exists");
-            return;
-        }
-        storage[resumeIndex] = resume;
-    }
-
     public void save(Resume resume) {
         if (size >= MAX_SIZE) {
             System.out.println("Storage is full");
             return;
         }
-
         int resumeIndex = findResumeElementNumber(resume.getUuid());
         if (resumeIndex > -1) {
             System.out.println("Resume " + resume.getUuid() + " already exists");
             return;
         }
-
         concreteSave(resume, resumeIndex);
     }
 
@@ -65,6 +55,15 @@ public abstract class AbstractArrayStorage implements Storage {
             return;
         }
         concreteDelete(uuid, resumeIndex);
+    }
+
+    public void update(Resume resume) {
+        int resumeIndex = findResumeElementNumber(resume.getUuid());
+        if (resumeIndex < 0) {
+            System.out.println("Resume " + resume.getUuid() + " doesn't exists");
+            return;
+        }
+        storage[resumeIndex] = resume;
     }
 
     protected abstract void concreteSave(Resume resume, int index);
