@@ -1,5 +1,7 @@
 package by.tut.darrko.webapp;
 
+import by.tut.darrko.webapp.exception.NotExistStorageException;
+import by.tut.darrko.webapp.exception.StorageException;
 import by.tut.darrko.webapp.model.Resume;
 import by.tut.darrko.webapp.storage.ArrayStorage;
 import by.tut.darrko.webapp.storage.Storage;
@@ -37,20 +39,36 @@ public class MainArray {
                     break;
                 case "save":
                     r = new Resume(uuid);
-                    ARRAY_STORAGE.save(r);
-                    printAll();
+                    try {
+                        ARRAY_STORAGE.save(r);
+                        printAll();
+                    } catch (StorageException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case "delete":
-                    ARRAY_STORAGE.delete(uuid);
-                    printAll();
+                    try {
+                        ARRAY_STORAGE.delete(uuid);
+                        printAll();
+                    } catch (NotExistStorageException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case "get":
-                    System.out.println(ARRAY_STORAGE.get(uuid));
+                    try {
+                        System.out.println(ARRAY_STORAGE.get(uuid));
+                    } catch (NotExistStorageException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case "update":
-                    Resume resume = new Resume(uuid);
-                    ARRAY_STORAGE.update(resume);
-                    printAll();
+                    try {
+                        Resume resume = new Resume(uuid);
+                        ARRAY_STORAGE.update(resume);
+                        printAll();
+                    } catch (NotExistStorageException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case "clear":
                     ARRAY_STORAGE.clear();

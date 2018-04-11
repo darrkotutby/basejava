@@ -9,21 +9,23 @@ import java.util.Arrays;
  */
 public class SortedArrayStorage extends AbstractArrayStorage {
 
+    public SortedArrayStorage() {
+    }
+
+    public SortedArrayStorage(int maxSize) {
+        super(maxSize);
+    }
+
     @Override
-    public void saveToArray(Resume resume, int index) {
-        if (size == 0 || storage[size - 1].compareTo(resume) < 0) {
-            storage[size] = resume;
-            return;
-        }
+    public void add(Resume resume, int index) {
         index = Math.abs(index + 1);
         System.arraycopy(storage, index, storage, index + 1, size - index);
         storage[index] = resume;
     }
 
     @Override
-    public void deleteFromArray(String uuid, int index) {
-        System.arraycopy(storage, index + 1, storage, index, size - index - 1);
-        size--;
+    public void remove(String uuid, int index) {
+        System.arraycopy(storage, index + 1, storage, index, size - index);
         storage[size] = null;
     }
 

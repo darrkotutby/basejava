@@ -37,9 +37,16 @@ public class Resume implements Comparable<Resume> {
         return uuid.hashCode();
     }
 
-    @Override
+    /*@Override
     public String toString() {
         return uuid;
+    }*/
+
+    @Override
+    public String toString() {
+        return "Resume{" +
+                "uuid='" + uuid + '\'' +
+                '}';
     }
 
     @Override

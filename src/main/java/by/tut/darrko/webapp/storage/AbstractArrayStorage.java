@@ -1,22 +1,36 @@
 package by.tut.darrko.webapp.storage;
 
+import by.tut.darrko.webapp.exception.ExistStorageException;
+import by.tut.darrko.webapp.exception.NotExistStorageException;
+import by.tut.darrko.webapp.exception.StorageException;
 import by.tut.darrko.webapp.model.Resume;
 
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
 
-    protected final int MAX_SIZE = 10000;
+    protected final int MAX_SIZE;
     protected int size = 0;
-    protected Resume[] storage = new Resume[MAX_SIZE];
+    protected Resume[] storage;
 
-    protected abstract void saveToArray(Resume resume, int index);
+    public AbstractArrayStorage() {
+        this(10000);
+    }
 
-    protected abstract void deleteFromArray(String uuid, int index);
+    public AbstractArrayStorage(int maxSize) {
+        if (maxSize < 1)
+            throw new StorageException("Initial size of the storage must be more than 0. MAX_SIZE=" + maxSize, null);
+        MAX_SIZE = maxSize;
+        storage = new Resume[MAX_SIZE];
+    }
+
+    protected abstract void add(Resume resume, int index);
+
+    protected abstract void remove(String uuid, int index);
 
     protected abstract int findResumeElementNumber(String uuid);
 
-    public int getMaxSize(){
+    public int getMaxSize() {
         return MAX_SIZE;
     }
 
@@ -32,9 +46,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public Resume get(String uuid) {
         int resumeIndex = findResumeElementNumber(uuid);
         if (resumeIndex < 0) {
-            System.out.println("Resume with uuid=" + uuid + " doesn't exists");
-            return null;
-            // throw new NotExistStorageException("Resume " + uuid + " doesn't exists", uuid);
+            throw new NotExistStorageException("Resume with uuid=" + uuid + " doesn't exists", uuid);
         }
         return storage[resumeIndex];
     }
@@ -48,36 +60,33 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public void save(Resume resume) {
         if (size >= MAX_SIZE) {
-            System.out.println("Can't save resume with uuid=" + resume.getUuid() + ". Storage is full");
-            return;
-            // throw new NotExistStorageException("Storage is full", resume.getUuid());
+            throw new NotExistStorageException("Can't save resume with uuid=" + resume.getUuid() + ". Storage is full", resume.getUuid());
         }
-        int resumeIndex = findResumeElementNumber(resume.getUuid());
-        if (resumeIndex > -1) {
-            System.out.println("Resume with uuid=" + resume.getUuid() + " already exists");
-            return;
-            // throw new ExistStorageException("Resume " + resume.getUuid() + " already exists", resume.getUuid());
+        if (size == 0 || storage[size - 1].compareTo(resume) < 0) {
+            storage[size] = resume;
+        } else {
+            int resumeIndex = findResumeElementNumber(resume.getUuid());
+            if (resumeIndex > -1) {
+                throw new ExistStorageException("Resume with uuid=" + resume.getUuid() + " already exists", resume.getUuid());
+            }
+            add(resume, resumeIndex);
         }
-        saveToArray(resume, resumeIndex);
         size++;
     }
 
     public void delete(String uuid) {
         int resumeIndex = findResumeElementNumber(uuid);
         if (resumeIndex < 0) {
-            System.out.println("Resume with uuid=" + uuid + " doesn't exists");
-            return;
-            // throw new NotExistStorageException("Resume " + uuid + " doesn't exists", uuid);
+            throw new NotExistStorageException("Resume with uuid=" + uuid + " doesn't exists", uuid);
         }
-        deleteFromArray(uuid, resumeIndex);
+        size--;
+        remove(uuid, resumeIndex);
     }
 
     public void update(Resume resume) {
         int resumeIndex = findResumeElementNumber(resume.getUuid());
         if (resumeIndex < 0) {
-            System.out.println("Resume with uuid=" + resume.getUuid() + " doesn't exists");
-            return;
-            // throw new NotExistStorageException("Resume " + resume.getUuid() + " doesn't exists", resume.getUuid());
+            throw new NotExistStorageException("Resume with uuid=" + resume.getUuid() + " doesn't exists", resume.getUuid());
         }
         storage[resumeIndex] = resume;
     }

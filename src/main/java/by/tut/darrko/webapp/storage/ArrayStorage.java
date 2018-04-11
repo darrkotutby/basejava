@@ -7,12 +7,18 @@ import by.tut.darrko.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public void saveToArray(Resume resume, int index) {
+    public ArrayStorage() {
+    }
+
+    public ArrayStorage(int maxSize) {
+        super(maxSize);
+    }
+
+    public void add(Resume resume, int index) {
         storage[size] = resume;
     }
 
-    public void deleteFromArray(String uuid, int index) {
-        size--;
+    public void remove(String uuid, int index) {
         storage[index] = storage[size];
         storage[size] = null;
     }
