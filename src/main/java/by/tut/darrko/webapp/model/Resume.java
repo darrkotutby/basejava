@@ -2,9 +2,6 @@ package by.tut.darrko.webapp.model;
 
 import java.util.UUID;
 
-/**
- * com.urise.webapp.model.by.tut.darrko.webapp.model.Resume class
- */
 public class Resume implements Comparable<Resume> {
 
     // Unique identifier
@@ -17,7 +14,6 @@ public class Resume implements Comparable<Resume> {
     public Resume(String uuid) {
         this.uuid = uuid;
     }
-
 
     public String getUuid() {
         return uuid;
@@ -33,7 +29,6 @@ public class Resume implements Comparable<Resume> {
 
     @Override
     public int hashCode() {
-
         return uuid.hashCode();
     }
 

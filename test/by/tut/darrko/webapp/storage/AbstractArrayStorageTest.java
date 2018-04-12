@@ -15,10 +15,10 @@ public abstract class AbstractArrayStorageTest {
     private final String UUID_3 = "UUID3";
     private Storage storage;
 
-    public AbstractArrayStorageTest() {
+    protected AbstractArrayStorageTest() {
     }
 
-    public void setStorage(Storage storage) {
+    protected void setStorage(Storage storage) {
         this.storage = storage;
     }
 

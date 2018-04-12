@@ -16,7 +16,6 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     public void remove(String uuid, int index) {
         storage[index] = storage[size];
-        storage[size] = null;
     }
 
     protected int findResumeElementNumber(String uuid) {

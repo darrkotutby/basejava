@@ -22,7 +22,6 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
     public void remove(String uuid, int index) {
         System.arraycopy(storage, index + 1, storage, index, size - index);
-        storage[size] = null;
     }
 
     protected int findResumeElementNumber(String uuid) {
