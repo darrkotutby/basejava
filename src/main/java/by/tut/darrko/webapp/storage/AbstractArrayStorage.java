@@ -7,7 +7,6 @@ import by.tut.darrko.webapp.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
-
     protected static final int MAX_SIZE = 10000;
     protected int size = 0;
     protected Resume[] storage;
@@ -52,8 +51,8 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public void save(Resume resume) {
         if (size >= MAX_SIZE) {
-            throw new NotExistStorageException("Can't save resume with uuid=" + resume.getUuid() + ". Storage is full",
-                    resume.getUuid());
+            throw new NotExistStorageException("Can't save resume with uuid=" + resume.getUuid() +
+                    ". Storage is full", resume.getUuid());
         }
         int index = findResumeElementNumber(resume.getUuid());
         if (index > -1) {
@@ -83,6 +82,4 @@ public abstract class AbstractArrayStorage implements Storage {
         }
         storage[index] = resume;
     }
-
-
 }

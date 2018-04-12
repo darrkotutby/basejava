@@ -8,7 +8,6 @@ import java.util.Arrays;
  * Sorted Array based storage for Resumes
  */
 public class SortedArrayStorage extends AbstractArrayStorage {
-
     public SortedArrayStorage() {
         super();
     }

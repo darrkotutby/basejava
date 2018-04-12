@@ -6,7 +6,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 public class SortedArrayStorageTest extends AbstractArrayStorageTest {
-
     private final Storage storage = new SortedArrayStorage();
 
     public SortedArrayStorageTest() {
@@ -23,5 +22,4 @@ public class SortedArrayStorageTest extends AbstractArrayStorageTest {
             assertTrue(resume1.compareTo(resume2) < 0);
         }
     }
-
 }
