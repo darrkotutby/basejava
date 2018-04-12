@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 public class MainReflection {
     public static void main(String[] args)
             throws IllegalAccessException, NoSuchMethodException, InvocationTargetException,
-                   ClassNotFoundException, InstantiationException {
+            ClassNotFoundException, InstantiationException {
         String resumeClassName = "by.tut.darrko.webapp.model.Resume";
         Class<?> resumeClass = Class.forName(resumeClassName);
         Constructor<?> dogConstructor = resumeClass.getConstructor(String.class);
