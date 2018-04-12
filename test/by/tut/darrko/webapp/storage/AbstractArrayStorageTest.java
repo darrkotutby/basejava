@@ -31,11 +31,6 @@ public abstract class AbstractArrayStorageTest {
         storage.save(new Resume(UUID_2));
     }
 
-    @Test(expected = StorageException.class)
-    public void storageCreation() {
-        Storage storage = new ArrayStorage(-1);
-    }
-
     @Test
     public void clear() {
         storage.clear();
@@ -51,6 +46,7 @@ public abstract class AbstractArrayStorageTest {
     public void get() {
         Resume resume = new Resume(UUID_1);
         Resume resume1 = storage.get(UUID_1);
+        assertNotNull(resume1);
         assertEquals(resume, resume1);
     }
 
@@ -66,41 +62,20 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test(expected = StorageException.class)
-    public void saveSorted() {
-        StringBuilder sb = new StringBuilder();
-
-        try {
-            for (int i = 0; i <= ((AbstractArrayStorage) storage).getMaxSize() - 4; i++) {
-                sb.append(i);
-                storage.save(new Resume(sb.toString()));
-            }
-        } catch (StorageException e) {
-            System.out.println(e.getMessage());
-            System.out.println(((AbstractArrayStorage) storage).size);
-            fail("Storage is not full");
-        }
-        storage.save(new Resume());
-        fail("Storage is full");
-    }
-
-    @Test(expected = StorageException.class)
     public void saveRandom() {
         try {
             for (int i = 0; i <= ((AbstractArrayStorage) storage).getMaxSize() - 4; i++) {
                 storage.save(new Resume());
             }
         } catch (StorageException e) {
-            System.out.println(e.getMessage());
-            System.out.println(((AbstractArrayStorage) storage).size);
             fail("Storage is not full");
         }
         storage.save(new Resume());
-        fail("Storage is full");
     }
 
     @Test(expected = ExistStorageException.class)
     public void saveExist() {
-        storage.save(new Resume(UUID_1));
+        storage.save(new Resume(UUID_2));
     }
 
     @Test(expected = NotExistStorageException.class)

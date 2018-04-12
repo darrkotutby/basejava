@@ -10,10 +10,6 @@ public class ArrayStorage extends AbstractArrayStorage {
     public ArrayStorage() {
     }
 
-    public ArrayStorage(int maxSize) {
-        super(maxSize);
-    }
-
     public void add(Resume resume, int index) {
         storage[size] = resume;
     }

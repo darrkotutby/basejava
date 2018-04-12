@@ -12,10 +12,6 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     public SortedArrayStorage() {
     }
 
-    public SortedArrayStorage(int maxSize) {
-        super(maxSize);
-    }
-
     @Override
     public void add(Resume resume, int index) {
         index = Math.abs(index + 1);
