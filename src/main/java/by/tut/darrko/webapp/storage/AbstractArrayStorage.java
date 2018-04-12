@@ -12,7 +12,7 @@ public abstract class AbstractArrayStorage implements Storage {
     protected int size = 0;
     protected Resume[] storage;
 
-    public AbstractArrayStorage() {
+    protected AbstractArrayStorage() {
         storage = new Resume[MAX_SIZE];
     }
 

@@ -8,6 +8,7 @@ import by.tut.darrko.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     public ArrayStorage() {
+        super();
     }
 
     public void add(Resume resume, int index) {
