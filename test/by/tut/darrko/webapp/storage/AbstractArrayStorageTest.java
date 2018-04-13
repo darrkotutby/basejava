@@ -46,7 +46,6 @@ public abstract class AbstractArrayStorageTest {
     public void getTest() {
         Resume resume = new Resume(UUID_1);
         Resume resume1 = storage.get(UUID_1);
-        assertNotNull(resume1);
         assertEquals(resume, resume1);
     }
 
