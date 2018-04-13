@@ -6,15 +6,16 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 public class SortedArrayStorageTest extends AbstractArrayStorageTest {
-    private final Storage storage = new SortedArrayStorage();
+    private final Storage STORAGE = new SortedArrayStorage();
 
     public SortedArrayStorageTest() {
-        setStorage(storage);
+        super();
+        setStorage(STORAGE);
     }
 
     @Test
     public void fillingTest() {
-        Resume[] array = storage.getAll();
+        Resume[] array = STORAGE.getAll();
         for (int i = 1; i <= array.length - 1; i++) {
             Resume resume1 = array[i - 1];
             Resume resume2 = array[i];

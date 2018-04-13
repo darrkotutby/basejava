@@ -16,12 +16,16 @@ public abstract class AbstractArrayStorageTest {
     private Storage storage;
 
     protected AbstractArrayStorageTest() {
+        this(new ArrayStorage());
+    }
+
+    protected AbstractArrayStorageTest(Storage storage) {
+        this.storage = storage;
     }
 
     protected void setStorage(Storage storage) {
         this.storage = storage;
     }
-
 
     @Before
     public void setUp() {
@@ -105,7 +109,6 @@ public abstract class AbstractArrayStorageTest {
     public void deleteNotExistTest() {
         storage.delete("test1");
     }
-
 
     @Test
     public void updateTest() {
