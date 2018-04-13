@@ -9,7 +9,6 @@ public class SortedArrayStorageTest extends AbstractArrayStorageTest {
     private final Storage storage = new SortedArrayStorage();
 
     public SortedArrayStorageTest() {
-        super();
         setStorage(storage);
     }
 

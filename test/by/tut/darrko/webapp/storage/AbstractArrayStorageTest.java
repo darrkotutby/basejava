@@ -32,18 +32,18 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test
-    public void clear() {
+    public void clearTest() {
         storage.clear();
         assertEquals(0, storage.size());
     }
 
     @Test
-    public void size() {
+    public void sizeTest() {
         assertEquals(3, storage.size());
     }
 
     @Test
-    public void get() {
+    public void getTest() {
         Resume resume = new Resume(UUID_1);
         Resume resume1 = storage.get(UUID_1);
         assertNotNull(resume1);
@@ -51,18 +51,30 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void getNotExists() {
+    public void getNotExistsTest() {
         storage.get("test1");
     }
 
     @Test
-    public void getAll() {
+    public void getAllTest() {
         Resume[] array = storage.getAll();
         assertEquals(3, array.length);
+        Resume[] ethalonArray = {new Resume(UUID_1), new Resume(UUID_2), new Resume(UUID_3)};
+        for (Resume anEthalonResume : ethalonArray) {
+            boolean flag = false;
+            for (Resume resume : array) {
+                if (anEthalonResume.equals(resume)) {
+                    flag = true;
+                }
+            }
+            if (!flag) {
+                fail("Resume with uuid=" + anEthalonResume.getUuid() + " have to be returned by getAll");
+            }
+        }
     }
 
     @Test(expected = StorageException.class)
-    public void saveRandom() {
+    public void saveTest() {
         try {
             for (int i = 0; i <= ((AbstractArrayStorage) storage).getMaxSize() - 4; i++) {
                 storage.save(new Resume());
@@ -74,12 +86,12 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test(expected = ExistStorageException.class)
-    public void saveExist() {
+    public void saveExistTest() {
         storage.save(new Resume(UUID_2));
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void delete() {
+    public void deleteTest() {
         try {
             storage.delete(UUID_1);
             assertEquals(2, storage.size());
@@ -91,13 +103,13 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void deleteNotExist() {
+    public void deleteNotExistTest() {
         storage.delete("test1");
     }
 
 
     @Test
-    public void update() {
+    public void updateTest() {
         Resume ethalonResume = storage.get(UUID_1);
         Resume newResume = new Resume(UUID_1);
         storage.update(newResume);
@@ -107,7 +119,7 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void updateNotExist() {
+    public void updateNotExistTest() {
         storage.update(new Resume("test1"));
     }
 }
