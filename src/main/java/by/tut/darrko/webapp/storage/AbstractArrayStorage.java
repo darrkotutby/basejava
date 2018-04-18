@@ -7,12 +7,12 @@ import by.tut.darrko.webapp.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
-    protected static final int MAX_SIZE = 10000;
-    protected int size = 0;
-    protected Resume[] storage;
+    private static final int MAX_SIZE = 10000;
+    final Resume[] STORAGE;
+    int size = 0;
 
-    protected AbstractArrayStorage() {
-        storage = new Resume[MAX_SIZE];
+    AbstractArrayStorage() {
+        STORAGE = new Resume[MAX_SIZE];
     }
 
     protected abstract void add(Resume resume, int index);
@@ -26,7 +26,7 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     public void clear() {
-        Arrays.fill(storage, 0, size, null);
+        Arrays.fill(STORAGE, 0, size, null);
         size = 0;
     }
 
@@ -39,14 +39,14 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index < 0) {
             throw new NotExistStorageException("Resume with uuid=" + uuid + " doesn't exists", uuid);
         }
-        return storage[index];
+        return STORAGE[index];
     }
 
     /**
-     * @return array, contains only Resumes in storage (without null)
+     * @return array, contains only Resumes in STORAGE (without null)
      */
     public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
+        return Arrays.copyOf(STORAGE, size);
     }
 
     public void save(Resume resume) {
@@ -71,7 +71,7 @@ public abstract class AbstractArrayStorage implements Storage {
         }
         size--;
         remove(uuid, index);
-        storage[size] = null;
+        STORAGE[size] = null;
     }
 
     public void update(Resume resume) {
@@ -80,6 +80,6 @@ public abstract class AbstractArrayStorage implements Storage {
             throw new NotExistStorageException("Resume with uuid=" + resume.getUuid() + " doesn't exists",
                     resume.getUuid());
         }
-        storage[index] = resume;
+        STORAGE[index] = resume;
     }
 }

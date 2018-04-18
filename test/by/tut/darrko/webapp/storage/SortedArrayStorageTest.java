@@ -3,23 +3,15 @@ package by.tut.darrko.webapp.storage;
 import by.tut.darrko.webapp.model.Resume;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertArrayEquals;
 
 public class SortedArrayStorageTest extends AbstractArrayStorageTest {
-    private final Storage STORAGE = new SortedArrayStorage();
-
     public SortedArrayStorageTest() {
-        super();
-        setStorage(STORAGE);
+        super(new SortedArrayStorage());
     }
 
     @Test
-    public void fillingTest() {
-        Resume[] array = STORAGE.getAll();
-        for (int i = 1; i <= array.length - 1; i++) {
-            Resume resume1 = array[i - 1];
-            Resume resume2 = array[i];
-            assertTrue(resume1.compareTo(resume2) < 0);
-        }
+    public void getAllTest() {
+        assertArrayEquals(new Resume[]{RESUME_1, RESUME_2, RESUME_3}, STORAGE.getAll());
     }
 }

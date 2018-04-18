@@ -5,27 +5,27 @@ import by.tut.darrko.webapp.model.Resume;
 import java.util.Arrays;
 
 /**
- * Sorted Array based storage for Resumes
+ * Sorted Array based STORAGE for Resumes
  */
 public class SortedArrayStorage extends AbstractArrayStorage {
     public SortedArrayStorage() {
+        super();
     }
 
     @Override
     public void add(Resume resume, int index) {
         index = Math.abs(index + 1);
-        System.arraycopy(storage, index, storage, index + 1, size - index);
-        storage[index] = resume;
+        System.arraycopy(STORAGE, index, STORAGE, index + 1, size - index);
+        STORAGE[index] = resume;
     }
 
     @Override
     public void remove(String uuid, int index) {
-        System.arraycopy(storage, index + 1, storage, index, size - index);
+        System.arraycopy(STORAGE, index + 1, STORAGE, index, size - index);
     }
 
     protected int findResumeElementNumber(String uuid) {
         Resume searchedKey = new Resume(uuid);
-        return Arrays.binarySearch(storage, 0, size, searchedKey);
+        return Arrays.binarySearch(STORAGE, 0, size, searchedKey);
     }
-
 }
