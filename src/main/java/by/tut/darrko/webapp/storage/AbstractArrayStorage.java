@@ -35,11 +35,7 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     public Resume get(String uuid) {
-        int index = findResumeElementNumber(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException("Resume with uuid=" + uuid + " doesn't exists", uuid);
-        }
-        return STORAGE[index];
+        return STORAGE[isExists(uuid)];
     }
 
     /**
@@ -54,32 +50,35 @@ public abstract class AbstractArrayStorage implements Storage {
             throw new NotExistStorageException("Can't save resume with uuid=" + resume.getUuid() +
                     ". Storage is full", resume.getUuid());
         }
-        int index = findResumeElementNumber(resume.getUuid());
-        if (index > -1) {
-            throw new ExistStorageException("Resume with uuid=" + resume.getUuid() + " already exists",
-                    resume.getUuid());
-        }
-        add(resume, index);
-
+        add(resume, isNotExists(resume.getUuid()));
         size++;
     }
 
     public void delete(String uuid) {
-        int index = findResumeElementNumber(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException("Resume with uuid=" + uuid + " doesn't exists", uuid);
-        }
+        remove(uuid, isExists(uuid));
         size--;
-        remove(uuid, index);
         STORAGE[size] = null;
     }
 
     public void update(Resume resume) {
-        int index = findResumeElementNumber(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException("Resume with uuid=" + resume.getUuid() + " doesn't exists",
-                    resume.getUuid());
-        }
-        STORAGE[index] = resume;
+        STORAGE[isExists(resume.getUuid())] = resume;
     }
+
+    private int isExists(String uuid) {
+        int index = findResumeElementNumber(uuid);
+        if (index < 0) {
+            throw new NotExistStorageException("Resume with uuid=" + uuid + " doesn't exists", uuid);
+        }
+        return index;
+    }
+
+    private int isNotExists(String uuid) {
+        int index = findResumeElementNumber(uuid);
+        if (index > -1) {
+            throw new ExistStorageException("Resume with uuid=" + uuid + " already exists",
+                    uuid);
+        }
+        return index;
+    }
+
 }

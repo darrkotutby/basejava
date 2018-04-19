@@ -8,10 +8,6 @@ import java.util.Arrays;
  * Sorted Array based STORAGE for Resumes
  */
 public class SortedArrayStorage extends AbstractArrayStorage {
-    public SortedArrayStorage() {
-        super();
-    }
-
     @Override
     public void add(Resume resume, int index) {
         index = Math.abs(index + 1);
@@ -21,7 +17,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public void remove(String uuid, int index) {
-        System.arraycopy(STORAGE, index + 1, STORAGE, index, size - index);
+        System.arraycopy(STORAGE, index + 1, STORAGE, index, size - index - 1);
     }
 
     protected int findResumeElementNumber(String uuid) {

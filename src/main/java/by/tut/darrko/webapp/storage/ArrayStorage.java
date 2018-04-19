@@ -6,16 +6,12 @@ import by.tut.darrko.webapp.model.Resume;
  * Array based STORAGE for Resumes
  */
 public class ArrayStorage extends AbstractArrayStorage {
-    public ArrayStorage() {
-        super();
-    }
-
     public void add(Resume resume, int index) {
         STORAGE[size] = resume;
     }
 
     public void remove(String uuid, int index) {
-        STORAGE[index] = STORAGE[size];
+        STORAGE[index] = STORAGE[size - 1];
     }
 
     protected int findResumeElementNumber(String uuid) {
