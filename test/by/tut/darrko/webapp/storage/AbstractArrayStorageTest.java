@@ -13,7 +13,7 @@ public abstract class AbstractArrayStorageTest {
     Resume resume1 = new Resume("UUID1");
     Resume resume2 = new Resume("UUID2");
     Resume resume3 = new Resume("UUID3");
-    Storage storage;
+    private Storage storage;
     Resume[] array = null;
 
     AbstractArrayStorageTest(Storage storage) {
@@ -74,17 +74,16 @@ public abstract class AbstractArrayStorageTest {
         storage.save(resume2);
     }
 
-    @Test
+    @Test(expected = NotExistStorageException.class)
     public void deleteTest() {
-        boolean flag = false;
-        storage.delete(resume1.getUuid());
-        assertEquals(2, storage.size());
         try {
-            storage.get(resume1.getUuid());
-        } catch (NotExistStorageException e) {
-            flag = true;
+            storage.delete(resume1.getUuid());
         }
-        assertTrue(flag);
+        catch (NotExistStorageException e) {
+                fail("Resume with uuid="+e.getUUID()+" have to be exists");
+        }
+        assertEquals(2, storage.size());
+        storage.get(resume1.getUuid());
     }
 
     @Test(expected = NotExistStorageException.class)
