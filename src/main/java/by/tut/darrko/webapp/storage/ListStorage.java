@@ -1,13 +1,11 @@
 package by.tut.darrko.webapp.storage;
 
-import by.tut.darrko.webapp.exception.ExistStorageException;
-import by.tut.darrko.webapp.exception.NotExistStorageException;
 import by.tut.darrko.webapp.model.Resume;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ListStorage implements Storage {
+public class ListStorage extends AbstractStorage {
 
     protected List<Resume> storage;
 
@@ -24,11 +22,7 @@ public abstract class ListStorage implements Storage {
     }
 
     public Resume get(String uuid) {
-        int resumeIndex = storage.indexOf(new Resume(uuid));
-        if (resumeIndex < 0) {
-            throw new NotExistStorageException("Resume with uuid=" + uuid + " doesn't exists", uuid);
-        }
-        return (Resume) storage.get(resumeIndex);
+        return (Resume) storage.get(isExists(uuid));
     }
 
     public Resume[] getAll() {
@@ -36,28 +30,19 @@ public abstract class ListStorage implements Storage {
     }
 
     public void save(Resume resume) {
-        int resumeIndex = storage.indexOf(resume);
-        if (resumeIndex > -1) {
-            throw new ExistStorageException("Resume with uuid=" + resume.getUuid() + " already exists", resume.getUuid());
-        }
+        isNotExists(resume.getUuid());
         storage.add(resume);
     }
 
     public void delete(String uuid) {
-        int resumeIndex = storage.indexOf(new Resume(uuid));
-        if (resumeIndex < 0) {
-            throw new NotExistStorageException("Resume with uuid=" + uuid + " doesn't exists", uuid);
-        }
-        storage.remove(resumeIndex);
+        storage.remove(isExists(uuid));
     }
 
     public void update(Resume resume) {
-        int resumeIndex = storage.indexOf(resume);
-        if (resumeIndex < 0) {
-            throw new NotExistStorageException("Resume with uuid=" + resume.getUuid() + " doesn't exists", resume.getUuid());
-        }
-        storage.set(resumeIndex, resume);
+        storage.set(isExists(resume.getUuid()), resume);
     }
 
-
+    protected int findResumeElementNumber(String uuid) {
+        return storage.indexOf(new Resume(uuid));
+    }
 }

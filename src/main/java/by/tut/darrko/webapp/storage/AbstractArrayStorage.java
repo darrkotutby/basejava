@@ -1,12 +1,11 @@
 package by.tut.darrko.webapp.storage;
 
-import by.tut.darrko.webapp.exception.ExistStorageException;
 import by.tut.darrko.webapp.exception.NotExistStorageException;
 import by.tut.darrko.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
     private static final int MAX_SIZE = 10000;
     final Resume[] STORAGE;
     int size = 0;
@@ -18,8 +17,6 @@ public abstract class AbstractArrayStorage implements Storage {
     protected abstract void add(Resume resume, int index);
 
     protected abstract void remove(String uuid, int index);
-
-    protected abstract int findResumeElementNumber(String uuid);
 
     public int getMaxSize() {
         return MAX_SIZE;
@@ -63,22 +60,4 @@ public abstract class AbstractArrayStorage implements Storage {
     public void update(Resume resume) {
         STORAGE[isExists(resume.getUuid())] = resume;
     }
-
-    private int isExists(String uuid) {
-        int index = findResumeElementNumber(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException("Resume with uuid=" + uuid + " doesn't exists", uuid);
-        }
-        return index;
-    }
-
-    private int isNotExists(String uuid) {
-        int index = findResumeElementNumber(uuid);
-        if (index > -1) {
-            throw new ExistStorageException("Resume with uuid=" + uuid + " already exists",
-                    uuid);
-        }
-        return index;
-    }
-
 }
