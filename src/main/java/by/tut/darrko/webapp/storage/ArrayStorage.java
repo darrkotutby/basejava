@@ -10,11 +10,11 @@ public class ArrayStorage extends AbstractArrayStorage {
         STORAGE[size] = resume;
     }
 
-    public void remove(String uuid, int index) {
-        STORAGE[index] = STORAGE[size - 1];
+    public void remove(Object index) {
+        STORAGE[(Integer)index] = STORAGE[size - 1];
     }
 
-    protected int findResumeElementNumber(String uuid) {
+    protected Integer findResumeElementNumber(String uuid) {
         for (int i = 0; i < size; i++) {
             if (STORAGE[i].getUuid().equals(uuid)) {
                 return i;

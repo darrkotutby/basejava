@@ -16,7 +16,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected abstract void add(Resume resume, int index);
 
-    protected abstract void remove(String uuid, int index);
+    protected abstract void remove(Object index);
 
     public int getMaxSize() {
         return MAX_SIZE;
@@ -31,8 +31,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    public Resume get(String uuid) {
-        return STORAGE[isExists(uuid)];
+    public Resume get(Object index) {
+        return STORAGE[(Integer)index];
     }
 
     /**
@@ -42,22 +42,26 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return Arrays.copyOf(STORAGE, size);
     }
 
-    public void save(Resume resume) {
+    public void save(Resume resume, Object index) {
         if (size >= MAX_SIZE) {
-            throw new NotExistStorageException("Can't save resume with uuid=" + resume.getUuid() +
-                    ". Storage is full", resume.getUuid());
+            throw new NotExistStorageException("Can't save resume. Storage is full");
         }
-        add(resume, isNotExists(resume.getUuid()));
+        add(resume, (Integer)index);
         size++;
     }
 
-    public void delete(String uuid) {
-        remove(uuid, isExists(uuid));
+    public void delete(Object index) {
+        remove((Integer)index);
         size--;
         STORAGE[size] = null;
     }
 
-    public void update(Resume resume) {
-        STORAGE[isExists(resume.getUuid())] = resume;
+    public void update(Resume resume, Object index) {
+        STORAGE[(Integer)index] = resume;
+    }
+
+    @Override
+    boolean isExists(Object index) {
+        return (Integer) index > -1;
     }
 }

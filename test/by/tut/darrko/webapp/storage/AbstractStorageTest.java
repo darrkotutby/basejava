@@ -66,7 +66,7 @@ public abstract class AbstractStorageTest {
         try {
             storage.delete(resume1.getUuid());
         } catch (NotExistStorageException e) {
-            fail("Resume with uuid=" + e.getUUID() + " have to be exists");
+            fail(e.getMessage());
         }
         assertEquals(2, storage.size());
         storage.get(resume1.getUuid());

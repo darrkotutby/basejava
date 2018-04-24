@@ -20,28 +20,32 @@ public class ListStorage extends AbstractStorage {
         return storage.size();
     }
 
-    public Resume get(String uuid) {
-        return (Resume) storage.get(isExists(uuid));
+    public Resume get(Object index) {
+        return storage.get((Integer)index);
     }
 
     public Resume[] getAll() {
         return storage.toArray(new Resume[0]);
     }
 
-    public void save(Resume resume) {
-        isNotExists(resume.getUuid());
+    public void save(Resume resume, Object index) {
         storage.add(resume);
     }
 
-    public void delete(String uuid) {
-        storage.remove(isExists(uuid));
+    public void delete(Object index) {
+        storage.remove(((Integer)index).intValue());
     }
 
-    public void update(Resume resume) {
-        storage.set(isExists(resume.getUuid()), resume);
+    public void update(Resume resume, Object index) {
+        storage.set((Integer)index, resume);
     }
 
-    protected int findResumeElementNumber(String uuid) {
+    @Override
+    boolean isExists(Object index) {
+        return (Integer) index > -1;
+    }
+
+    protected Integer findResumeElementNumber(String uuid) {
         return storage.indexOf(new Resume(uuid));
     }
 }
