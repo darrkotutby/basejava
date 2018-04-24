@@ -20,34 +20,35 @@ public class MapStorage extends AbstractStorage {
         return storage.size();
     }
 
-    public Resume get(String uuid) {
-        isExists(uuid);
-        return (Resume) storage.get(uuid);
+    public Resume get(Object index) {
+        return storage.get(index.toString());
     }
 
     public Resume[] getAll() {
         return storage.values().toArray(new Resume[0]);
     }
 
-    public void save(Resume resume) {
-        isNotExists(resume.getUuid());
+    public void save(Resume resume, Object index) {
         storage.put(resume.getUuid(), resume);
     }
 
-    public void delete(String uuid) {
-        isExists(uuid);
-        storage.remove(uuid);
+    public void delete(Object index) {
+        storage.remove(index.toString());
     }
 
-    public void update(Resume resume) {
-        isExists(resume.getUuid());
-        storage.put(resume.getUuid(), resume);
+    public void update(Resume resume, Object index) {
+        save(resume, index);
     }
 
-    protected int findResumeElementNumber(String uuid) {
-        if (storage.containsValue(new Resume(uuid))) {
-            return 1;
+    protected Object findResumeElementNumber(Resume resume) {
+        if (storage.containsKey(resume.getUuid())) {
+            return resume.getUuid();
         }
-        return -1;
+        return null;
+    }
+
+    @Override
+    boolean check(Object index) {
+        return index != null;
     }
 }
