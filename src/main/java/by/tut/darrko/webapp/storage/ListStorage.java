@@ -21,7 +21,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     public Resume get(Object index) {
-        return storage.get((Integer)index);
+        return storage.get((Integer) index);
     }
 
     public Resume[] getAll() {
@@ -33,19 +33,19 @@ public class ListStorage extends AbstractStorage {
     }
 
     public void delete(Object index) {
-        storage.remove(((Integer)index).intValue());
+        storage.remove(((Integer) index).intValue());
     }
 
     public void update(Resume resume, Object index) {
-        storage.set((Integer)index, resume);
+        storage.set((Integer) index, resume);
     }
 
     @Override
-    boolean isExists(Object index) {
+    boolean check(Object index) {
         return (Integer) index > -1;
     }
 
-    protected Integer findResumeElementNumber(String uuid) {
-        return storage.indexOf(new Resume(uuid));
+    protected Integer findResumeElementNumber(Resume resume) {
+        return storage.indexOf(resume);
     }
 }

@@ -32,7 +32,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     public Resume get(Object index) {
-        return STORAGE[(Integer)index];
+        return STORAGE[(Integer) index];
     }
 
     /**
@@ -46,22 +46,22 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         if (size >= MAX_SIZE) {
             throw new NotExistStorageException("Can't save resume. Storage is full");
         }
-        add(resume, (Integer)index);
+        add(resume, (Integer) index);
         size++;
     }
 
     public void delete(Object index) {
-        remove((Integer)index);
+        remove(index);
         size--;
         STORAGE[size] = null;
     }
 
     public void update(Resume resume, Object index) {
-        STORAGE[(Integer)index] = resume;
+        STORAGE[(Integer) index] = resume;
     }
 
     @Override
-    boolean isExists(Object index) {
+    boolean check(Object index) {
         return (Integer) index > -1;
     }
 }

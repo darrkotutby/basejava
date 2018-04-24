@@ -17,12 +17,11 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public void remove(Object index) {
-        int idx = (Integer)index;
+        int idx = (Integer) index;
         System.arraycopy(STORAGE, idx + 1, STORAGE, idx, size - idx - 1);
     }
 
-    protected Integer findResumeElementNumber(String uuid) {
-        Resume searchedKey = new Resume(uuid);
-        return Arrays.binarySearch(STORAGE, 0, size, searchedKey);
+    protected Integer findResumeElementNumber(Resume resume) {
+        return Arrays.binarySearch(STORAGE, 0, size, resume);
     }
 }

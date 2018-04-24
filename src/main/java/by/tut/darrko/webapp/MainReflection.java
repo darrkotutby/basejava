@@ -14,7 +14,7 @@ public class MainReflection {
         Object resume = dogConstructor.newInstance("test1");
         Method getUuidMethod = resume.getClass().getMethod("getUuid");
         System.out.println("getUuid: " + getUuidMethod.invoke(resume));
-        Method toStringMethod = resume.getClass().getMethod("toString");
-        System.out.println("toString: " + toStringMethod.invoke(resume));
+        getUuidMethod = resume.getClass().getMethod("toString");
+        System.out.println("toString: " + getUuidMethod.invoke(resume));
     }
 }

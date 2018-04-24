@@ -37,18 +37,18 @@ public class MapStorage extends AbstractStorage {
     }
 
     public void update(Resume resume, Object index) {
-        storage.put(index.toString(), resume);
+        save(resume, index);
     }
 
-    protected Object findResumeElementNumber(String uuid) {
-        if (storage.containsKey(uuid)) {
-            return uuid;
+    protected Object findResumeElementNumber(Resume resume) {
+        if (storage.containsKey(resume.getUuid())) {
+            return resume.getUuid();
         }
         return null;
     }
 
     @Override
-    boolean isExists(Object index) {
-        return index!=null;
+    boolean check(Object index) {
+        return index != null;
     }
 }

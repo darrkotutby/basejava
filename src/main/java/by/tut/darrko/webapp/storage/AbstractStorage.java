@@ -5,46 +5,51 @@ import by.tut.darrko.webapp.exception.NotExistStorageException;
 import by.tut.darrko.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
-    protected abstract Object findResumeElementNumber(String uuid);
-    public abstract Resume get(Object index);
-    protected abstract void save(Resume resume, Object index);
-    protected abstract void delete(Object index);
-    protected abstract void update(Resume resume, Object index);
-    abstract boolean isExists(Object index);
+    protected abstract Object findResumeElementNumber(Resume resume);
 
-    Object isExists(String uuid) {
-        Object index = findResumeElementNumber(uuid);
-        if (!isExists(index)) {
-            throw new NotExistStorageException("Resume with uuid=" + uuid + " doesn't exists");
+    public abstract Resume get(Object index);
+
+    protected abstract void save(Resume resume, Object index);
+
+    protected abstract void delete(Object index);
+
+    protected abstract void update(Resume resume, Object index);
+
+    abstract boolean check(Object index);
+
+    private Object isExists(Resume resume) {
+        Object index = findResumeElementNumber(resume);
+        if (!check(index)) {
+            throw new NotExistStorageException("Resume with uuid=" + resume.getUuid() + " doesn't exists");
         }
         return index;
     }
 
-    Object isNotExists(String uuid) {
-        Object index = findResumeElementNumber(uuid);
-        if (isExists(index)) {
-            throw new ExistStorageException("Resume with uuid=" + uuid + " already exists");
+    private Object isNotExists(Resume resume) {
+        Object index = findResumeElementNumber(resume);
+        if (check(index)) {
+            throw new ExistStorageException("Resume with uuid=" + resume.getUuid() + " already exists");
         }
         return index;
     }
 
     @Override
-    public Resume get(String uuid) {
-        return get(isExists(uuid));
+    public Resume get(Resume resume) {
+        return get(isExists(resume));
     }
 
     @Override
     public void save(Resume resume) {
-        save(resume, isNotExists(resume.getUuid()));
+        save(resume, isNotExists(resume));
     }
 
     @Override
-    public void delete(String uuid) {
-        delete(isExists(uuid));
+    public void delete(Resume resume) {
+        delete(isExists(resume));
     }
 
     @Override
     public void update(Resume resume) {
-        update(resume, isExists(resume.getUuid()));
+        update(resume, isExists(resume));
     }
 }

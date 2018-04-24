@@ -49,7 +49,7 @@ public class MainArray {
                     break;
                 case "delete":
                     try {
-                        ARRAY_STORAGE.delete(uuid);
+                        ARRAY_STORAGE.delete(new Resume(uuid));
                         printAll();
                     } catch (NotExistStorageException e) {
                         System.out.println(e.getMessage());
@@ -57,7 +57,7 @@ public class MainArray {
                     break;
                 case "get":
                     try {
-                        System.out.println(ARRAY_STORAGE.get(uuid));
+                        System.out.println(ARRAY_STORAGE.get(new Resume(uuid)));
                     } catch (NotExistStorageException e) {
                         System.out.println(e.getMessage());
                     }
