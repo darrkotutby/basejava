@@ -14,9 +14,9 @@ public class ArrayStorage extends AbstractArrayStorage {
         STORAGE[(Integer) index] = STORAGE[size - 1];
     }
 
-    protected Integer findResumeElementNumber(Resume resume) {
+    protected Integer findResumeElementNumber(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (STORAGE[i].equals(resume)) {
+            if (STORAGE[i].getUuid().equals(uuid)) {
                 return i;
             }
         }

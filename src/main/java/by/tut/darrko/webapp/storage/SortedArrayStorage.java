@@ -21,7 +21,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         System.arraycopy(STORAGE, idx + 1, STORAGE, idx, size - idx - 1);
     }
 
-    protected Integer findResumeElementNumber(Resume resume) {
-        return Arrays.binarySearch(STORAGE, 0, size, resume);
+    protected Integer findResumeElementNumber(String uuid) {
+        return Arrays.binarySearch(STORAGE, 0, size, new Resume(uuid));
     }
 }
