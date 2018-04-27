@@ -20,7 +20,7 @@ public class ListStorage extends AbstractStorage {
         return storage.size();
     }
 
-    public Resume getUsingIndex(Object index) {
+    public Resume getByIndex(Object index) {
         return storage.get((Integer) index);
     }
 
@@ -28,15 +28,15 @@ public class ListStorage extends AbstractStorage {
         return storage.toArray(new Resume[0]);
     }
 
-    public void saveUsingIndex(Resume resume, Object index) {
+    public void saveByIndex(Resume resume, Object index) {
         storage.add(resume);
     }
 
-    public void deleteUsingIndex(Object index) {
+    public void deleteByIndex(Object index) {
         storage.remove(((Integer) index).intValue());
     }
 
-    public void updateUsingIndex(Resume resume, Object index) {
+    public void updateByIndex(Resume resume, Object index) {
         storage.set((Integer) index, resume);
     }
 

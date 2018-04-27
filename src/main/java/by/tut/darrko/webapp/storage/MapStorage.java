@@ -20,7 +20,7 @@ public class MapStorage extends AbstractStorage {
         return storage.size();
     }
 
-    public Resume getUsingIndex(Object index) {
+    public Resume getByIndex(Object index) {
         return storage.get(index.toString());
     }
 
@@ -28,23 +28,21 @@ public class MapStorage extends AbstractStorage {
         return storage.values().toArray(new Resume[0]);
     }
 
-    public void saveUsingIndex(Resume resume, Object index) {
+    public void saveByIndex(Resume resume, Object index) {
         storage.put(resume.getUuid(), resume);
     }
 
-    public void deleteUsingIndex(Object index) {
+    public void deleteByIndex(Object index) {
         storage.remove(index.toString());
     }
 
-    public void updateUsingIndex(Resume resume, Object index) {
+    public void updateByIndex(Resume resume, Object index) {
         storage.put(index.toString(), resume);
     }
 
     protected Object findResumeElementNumber(String uuid) {
-        for (Map.Entry entry : storage.entrySet()) {
-            if (uuid.equals(((Resume) entry.getValue()).getUuid())) {
-                return entry.getKey();
-            }
+        if (storage.containsKey(uuid)) {
+            return uuid;
         }
         return null;
     }

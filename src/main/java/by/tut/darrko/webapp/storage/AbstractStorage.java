@@ -7,13 +7,13 @@ import by.tut.darrko.webapp.model.Resume;
 public abstract class AbstractStorage implements Storage {
     protected abstract Object findResumeElementNumber(String uuid);
 
-    public abstract Resume getUsingIndex(Object index);
+    public abstract Resume getByIndex(Object index);
 
-    protected abstract void saveUsingIndex(Resume resume, Object index);
+    protected abstract void saveByIndex(Resume resume, Object index);
 
-    protected abstract void deleteUsingIndex(Object index);
+    protected abstract void deleteByIndex(Object index);
 
-    protected abstract void updateUsingIndex(Resume resume, Object index);
+    protected abstract void updateByIndex(Resume resume, Object index);
 
     abstract boolean check(Object index);
 
@@ -35,21 +35,21 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public Resume get(Resume resume) {
-        return getUsingIndex(isExists(resume));
+        return getByIndex(isExists(resume));
     }
 
     @Override
     public void save(Resume resume) {
-        saveUsingIndex(resume, isNotExists(resume));
+        saveByIndex(resume, isNotExists(resume));
     }
 
     @Override
     public void delete(Resume resume) {
-        deleteUsingIndex(isExists(resume));
+        deleteByIndex(isExists(resume));
     }
 
     @Override
     public void update(Resume resume) {
-        updateUsingIndex(resume, isExists(resume));
+        updateByIndex(resume, isExists(resume));
     }
 }

@@ -31,7 +31,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    public Resume getUsingIndex(Object index) {
+    public Resume getByIndex(Object index) {
         return STORAGE[(Integer) index];
     }
 
@@ -42,7 +42,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return Arrays.copyOf(STORAGE, size);
     }
 
-    public void saveUsingIndex(Resume resume, Object index) {
+    public void saveByIndex(Resume resume, Object index) {
         if (size >= MAX_SIZE) {
             throw new NotExistStorageException("Can't save resume. Storage is full");
         }
@@ -50,13 +50,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size++;
     }
 
-    public void deleteUsingIndex(Object index) {
+    public void deleteByIndex(Object index) {
         remove(index);
         size--;
         STORAGE[size] = null;
     }
 
-    public void updateUsingIndex(Resume resume, Object index) {
+    public void updateByIndex(Resume resume, Object index) {
         STORAGE[(Integer) index] = resume;
     }
 
