@@ -4,9 +4,7 @@ import by.tut.darrko.webapp.exception.ExistStorageException;
 import by.tut.darrko.webapp.exception.NotExistStorageException;
 import by.tut.darrko.webapp.model.Resume;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
@@ -48,9 +46,7 @@ public abstract class AbstractStorage implements Storage {
     public List<Resume> getAllSorted() {
         Resume[] array = getAll();
         Arrays.sort(array, Resume.getFullNameComparator());
-        List<Resume> list = new ArrayList<>();
-        Collections.addAll(list, array);
-        return list;
+        return Arrays.asList(array);
     }
 
     @Override

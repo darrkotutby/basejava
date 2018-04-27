@@ -1,11 +1,13 @@
 package by.tut.darrko.webapp.model;
 
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Resume implements Comparable<Resume> {
 
-    private static FullNameComparator fullNameComparator;
+    private static final Comparator<Resume> FULL_NAME_COMPARATOR = (o1, o2) -> o1.getFullName().compareTo(o2.getFullName());
+
     // Unique identifier
     private final String uuid;
     private String fullName;
@@ -24,14 +26,7 @@ public class Resume implements Comparable<Resume> {
     }
 
     public static Comparator<Resume> getFullNameComparator() {
-        if (fullNameComparator == null) {
-            synchronized (Resume.class) {
-                if (fullNameComparator == null) {
-                    fullNameComparator = new FullNameComparator();
-                }
-            }
-        }
-        return fullNameComparator;
+        return FULL_NAME_COMPARATOR;
     }
 
     public String getUuid() {
@@ -51,12 +46,12 @@ public class Resume implements Comparable<Resume> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return uuid.equals(resume.uuid);
+        return Objects.equals(uuid, resume.uuid);
     }
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        return Objects.hash(uuid);
     }
 
     @Override
@@ -70,12 +65,5 @@ public class Resume implements Comparable<Resume> {
     @Override
     public int compareTo(Resume o) {
         return uuid.compareTo(o.uuid);
-    }
-
-    private static class FullNameComparator implements Comparator<Resume> {
-        @Override
-        public int compare(Resume o1, Resume o2) {
-            return o1.getFullName().compareTo(o2.getFullName());
-        }
     }
 }

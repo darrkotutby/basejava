@@ -6,9 +6,7 @@ import by.tut.darrko.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -89,9 +87,10 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void updateTest() {
-        Resume newResume = new Resume(resume1.getUuid());
+        Resume newResume = new Resume(resume1.getUuid(), "Test");
         storage.update(newResume);
-        assertSame(newResume, storage.get(resume1));
+        assertEquals(newResume.getFullName(), storage.get(resume1).getFullName());
+
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -101,9 +100,6 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void getAllSortedTest() {
-        List<Resume> list = new ArrayList<>();
-        Resume[] array = new Resume[]{resume1, resume3, resume2};
-        Collections.addAll(list, array);
-        assertEquals(list, storage.getAllSorted());
+        assertEquals(Arrays.asList(resume1, resume3, resume2), storage.getAllSorted());
     }
 }
