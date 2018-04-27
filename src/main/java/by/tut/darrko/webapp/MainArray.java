@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
  * Test for ArrayStorage
  */
 public class MainArray {
+
     private final static Storage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) throws IOException {

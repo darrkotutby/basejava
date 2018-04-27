@@ -6,6 +6,7 @@ import by.tut.darrko.webapp.model.Resume;
  * Array based STORAGE for Resumes
  */
 public class ArrayStorage extends AbstractArrayStorage {
+
     public void add(Resume resume, int index) {
         STORAGE[size] = resume;
     }
