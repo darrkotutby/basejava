@@ -6,6 +6,7 @@ import by.tut.darrko.webapp.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
+
     private static final int MAX_SIZE = 10000;
     final Resume[] STORAGE;
     int size = 0;

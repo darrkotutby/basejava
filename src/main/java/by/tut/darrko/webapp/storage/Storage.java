@@ -2,7 +2,10 @@ package by.tut.darrko.webapp.storage;
 
 import by.tut.darrko.webapp.model.Resume;
 
+import java.util.List;
+
 public interface Storage {
+
     void clear();
 
     int size();
@@ -10,6 +13,8 @@ public interface Storage {
     Resume get(Resume resume);
 
     Resume[] getAll();
+
+    List<Resume> getAllSorted();
 
     void save(Resume resume);
 

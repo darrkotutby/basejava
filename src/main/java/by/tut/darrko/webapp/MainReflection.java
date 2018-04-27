@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class MainReflection {
+
     public static void main(String[] args)
             throws IllegalAccessException, NoSuchMethodException, InvocationTargetException,
             ClassNotFoundException, InstantiationException {
@@ -16,5 +17,14 @@ public class MainReflection {
         System.out.println("getUuid: " + getUuidMethod.invoke(resume));
         getUuidMethod = resume.getClass().getMethod("toString");
         System.out.println("toString: " + getUuidMethod.invoke(resume));
+
+        int h = "0".hashCode();
+        System.out.println(h);
+        h ^= (h >>> 20) ^ (h >>> 12);
+        System.out.println(h);
+        h ^= (h >>> 7) ^ (h >>> 4);
+        System.out.println(h);
+        System.out.println(h & (16 - 1));
+
     }
 }

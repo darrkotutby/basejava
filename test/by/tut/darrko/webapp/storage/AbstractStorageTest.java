@@ -6,12 +6,15 @@ import by.tut.darrko.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
-    Resume resume1 = new Resume("UUID1");
-    Resume resume2 = new Resume("UUID2");
-    Resume resume3 = new Resume("UUID3");
+
+    Resume resume1 = new Resume("UUID1", "Alex Ivanov");
+    Resume resume2 = new Resume("UUID2", "Petr Sidorov");
+    Resume resume3 = new Resume("UUID3", "Herman Shults");
     Storage storage;
     Resume[] array = null;
 
@@ -84,13 +87,19 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void updateTest() {
-        Resume newResume = new Resume(resume1.getUuid());
+        Resume newResume = new Resume(resume1.getUuid(), "Test");
         storage.update(newResume);
-        assertSame(newResume, storage.get(resume1));
+        assertEquals(newResume.getFullName(), storage.get(resume1).getFullName());
+
     }
 
     @Test(expected = NotExistStorageException.class)
     public void updateNotExistTest() {
         storage.update(new Resume("test1"));
+    }
+
+    @Test
+    public void getAllSortedTest() {
+        assertEquals(Arrays.asList(resume1, resume3, resume2), storage.getAllSorted());
     }
 }

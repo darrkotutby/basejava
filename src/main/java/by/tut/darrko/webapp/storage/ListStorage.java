@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
+
     protected List<Resume> storage;
 
     public ListStorage() {

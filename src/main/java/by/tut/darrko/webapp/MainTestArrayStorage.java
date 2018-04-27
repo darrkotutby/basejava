@@ -12,12 +12,13 @@ import by.tut.darrko.webapp.storage.Storage;
  * Test for ArrayStorage
  */
 public class MainTestArrayStorage {
+
     private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
-        Resume r1 = new Resume("uuid1");
-        Resume r2 = new Resume("uuid2");
-        Resume r3 = new Resume("uuid3");
+        Resume r1 = new Resume("UUID1", "Alex Ivanov");
+        Resume r2 = new Resume("UUID2", "Petr Sidorov");
+        Resume r3 = new Resume("UUID3", "Herman Shults");
 
         ARRAY_STORAGE.save(r1);
 
@@ -36,7 +37,7 @@ public class MainTestArrayStorage {
         System.out.println("Size: " + ARRAY_STORAGE.size());
 
         try {
-            System.out.println("Get dummy: " + ARRAY_STORAGE.get(new Resume("dummy")));
+            System.out.println("Get dummy: " + ARRAY_STORAGE.get(new Resume("dummy", null)));
         } catch (NotExistStorageException e) {
             System.out.println(e.getMessage());
         }

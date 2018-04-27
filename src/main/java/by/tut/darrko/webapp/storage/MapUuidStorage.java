@@ -2,30 +2,16 @@ package by.tut.darrko.webapp.storage;
 
 import by.tut.darrko.webapp.model.Resume;
 
-import java.util.Map;
 import java.util.TreeMap;
 
-public class MapStorage extends AbstractStorage {
-    protected Map<String, Resume> storage;
+public class MapUuidStorage extends AbstractMapStorage {
 
-    public MapStorage() {
+    public MapUuidStorage() {
         storage = new TreeMap<>();
-    }
-
-    public void clear() {
-        storage.clear();
-    }
-
-    public int size() {
-        return storage.size();
     }
 
     public Resume getByIndex(Object index) {
         return storage.get(index.toString());
-    }
-
-    public Resume[] getAll() {
-        return storage.values().toArray(new Resume[0]);
     }
 
     public void saveByIndex(Resume resume, Object index) {
