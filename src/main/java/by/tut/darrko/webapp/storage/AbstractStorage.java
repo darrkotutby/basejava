@@ -5,9 +5,16 @@ import by.tut.darrko.webapp.exception.NotExistStorageException;
 import by.tut.darrko.webapp.model.Resume;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
+
+    private static final Comparator<Resume> FULL_NAME_COMPARATOR = (o1, o2) -> o1.getFullName().compareTo(o2.getFullName());
+
+    private static Comparator<Resume> getFullNameComparator() {
+        return FULL_NAME_COMPARATOR;
+    }
 
     protected abstract Object findResumeElementNumber(String uuid);
 
@@ -45,7 +52,7 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         Resume[] array = getAll();
-        Arrays.sort(array, Resume.getFullNameComparator());
+        Arrays.sort(array, getFullNameComparator());
         return Arrays.asList(array);
     }
 

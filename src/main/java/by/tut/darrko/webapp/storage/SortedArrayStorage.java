@@ -20,6 +20,6 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     protected Integer findResumeElementNumber(String uuid) {
-        return Arrays.binarySearch(STORAGE, 0, size, new Resume(uuid));
+        return Arrays.binarySearch(STORAGE, 0, size, new Resume(uuid, null));
     }
 }
