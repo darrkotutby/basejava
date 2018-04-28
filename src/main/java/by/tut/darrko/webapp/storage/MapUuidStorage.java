@@ -15,7 +15,7 @@ public class MapUuidStorage extends AbstractMapStorage {
     }
 
     public void saveByIndex(Resume resume, Object index) {
-        storage.put(resume.getUuid(), resume);
+        storage.put(index.toString(), resume);
     }
 
     public void deleteByIndex(Object index) {
@@ -23,18 +23,15 @@ public class MapUuidStorage extends AbstractMapStorage {
     }
 
     public void updateByIndex(Resume resume, Object index) {
-        storage.put(index.toString(), resume);
+        saveByIndex(resume, index);
     }
 
     protected Object findResumeElementNumber(String uuid) {
-        if (storage.containsKey(uuid)) {
-            return uuid;
-        }
-        return null;
+        return uuid;
     }
 
     @Override
     boolean check(Object index) {
-        return index != null;
+        return storage.containsKey(index.toString());
     }
 }
