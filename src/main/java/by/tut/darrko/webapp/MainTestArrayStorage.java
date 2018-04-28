@@ -33,11 +33,11 @@ public class MainTestArrayStorage {
 
         printAll();
 
-        System.out.println("Get r1: " + ARRAY_STORAGE.get(r1));
+        System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.getUuid()));
         System.out.println("Size: " + ARRAY_STORAGE.size());
 
         try {
-            System.out.println("Get dummy: " + ARRAY_STORAGE.get(new Resume("dummy", null)));
+            System.out.println("Get dummy: " + ARRAY_STORAGE.get(new Resume("dummy", null).getUuid()));
         } catch (NotExistStorageException e) {
             System.out.println(e.getMessage());
         }
@@ -52,17 +52,17 @@ public class MainTestArrayStorage {
 
         r4 = new Resume("uuid3");
         ARRAY_STORAGE.update(r4);
-        r3 = ARRAY_STORAGE.get(r4);
+        r3 = ARRAY_STORAGE.get(r4.getUuid());
         if (r3 == r4) {
             System.out.println("Resume updated");
         }
         try {
-            ARRAY_STORAGE.delete(new Resume("dummy"));
+            ARRAY_STORAGE.delete(new Resume("dummy").getUuid());
         } catch (NotExistStorageException e) {
             System.out.println(e.getMessage());
         }
         printAll();
-        ARRAY_STORAGE.delete(r1);
+        ARRAY_STORAGE.delete(r1.getUuid());
 
         printAll();
         ARRAY_STORAGE.clear();
@@ -79,7 +79,7 @@ public class MainTestArrayStorage {
         }
         System.out.println("Size: " + ARRAY_STORAGE.size());
 
-        ARRAY_STORAGE.delete(new Resume("5"));
+        ARRAY_STORAGE.delete(new Resume("5").getUuid());
 
         printAll();
 

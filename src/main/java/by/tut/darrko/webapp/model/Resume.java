@@ -1,6 +1,5 @@
 package by.tut.darrko.webapp.model;
 
-import java.util.Comparator;
 import java.util.Objects;
 import java.util.UUID;
 

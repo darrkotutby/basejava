@@ -28,25 +28,25 @@ public abstract class AbstractStorage implements Storage {
 
     abstract boolean check(Object index);
 
-    private Object isExists(Resume resume) {
-        Object index = findResumeElementNumber(resume.getUuid());
+    private Object isExists(String uuid) {
+        Object index = findResumeElementNumber(uuid);
         if (!check(index)) {
-            throw new NotExistStorageException("Resume with uuid=" + resume.getUuid() + " doesn't exists");
+            throw new NotExistStorageException("Resume with uuid=" + uuid + " doesn't exists");
         }
         return index;
     }
 
-    private Object isNotExists(Resume resume) {
-        Object index = findResumeElementNumber(resume.getUuid());
+    private Object isNotExists(String uuid) {
+        Object index = findResumeElementNumber(uuid);
         if (check(index)) {
-            throw new ExistStorageException("Resume with uuid=" + resume.getUuid() + " already exists");
+            throw new ExistStorageException("Resume with uuid=" + uuid + " already exists");
         }
         return index;
     }
 
     @Override
-    public Resume get(Resume resume) {
-        return getByIndex(isExists(resume));
+    public Resume get(String uuid) {
+        return getByIndex(isExists(uuid));
     }
 
     @Override
@@ -58,16 +58,16 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void save(Resume resume) {
-        saveByIndex(resume, isNotExists(resume));
+        saveByIndex(resume, isNotExists(resume.getUuid()));
     }
 
     @Override
-    public void delete(Resume resume) {
-        deleteByIndex(isExists(resume));
+    public void delete(String uuid) {
+        deleteByIndex(isExists(uuid));
     }
 
     @Override
     public void update(Resume resume) {
-        updateByIndex(resume, isExists(resume));
+        updateByIndex(resume, isExists(resume.getUuid()));
     }
 }
