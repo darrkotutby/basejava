@@ -8,7 +8,8 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public abstract class AbstractStorageTest {
 
@@ -16,7 +17,7 @@ public abstract class AbstractStorageTest {
     Resume resume2 = new Resume("UUID2", "Petr Sidorov");
     Resume resume3 = new Resume("UUID3", "Herman Shults");
     Storage storage;
-  //  Resume[] array = null;
+    //  Resume[] array = null;
 
     AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -53,7 +54,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void save() {
-        Resume newResume = new Resume("test1", null);
+        Resume newResume = new Resume("test1", "Dummy");
         storage.save(newResume);
         assertEquals(4, storage.size());
         assertEquals(newResume, storage.get(newResume.getUuid()));

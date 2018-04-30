@@ -28,9 +28,9 @@ public class MainArray {
                 System.out.println("Неверная команда.");
                 continue;
             }
-            String uuid = null;
+            String param = null;
             if (params.length == 2) {
-                uuid = params[1].intern();
+                param = params[1].intern();
             }
             switch (params[0]) {
                 case "list":
@@ -40,7 +40,7 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    r = new Resume(uuid);
+                    r = new Resume(param);
                     try {
                         ARRAY_STORAGE.save(r);
                         printAll();
@@ -50,7 +50,7 @@ public class MainArray {
                     break;
                 case "delete":
                     try {
-                        ARRAY_STORAGE.delete(uuid);
+                        ARRAY_STORAGE.delete(param);
                         printAll();
                     } catch (NotExistStorageException e) {
                         System.out.println(e.getMessage());
@@ -58,14 +58,14 @@ public class MainArray {
                     break;
                 case "get":
                     try {
-                        System.out.println(ARRAY_STORAGE.get(uuid));
+                        System.out.println(ARRAY_STORAGE.get(param));
                     } catch (NotExistStorageException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
                 case "update":
                     try {
-                        Resume resume = new Resume(uuid);
+                        Resume resume = new Resume(param, params[2]);
                         ARRAY_STORAGE.update(resume);
                         printAll();
                     } catch (NotExistStorageException e) {

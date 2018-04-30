@@ -4,34 +4,39 @@ import by.tut.darrko.webapp.model.Resume;
 
 import java.util.HashMap;
 
-public class MapResumeStorage extends AbstractMapStorage {
+public class MapResumeStorage extends AbstractMapStorage<Resume> {
 
     public MapResumeStorage() {
         storage = new HashMap<>();
     }
 
-    public Resume getByIndex(Object index) {
-        return storage.get(((Resume) index).getUuid());
+    @Override
+    public Resume getByIndex(Resume index) {
+        return storage.get(index.getUuid());
     }
 
-    public void saveByIndex(Resume resume, Object index) {
+    @Override
+    public void saveByIndex(Resume resume, Resume index) {
         storage.put(resume.getUuid(), resume);
     }
 
-    public void deleteByIndex(Object index) {
-        storage.remove(((Resume) index).getUuid());
+    @Override
+    public void deleteByIndex(Resume index) {
+        storage.remove(index.getUuid());
     }
 
-    public void updateByIndex(Resume resume, Object index) {
-        storage.put(((Resume) index).getUuid(), resume);
+    @Override
+    public void updateByIndex(Resume resume, Resume index) {
+        storage.put(index.getUuid(), resume);
     }
 
-    protected Object findResumeElementNumber(String uuid) {
+    @Override
+    protected Resume findResumeElementNumber(String uuid) {
         return storage.get(uuid);
     }
 
     @Override
-    boolean check(Object index) {
+    boolean check(Resume index) {
         return index != null;
     }
 }
