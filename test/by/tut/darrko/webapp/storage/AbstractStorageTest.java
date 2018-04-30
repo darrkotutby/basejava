@@ -16,7 +16,7 @@ public abstract class AbstractStorageTest {
     Resume resume2 = new Resume("UUID2", "Petr Sidorov");
     Resume resume3 = new Resume("UUID3", "Herman Shults");
     Storage storage;
-    Resume[] array = null;
+  //  Resume[] array = null;
 
     AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -78,11 +78,6 @@ public abstract class AbstractStorageTest {
     @Test(expected = NotExistStorageException.class)
     public void deleteNotExistTest() {
         storage.delete("test1");
-    }
-
-    @Test
-    public void getAllTest() {
-        assertArrayEquals(array, storage.getAll());
     }
 
     @Test

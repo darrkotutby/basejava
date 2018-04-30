@@ -12,10 +12,6 @@ public abstract class AbstractStorage implements Storage {
 
     private static final Comparator<Resume> FULL_NAME_COMPARATOR = (o1, o2) -> o1.getFullName().compareTo(o2.getFullName());
 
-    private static Comparator<Resume> getFullNameComparator() {
-        return FULL_NAME_COMPARATOR;
-    }
-
     protected abstract Object findResumeElementNumber(String uuid);
 
     public abstract Resume getByIndex(Object index);
@@ -52,7 +48,7 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         Resume[] array = getAll();
-        Arrays.sort(array, getFullNameComparator());
+        Arrays.sort(array, FULL_NAME_COMPARATOR);
         return Arrays.asList(array);
     }
 

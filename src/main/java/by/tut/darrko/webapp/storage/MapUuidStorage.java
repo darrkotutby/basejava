@@ -2,12 +2,12 @@ package by.tut.darrko.webapp.storage;
 
 import by.tut.darrko.webapp.model.Resume;
 
-import java.util.TreeMap;
+import java.util.HashMap;
 
 public class MapUuidStorage extends AbstractMapStorage {
 
     public MapUuidStorage() {
-        storage = new TreeMap<>();
+        storage = new HashMap<>();
     }
 
     public Resume getByIndex(Object index) {
