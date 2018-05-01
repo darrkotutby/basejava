@@ -7,8 +7,8 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     private final String uuid;
     private final String fullName;
-    private Map<ContactType, Section> contacts = new TreeMap<>();
-    private Map<SectionType, Section> sections = new TreeMap<>();
+    private Map<ContactType, Section<ContactType>> contacts = new TreeMap<>();
+    private Map<SectionType, Section<SectionType>> sections = new TreeMap<>();
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -29,7 +29,7 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-    public Map<ContactType, Section> getContacts() {
+    public Map<ContactType, Section<ContactType>> getContacts() {
         return contacts;
     }
 
@@ -41,23 +41,23 @@ public class Resume implements Comparable<Resume> {
         getContactSection(contactType).deleteEntry(description);
     }
 
-    public Map<SectionType, Section> getSections() {
+    public Map<SectionType, Section<SectionType>> getSections() {
         return sections;
     }
 
-    public Section getContactSection(ContactType contactType) {
-        Section section = contacts.get(contactType);
+    public Section<ContactType> getContactSection(ContactType contactType) {
+        Section<ContactType> section = contacts.get(contactType);
         if (section == null) {
-            section = new Section(contactType);
+            section = new Section<>(contactType);
             contacts.put(contactType, section);
         }
         return section;
     }
 
-    public Section getSection(SectionType sectionType) {
-        Section section = sections.get(sectionType);
+    public Section<SectionType> getSection(SectionType sectionType) {
+        Section<SectionType> section = sections.get(sectionType);
         if (section == null) {
-            section = new Section(sectionType);
+            section = new Section<>(sectionType);
             sections.put(sectionType, section);
         }
         return section;

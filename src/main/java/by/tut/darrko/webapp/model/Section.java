@@ -2,11 +2,11 @@ package by.tut.darrko.webapp.model;
 
 import java.util.*;
 
-public class Section<T> {
-    T type;
+public class Section<Enum> {
+    Enum type;
     Set<Entry> entries = new TreeSet<>();
 
-    public Section(T type) {
+    public Section(Enum type) {
         this.type = type;
     }
 
