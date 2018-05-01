@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>by.tut.darrko.webapp.model</OriginalElement>
+  <nodes>
+    <node x="143.0" y="336.0">by.tut.darrko.webapp.model.Section</node>
+    <node x="327.0" y="270.0">by.tut.darrko.webapp.model.ContactType</node>
+    <node x="0.0" y="281.0">by.tut.darrko.webapp.model.SectionType</node>
+    <node x="67.70833333333331" y="526.0">by.tut.darrko.webapp.model.Resume</node>
+    <node x="37.76190476190473" y="102.0">by.tut.darrko.webapp.model.DatedEntry</node>
+    <node x="146.26190476190473" y="0.0">by.tut.darrko.webapp.model.Entry</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="by.tut.darrko.webapp.model.Section" target="by.tut.darrko.webapp.model.Entry">
+      <point x="-20.50000000000003" y="-37.0" />
+      <point x="204.49999999999997" y="240.0" />
+      <point x="247.26190476190473" y="240.0" />
+      <point x="247.26190476190473" y="77.0" />
+      <point x="226.26190476190473" y="77.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="by.tut.darrko.webapp.model.Resume" target="by.tut.darrko.webapp.model.ContactType">
+      <point x="150.85714285714292" y="-59.0" />
+      <point x="394.56547619047626" y="506.0" />
+      <point x="417.75" y="506.0" />
+      <point x="30.25" y="103.0" />
+    </edge>
+    <edge source="by.tut.darrko.webapp.model.Resume" target="by.tut.darrko.webapp.model.SectionType">
+      <point x="-150.85714285714292" y="-59.0" />
+      <point x="92.8511904761904" y="506.0" />
+      <point x="30.75" y="506.0" />
+      <point x="-30.75" y="92.0" />
+    </edge>
+    <edge source="by.tut.darrko.webapp.model.Resume" target="by.tut.darrko.webapp.model.Section">
+      <point x="50.28571428571425" y="-59.0" />
+      <point x="293.9940476190476" y="506.0" />
+      <point x="279.66666666666663" y="506.0" />
+      <point x="54.66666666666666" y="37.0" />
+    </edge>
+    <edge source="by.tut.darrko.webapp.model.DatedEntry" target="by.tut.darrko.webapp.model.Entry">
+      <point x="49.75" y="-59.0" />
+      <point x="187.01190476190473" y="77.0" />
+      <point x="194.26190476190473" y="77.0" />
+      <point x="-32.0" y="26.0" />
+    </edge>
+    <edge source="by.tut.darrko.webapp.model.Section" target="by.tut.darrko.webapp.model.DatedEntry">
+      <point x="-61.50000000000003" y="-37.0" />
+      <point x="163.49999999999997" y="250.0" />
+      <point x="137.26190476190473" y="250.0" />
+      <point x="0.0" y="59.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="224.0" y="322.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
