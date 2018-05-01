@@ -1,5 +1,8 @@
 package by.tut.darrko.webapp;
 
+import by.tut.darrko.webapp.model.ContactType;
+import by.tut.darrko.webapp.model.Resume;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,13 +21,14 @@ public class MainReflection {
         getUuidMethod = resume.getClass().getMethod("toString");
         System.out.println("toString: " + getUuidMethod.invoke(resume));
 
-        int h = "0".hashCode();
-        System.out.println(h);
-        h ^= (h >>> 20) ^ (h >>> 12);
-        System.out.println(h);
-        h ^= (h >>> 7) ^ (h >>> 4);
-        System.out.println(h);
-        System.out.println(h & (16 - 1));
+        Resume r = new Resume("UUID1", "Alex Ivanov");
+        r.addContact(ContactType.ADDRESS, "Minsk");
+        r.addContact(ContactType.PHONE, "123");
+        r.addContact(ContactType.PHONE, "456");
+        r.addObjective("Ведущий инженер программист");
+        r.addPersonal("Тупой");
+        r.addPersonal("Упоротый");
 
+        System.out.println(r);
     }
 }
