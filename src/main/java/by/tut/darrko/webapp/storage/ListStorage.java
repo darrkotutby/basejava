@@ -25,7 +25,7 @@ public class ListStorage extends AbstractStorage<Integer> {
 
     @Override
     public Resume getByIndex(Integer index) {
-        return storage.get((Integer) index);
+        return storage.get(index);
     }
 
     @Override
@@ -40,17 +40,17 @@ public class ListStorage extends AbstractStorage<Integer> {
 
     @Override
     public void deleteByIndex(Integer index) {
-        storage.remove(((Integer) index).intValue());
+        storage.remove(index.intValue());
     }
 
     @Override
     public void updateByIndex(Resume resume, Integer index) {
-        storage.set((Integer) index, resume);
+        storage.set(index, resume);
     }
 
     @Override
     boolean check(Integer index) {
-        return (Integer) index > -1;
+        return index > -1;
     }
 
     protected Integer findResumeElementNumber(String uuid) {

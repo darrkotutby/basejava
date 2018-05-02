@@ -1,5 +1,6 @@
 package by.tut.darrko.webapp.model;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class ListedSection extends Section<Entry> {
     }
 
     @Override
-    public List<Entry> getEntries(Entry entry) {
+    public List<Entry> getEntries() {
         return entries;
     }
 
@@ -28,13 +29,13 @@ public class ListedSection extends Section<Entry> {
                 "} " + super.toString();
     }
 
-    public void print() {
+    public void print() throws ParseException {
         super.print();
         StringBuilder sb = new StringBuilder();
         for (Entry entry : entries) {
-            sb.append(entry.getDescription()).append(", ");
+            sb.append(entry.toStringForPrint()).append("\n");
         }
-        String string = sb.toString().trim();
+        String string = sb.toString().replace(", \n", "\n");
         System.out.println(string.substring(0, string.length() - 1));
         System.out.println();
     }

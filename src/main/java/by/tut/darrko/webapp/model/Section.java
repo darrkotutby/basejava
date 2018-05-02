@@ -1,12 +1,13 @@
 package by.tut.darrko.webapp.model;
 
+import java.text.ParseException;
 import java.util.*;
 
 public abstract class Section<T extends Entry> {
     private final SectionType  sectionType;
 
     public abstract void addEntry(T entry);
-    public abstract List<Entry> getEntries(T entry);
+    public abstract List<Entry> getEntries();
 
     Section(SectionType sectionType) {
         this.sectionType = sectionType;
@@ -32,7 +33,7 @@ public abstract class Section<T extends Entry> {
                 '}';
     }
 
-    public void print() {
+    public void print() throws ParseException {
         System.out.println(sectionType.getTitle());
     }
 }

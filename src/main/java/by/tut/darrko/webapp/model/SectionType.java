@@ -2,12 +2,13 @@ package by.tut.darrko.webapp.model;
 
 public enum SectionType {
 
+    CONTACTS("Контакты:"),
     OBJECTIVE("Позиция:"),
     PERSONAL("Личные качества:"),
     ACHIEVEMENT("Достжения:"),
     QUALIFICATION("Квалификация:"),
     EXPERIENCE("Опыт работы:"),
-    EDUCATION("Обраование:");
+    EDUCATION("Образование:");
 
     private String title;
 

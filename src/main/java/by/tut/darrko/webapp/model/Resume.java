@@ -1,5 +1,6 @@
 package by.tut.darrko.webapp.model;
 
+import java.text.ParseException;
 import java.util.*;
 
 public class Resume implements Comparable<Resume> {
@@ -7,7 +8,7 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     private final String uuid;
     private final String fullName;
-    private List<Contact> contacts = new ArrayList<>();
+
     private Map<SectionType, Section> sections = new TreeMap<>();
 
     public Resume(String fullName) {
@@ -29,28 +30,25 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-    public List<Contact> getContacts() {
-        return contacts;
+    private List<ContactEntry> getContacts() {
+        return sections.get(SectionType.CONTACTS).getEntries();
     }
 
     public void addContact(ContactType contactType, String description) {
-        contacts.add(new Contact(contactType, description));
+        getSection(SectionType.CONTACTS).addEntry(new ContactEntry(contactType, description));
     }
 
-    public void deleteContact(ContactType contactType, String description) {
-        contacts.remove(new Contact(contactType, description));
-    }
-
-    public List<Contact> getContactsByType(ContactType contactType) {
+    public List<ContactEntry> getContactsByType(ContactType contactType) {
+        List<ContactEntry> list = getContacts();
         if (contactType == null) {
-            return getContacts();
+            return list;
         }
-        List<Contact> list = new ArrayList<>();
-        for (Contact contact : contacts) {
+        List<ContactEntry> subList = new ArrayList<>();
+        for (ContactEntry contact : list) {
             if (contact.getContactType().equals(contactType))
-                list.add(contact);
+                subList.add(contact);
         }
-        return list;
+        return subList;
     }
 
     public Map<SectionType, Section> getSections() {
@@ -66,28 +64,13 @@ public class Resume implements Comparable<Resume> {
         return section;
     }
 
-    public void addObjective(String description) {
-        getSection(SectionType.OBJECTIVE).addEntry(new Entry(description));
+    public void addSectionsEntry(SectionType sectionType, String description) {
+        getSection(sectionType).addEntry(new Entry(description));
     }
 
-    public void addPersonal(String description) {
-        getSection(SectionType.PERSONAL).addEntry(new Entry(description));
-    }
-
-    public void addAchievement(String description) {
-        getSection(SectionType.ACHIEVEMENT).addEntry(new Entry(description));
-    }
-
-    public void addQualification(String description) {
-        getSection(SectionType.QUALIFICATION).addEntry(new Entry(description));
-    }
-
-    public void addExperience(String organisationName, Date dateFrom, String dateTo, String position, String description) {
-        getSection(SectionType.EXPERIENCE).addEntry(new DatedEntry(organisationName, dateFrom, dateTo, position, description));
-    }
-
-    public void addEducation(String organisationName, Date dateFrom, String dateTo, String position, String description) {
-        getSection(SectionType.EDUCATION).addEntry(new DatedEntry(organisationName, dateFrom, dateTo, position, description));
+    public void addSectionsEntry(SectionType sectionType, String organisationName, Date dateFrom, String dateTo, String position, String
+            description) {
+        getSection(sectionType).addEntry(new DatedEntry(organisationName, dateFrom, dateTo, position, description));
     }
 
     @Override
@@ -108,7 +91,7 @@ public class Resume implements Comparable<Resume> {
         return "Resume{" +
                 "\nuuid='" + uuid + '\'' +
                 ",\n fullName='" + fullName + '\'' +
-                ",\n contacts=" + contacts +
+                //  ",\n contacts=" + contacts +
                 ",\n sections=" + sections +
                 "\n}";
     }
@@ -118,14 +101,8 @@ public class Resume implements Comparable<Resume> {
         return uuid.compareTo(o.uuid);
     }
 
-    public void print() {
+    public void print() throws ParseException {
         System.out.println(fullName);
-        System.out.println();
-
-        for (Contact contact : contacts) {
-            contact.print();
-        }
-
         System.out.println();
         for (SectionType contactType : sections.keySet()) {
             sections.get(contactType).print();
