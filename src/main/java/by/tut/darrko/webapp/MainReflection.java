@@ -40,5 +40,8 @@ public class MainReflection {
         r.addEducation("РТИ", format.parse("01.01.1995"),"01.08.2000", "Студент", "ФКП");
 
         System.out.println(r);
+        System.out.println();
+        r.print();
+
     }
 }

@@ -2,53 +2,37 @@ package by.tut.darrko.webapp.model;
 
 import java.util.*;
 
-public class Section<Enum> {
-    Enum type;
-    Set<Entry> entries = new TreeSet<>();
+public abstract class Section<T extends Entry> {
+    private final SectionType  sectionType;
 
-    public Section(Enum type) {
-        this.type = type;
-    }
+    public abstract void addEntry(T entry);
+    public abstract List<Entry> getEntries(T entry);
 
-    public void addEntry(String description) {
-        entries.add(new Entry(description));
-    }
-
-    public void addEntry(String organisationName, Date dateFrom, String dateTo, String position, String description) {
-        entries.add(new DatedEntry(organisationName, dateFrom, dateTo, position, description));
-    }
-
-    public void deleteEntry(String description) {
-        entries.remove(new Entry(description));
-    }
-
-    public void deleteEntry(String organisationName, Date dateFrom, String dateTo, String position, String description) {
-        entries.remove(new DatedEntry(organisationName, dateFrom, dateTo, position, description));
-    }
-
-    public List<Entry> getAllEntries() {
-        return new ArrayList<>(entries);
+    Section(SectionType sectionType) {
+        this.sectionType = sectionType;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Section)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Section section = (Section) o;
-        return type == section.type;
+        return sectionType == section.sectionType;
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(type);
+        return Objects.hash(sectionType);
     }
 
     @Override
     public String toString() {
         return "Section{" +
-                "type=" + type +
-                ", entries=" + entries +
+                "sectionType=" + sectionType +
                 '}';
+    }
+
+    public void print() {
+        System.out.println(sectionType.getTitle());
     }
 }

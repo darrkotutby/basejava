@@ -5,16 +5,12 @@ import java.util.Objects;
 public class Entry implements Comparable<Entry> {
     private String description;
 
-    public Entry(String description) {
+    Entry(String description) {
         this.description = description;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return description;
-    }
-
-    public void setDescription(String descrioption) {
-        this.description = descrioption;
     }
 
     @Override

@@ -15,7 +15,7 @@ public class DatedEntry extends Entry {
     private String dateTo;
     private String position;
 
-    public DatedEntry(String organisationName, Date dateFrom, String dateTo, String position, String description) {
+    DatedEntry(String organisationName, Date dateFrom, String dateTo, String position, String description) {
         super(description);
         this.organisationName = organisationName;
         this.dateFrom = dateFrom;
@@ -23,36 +23,20 @@ public class DatedEntry extends Entry {
         this.position = position;
     }
 
-    public String getOrganisation() {
+    String getOrganisation() {
         return organisationName;
     }
 
-    public void setOrganisation(String organisationName) {
-        this.organisationName = organisationName;
-    }
-
-    public Date getDateFrom() {
+    Date getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(Date dateFrom) {
-        this.dateFrom = dateFrom;
-    }
-
-    public String getDateTo() {
+    String getDateTo() {
         return dateTo;
     }
 
-    public void setDateTo(String dateTo) {
-        this.dateTo = dateTo;
-    }
-
-    public String getPosition() {
+    String getPosition() {
         return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
     }
 
     @Override
@@ -85,7 +69,7 @@ public class DatedEntry extends Entry {
 
     @Override
     public int compareTo(Entry entry) {
-        DatedEntry datedEntry = (DatedEntry)entry;
+        DatedEntry datedEntry = (DatedEntry) entry;
         DateFormat format = new SimpleDateFormat("dd.mm.yyyy", Locale.ENGLISH);
 
         int cmp = dateFrom.compareTo(datedEntry.getDateFrom());
@@ -108,7 +92,6 @@ public class DatedEntry extends Entry {
                 } catch (ParseException e1) {
                     e1.printStackTrace();
                 }
-                ;
             }
         }
         LocalDate otherDateTo = null;
@@ -141,4 +124,10 @@ public class DatedEntry extends Entry {
         }
         return position.compareTo(datedEntry.position);
     }
+
+    public void print() {
+        System.out.println(organisationName);
+        System.out.println(dateFrom + "/t" + dateTo + "/t");
+    }
+
 }

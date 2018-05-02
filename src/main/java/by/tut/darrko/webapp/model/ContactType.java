@@ -1,11 +1,11 @@
 package by.tut.darrko.webapp.model;
 
 public enum ContactType {
-    ADDRESS("Телефон:"),
+    ADDRESS("Адрес:"),
     PHONE("Телефон:"),
     EMAIL("E-mail:"),
     SKYPE("Skype"),
-    LINKEDID("Квалификация"),
+    LINKEDIN("Квалификация"),
     GITHUB("Опыт работы"),
     EDUCATION("Обраование");
 

@@ -7,8 +7,8 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     private final String uuid;
     private final String fullName;
-    private Map<ContactType, Section<ContactType>> contacts = new TreeMap<>();
-    private Map<SectionType, Section<SectionType>> sections = new TreeMap<>();
+    private List<Contact> contacts = new ArrayList<>();
+    private Map<SectionType, Section> sections = new TreeMap<>();
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -29,86 +29,65 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-    public Map<ContactType, Section<ContactType>> getContacts() {
+    public List<Contact> getContacts() {
         return contacts;
     }
 
     public void addContact(ContactType contactType, String description) {
-        getContactSection(contactType).addEntry(description);
+        contacts.add(new Contact(contactType, description));
     }
 
     public void deleteContact(ContactType contactType, String description) {
-        getContactSection(contactType).deleteEntry(description);
+        contacts.remove(new Contact(contactType, description));
     }
 
-    public Map<SectionType, Section<SectionType>> getSections() {
+    public List<Contact> getContactsByType(ContactType contactType) {
+        if (contactType == null) {
+            return getContacts();
+        }
+        List<Contact> list = new ArrayList<>();
+        for (Contact contact : contacts) {
+            if (contact.getContactType().equals(contactType))
+                list.add(contact);
+        }
+        return list;
+    }
+
+    public Map<SectionType, Section> getSections() {
         return sections;
     }
 
-    public Section<ContactType> getContactSection(ContactType contactType) {
-        Section<ContactType> section = contacts.get(contactType);
+    private Section getSection(SectionType sectionType) {
+        Section section = sections.get(sectionType);
         if (section == null) {
-            section = new Section<>(contactType);
-            contacts.put(contactType, section);
-        }
-        return section;
-    }
-
-    public Section<SectionType> getSection(SectionType sectionType) {
-        Section<SectionType> section = sections.get(sectionType);
-        if (section == null) {
-            section = new Section<>(sectionType);
+            section = SectionFactory.createSection(sectionType);
             sections.put(sectionType, section);
         }
         return section;
     }
 
     public void addObjective(String description) {
-        getSection(SectionType.OBJECTIVE).addEntry(description);
-    }
-
-    public void deleteObjective(String description) {
-        getSection(SectionType.OBJECTIVE).deleteEntry(description);
+        getSection(SectionType.OBJECTIVE).addEntry(new Entry(description));
     }
 
     public void addPersonal(String description) {
-        getSection(SectionType.PERSONAL).addEntry(description);
-    }
-
-    public void deletePersonal(String description) {
-        getSection(SectionType.PERSONAL).deleteEntry(description);
+        getSection(SectionType.PERSONAL).addEntry(new Entry(description));
     }
 
     public void addAchievement(String description) {
-        getSection(SectionType.ACHIEVEMENT).addEntry(description);
-    }
-
-    public void deleteAchievement(String description) {
-        getSection(SectionType.ACHIEVEMENT).deleteEntry(description);
+        getSection(SectionType.ACHIEVEMENT).addEntry(new Entry(description));
     }
 
     public void addQualification(String description) {
-        getSection(SectionType.QUALIFICATION).addEntry(description);
-    }
-
-    public void deleteQualification(String description) {
-        getSection(SectionType.QUALIFICATION).deleteEntry(description);
+        getSection(SectionType.QUALIFICATION).addEntry(new Entry(description));
     }
 
     public void addExperience(String organisationName, Date dateFrom, String dateTo, String position, String description) {
-        getSection(SectionType.EXPERIENCE).addEntry(organisationName, dateFrom, dateTo, position, description);
-    }
-
-    public void deleteExperience(String organisationName, Date dateFrom, String dateTo, String position, String description) {
-        getSection(SectionType.EXPERIENCE).deleteEntry(organisationName, dateFrom, dateTo, position, description);
+        getSection(SectionType.EXPERIENCE).addEntry(new DatedEntry(organisationName, dateFrom, dateTo, position, description));
     }
 
     public void addEducation(String organisationName, Date dateFrom, String dateTo, String position, String description) {
-        getSection(SectionType.EDUCATION).addEntry(organisationName, dateFrom, dateTo, position, description);
-    }
-
-    public void deleteEducation(String organisationName, Date dateFrom, String dateTo, String position, String description) {
-        getSection(SectionType.EDUCATION).deleteEntry(organisationName, dateFrom, dateTo, position, description);
+        getSection(SectionType.EDUCATION).addEntry(new DatedEntry(organisationName, dateFrom, dateTo, position, description));
     }
 
     @Override
@@ -137,5 +116,19 @@ public class Resume implements Comparable<Resume> {
     @Override
     public int compareTo(Resume o) {
         return uuid.compareTo(o.uuid);
+    }
+
+    public void print() {
+        System.out.println(fullName);
+        System.out.println();
+
+        for (Contact contact : contacts) {
+            contact.print();
+        }
+
+        System.out.println();
+        for (SectionType contactType : sections.keySet()) {
+            sections.get(contactType).print();
+        }
     }
 }
