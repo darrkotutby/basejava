@@ -2,7 +2,7 @@ package by.tut.darrko.webapp.model;
 
 import java.util.Objects;
 
-public class ContactEntry extends Entry{
+public class ContactEntry extends Entry {
     private final ContactType contactType;
 
     ContactEntry(ContactType contactType, String description) {

@@ -10,9 +10,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public abstract class AbstractStorage<SK> implements Storage {
-    private static Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
-
     private static final Comparator<Resume> FULL_NAME_COMPARATOR = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
+    private static Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
 
     protected abstract SK findResumeElementNumber(String uuid);
 
@@ -27,7 +26,7 @@ public abstract class AbstractStorage<SK> implements Storage {
     abstract boolean check(SK index);
 
     private SK isExists(String uuid) {
-        LOG.info("isExists uuid="+uuid);
+        LOG.info("isExists uuid=" + uuid);
         SK index = findResumeElementNumber(uuid);
         if (!check(index)) {
             LOG.warning("Resume with uuid=" + uuid + " doesn't exists");
@@ -37,7 +36,7 @@ public abstract class AbstractStorage<SK> implements Storage {
     }
 
     private SK isNotExists(String uuid) {
-        LOG.info("isNotExists uuid="+uuid);
+        LOG.info("isNotExists uuid=" + uuid);
         SK index = findResumeElementNumber(uuid);
         if (check(index)) {
             LOG.warning("Resume with uuid=" + uuid + " already exists");
@@ -48,7 +47,7 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        LOG.info("get uuid="+uuid);
+        LOG.info("get uuid=" + uuid);
         return getByIndex(isExists(uuid));
     }
 
@@ -62,19 +61,19 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     @Override
     public void save(Resume resume) {
-        LOG.info("save resume="+resume);
+        LOG.info("save resume=" + resume);
         saveByIndex(resume, isNotExists(resume.getUuid()));
     }
 
     @Override
     public void delete(String uuid) {
-        LOG.info("delete uuid="+uuid);
+        LOG.info("delete uuid=" + uuid);
         deleteByIndex(isExists(uuid));
     }
 
     @Override
     public void update(Resume resume) {
-        LOG.info("update resume="+resume);
+        LOG.info("update resume=" + resume);
         updateByIndex(resume, isExists(resume.getUuid()));
     }
 }

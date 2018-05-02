@@ -30,7 +30,7 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-    private List<ContactEntry> getContacts() {
+    private List getContacts() {
         return sections.get(SectionType.CONTACTS).getEntries();
     }
 
