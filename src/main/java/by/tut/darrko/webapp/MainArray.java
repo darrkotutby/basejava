@@ -73,7 +73,7 @@ public class MainArray {
                             System.out.println(e.getMessage());
                         }
                     } else {
-
+                        System.out.println("Wrong format. You have to use update uuid fullName");
                     }
                     break;
                 case "clear":
