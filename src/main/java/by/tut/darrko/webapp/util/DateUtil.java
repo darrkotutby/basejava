@@ -11,20 +11,17 @@ public class DateUtil {
         return stringToDate(string, "dd.mm.yyyy");
     }
 
-
     public static Date stringToDate(String string, String format) throws ParseException {
         DateFormat dateFormat = new SimpleDateFormat(format, Locale.ENGLISH);
         return dateFormat.parse(string);
     }
 
-    public static String dateToString(Date date) throws ParseException {
+    public static String dateToString(Date date) {
         return dateToString(date, "dd.mm.yyyy");
     }
 
-
-    public static String dateToString(Date date, String format) throws ParseException {
+    public static String dateToString(Date date, String format) {
         DateFormat dateFormat = new SimpleDateFormat(format, Locale.ENGLISH);
         return dateFormat.format(date);
     }
-
 }

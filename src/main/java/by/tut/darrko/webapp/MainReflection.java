@@ -41,6 +41,7 @@ public class MainReflection {
         r.addSectionsEntry(SectionType.EXPERIENCE,"Банк", format.parse("10.01.2004"),"NOW", "Главный программист", "Oracle forms");
         r.addSectionsEntry(SectionType.EDUCATION,"РТИ", format.parse("03.01.1995"),"01.08.2000", "Студент", "ФКП");
         r.addSectionsEntry(SectionType.EDUCATION,"РТИ", format.parse("04.01.2000"),"01.08.2005", "Студент", "ФКП");
+        r.addSectionsEntry(SectionType.EDUCATION,"javaops", format.parse("04.01.2017"),"NOW", "Студент", "JAVA, JSP, SQL");
 
         System.out.println(r);
         System.out.println();
