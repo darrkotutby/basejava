@@ -4,7 +4,7 @@ import by.tut.darrko.webapp.model.Resume;
 
 import java.util.Map;
 
-public abstract class AbstractMapStorage extends AbstractStorage {
+public abstract class AbstractMapStorage<SK> extends AbstractStorage<SK> {
 
     protected Map<String, Resume> storage;
 

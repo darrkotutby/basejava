@@ -5,7 +5,7 @@ import by.tut.darrko.webapp.model.Resume;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer> {
 
     protected List<Resume> storage;
 
@@ -13,36 +13,43 @@ public class ListStorage extends AbstractStorage {
         storage = new ArrayList<>();
     }
 
+    @Override
     public void clear() {
         storage.clear();
     }
 
+    @Override
     public int size() {
         return storage.size();
     }
 
-    public Resume getByIndex(Object index) {
+    @Override
+    public Resume getByIndex(Integer index) {
         return storage.get((Integer) index);
     }
 
+    @Override
     public Resume[] getAll() {
         return storage.toArray(new Resume[0]);
     }
 
-    public void saveByIndex(Resume resume, Object index) {
+    @Override
+    public void saveByIndex(Resume resume, Integer index) {
         storage.add(resume);
     }
 
-    public void deleteByIndex(Object index) {
+    @Override
+    public void deleteByIndex(Integer index) {
         storage.remove(((Integer) index).intValue());
     }
 
-    public void updateByIndex(Resume resume, Object index) {
+    @Override
+    public void updateByIndex(Resume resume, Integer index) {
         storage.set((Integer) index, resume);
     }
 
     @Override
-    boolean check(Object index) {
+    boolean check(Integer index) {
         return (Integer) index > -1;
     }
 

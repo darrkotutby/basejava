@@ -7,12 +7,12 @@ import by.tut.darrko.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public void add(Resume resume, int index) {
+    public void add(Resume resume, Integer index) {
         STORAGE[size] = resume;
     }
 
-    public void remove(Object index) {
-        STORAGE[(Integer) index] = STORAGE[size - 1];
+    public void remove(int index) {
+        STORAGE[index] = STORAGE[size - 1];
     }
 
     protected Integer findResumeElementNumber(String uuid) {

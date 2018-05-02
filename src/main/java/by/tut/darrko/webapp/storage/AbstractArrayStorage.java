@@ -5,7 +5,7 @@ import by.tut.darrko.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     private static final int MAX_SIZE = 10000;
     final Resume[] STORAGE;
@@ -15,54 +15,58 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         STORAGE = new Resume[MAX_SIZE];
     }
 
-    protected abstract void add(Resume resume, int index);
+    protected abstract void add(Resume resume, Integer index);
 
-    protected abstract void remove(Object index);
+    protected abstract void remove(int index);
 
     public int getMaxSize() {
         return MAX_SIZE;
     }
 
+    @Override
     public void clear() {
         Arrays.fill(STORAGE, 0, size, null);
         size = 0;
     }
 
+    @Override
     public int size() {
         return size;
     }
 
-    public Resume getByIndex(Object index) {
-        return STORAGE[(Integer) index];
+    @Override
+    public Resume getByIndex(Integer index) {
+        return STORAGE[index];
     }
 
-    /**
-     * @return array, contains only Resumes in STORAGE (without null)
-     */
+    @Override
     public Resume[] getAll() {
         return Arrays.copyOf(STORAGE, size);
     }
 
-    public void saveByIndex(Resume resume, Object index) {
+    @Override
+    public void saveByIndex(Resume resume, Integer index) {
         if (size >= MAX_SIZE) {
             throw new NotExistStorageException("Can't save resume. Storage is full");
         }
-        add(resume, (Integer) index);
+        add(resume, index);
         size++;
     }
 
-    public void deleteByIndex(Object index) {
+    @Override
+    public void deleteByIndex(Integer index) {
         remove(index);
         size--;
         STORAGE[size] = null;
     }
 
-    public void updateByIndex(Resume resume, Object index) {
-        STORAGE[(Integer) index] = resume;
+    @Override
+    public void updateByIndex(Resume resume, Integer index) {
+        STORAGE[index] = resume;
     }
 
     @Override
-    boolean check(Object index) {
-        return (Integer) index > -1;
+    boolean check(Integer index) {
+        return index > -1;
     }
 }
