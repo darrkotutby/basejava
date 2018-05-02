@@ -3,205 +3,213 @@
   <ID>JAVA</ID>
   <OriginalElement>by.tut.darrko.webapp.model</OriginalElement>
   <nodes>
-    <node x="32.333333333333314" y="380.0">by.tut.darrko.webapp.model.Contact</node>
-    <node x="188.79472687400306" y="290.0">by.tut.darrko.webapp.model.ListedSection</node>
-    <node x="300.27622607655496" y="170.0">by.tut.darrko.webapp.model.Section</node>
-    <node x="529.0151515151514" y="290.0">by.tut.darrko.webapp.model.ListedDatedSection</node>
-    <node x="0.0" y="290.0">by.tut.darrko.webapp.model.ContactType</node>
-    <node x="357.6671650717701" y="380.0">by.tut.darrko.webapp.model.SectionFactory</node>
-    <node x="386.0151515151514" y="290.0">by.tut.darrko.webapp.model.SimpleSection</node>
-    <node x="192.7780602073364" y="0.0">by.tut.darrko.webapp.model.SectionType</node>
-    <node x="62.93749003189777" y="520.0">by.tut.darrko.webapp.model.Resume</node>
-    <node x="619.5151515151515" y="170.0">by.tut.darrko.webapp.model.DatedEntry</node>
-    <node x="428.9780602073364" y="0.0">by.tut.darrko.webapp.model.Entry</node>
+    <node x="71.52070707070703" y="340.0">by.tut.darrko.webapp.model.ListedSection</node>
+    <node x="580.125" y="340.0">by.tut.darrko.webapp.model.ContactType</node>
+    <node x="628.5" y="430.0">by.tut.darrko.webapp.model.ContactEntry</node>
+    <node x="174.4647817460317" y="210.0">by.tut.darrko.webapp.model.Section</node>
+    <node x="397.0" y="340.0">by.tut.darrko.webapp.model.ListedDatedSection</node>
+    <node x="223.03350468975464" y="430.0">by.tut.darrko.webapp.model.SectionFactory</node>
+    <node x="254.0" y="340.0">by.tut.darrko.webapp.model.SimpleSection</node>
+    <node x="75.50404040404038" y="0.0">by.tut.darrko.webapp.model.SectionType</node>
+    <node x="387.019246031746" y="540.0">by.tut.darrko.webapp.model.Resume</node>
+    <node x="487.5" y="210.0">by.tut.darrko.webapp.model.DatedEntry</node>
+    <node x="430.6873737373737" y="0.0">by.tut.darrko.webapp.model.Entry</node>
   </nodes>
   <notes />
   <edges>
+    <edge source="by.tut.darrko.webapp.model.ListedSection" target="by.tut.darrko.webapp.model.Section">
+      <point x="47.19999999999999" y="-15.0" />
+      <point x="177.72070707070702" y="310.0" />
+      <point x="198.63144841269835" y="310.0" />
+      <point x="-19.333333333333343" y="15.0" />
+    </edge>
     <edge source="by.tut.darrko.webapp.model.SectionFactory" target="by.tut.darrko.webapp.model.Section">
       <point x="0.0" y="-15.0" />
-      <point x="420.6671650717701" y="340.0" />
-      <point x="375.5151515151514" y="340.0" />
-      <point x="375.5151515151514" y="270.0" />
-      <point x="343.77622607655496" y="270.0" />
+      <point x="286.03350468975464" y="390.0" />
+      <point x="243.5" y="390.0" />
+      <point x="243.5" y="320.0" />
+      <point x="217.9647817460317" y="320.0" />
       <point x="0.0" y="15.0" />
     </edge>
-    <edge source="by.tut.darrko.webapp.model.ListedSection" target="by.tut.darrko.webapp.model.Section">
-      <point x="23.599999999999994" y="-15.0" />
-      <point x="271.394726874003" y="250.0" />
-      <point x="314.77622607655496" y="250.0" />
-      <point x="-29.0" y="15.0" />
-    </edge>
     <edge source="by.tut.darrko.webapp.model.ListedSection" target="by.tut.darrko.webapp.model.Entry">
-      <point x="0.0" y="-15.0" />
-      <point x="247.79472687400306" y="220.0" />
-      <point x="222.6504984051035" y="220.0" />
-      <point x="222.6504984051035" y="140.0" />
-      <point x="441.4780602073364" y="140.0" />
-      <point x="-25.0" y="15.0" />
+      <point x="-23.600000000000023" y="-15.0" />
+      <point x="106.92070707070701" y="270.0" />
+      <point x="77.01683802308798" y="270.0" />
+      <point x="77.01683802308798" y="150.0" />
+      <point x="434.09646464646465" y="150.0" />
+      <point x="-34.090909090909065" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.ListedDatedSection" target="by.tut.darrko.webapp.model.DatedEntry">
       <point x="62.08333333333337" y="-15.0" />
-      <point x="665.5984848484848" y="270.0" />
-      <point x="672.5151515151515" y="270.0" />
+      <point x="533.5833333333334" y="320.0" />
+      <point x="540.5" y="320.0" />
       <point x="0.0" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.Section" target="by.tut.darrko.webapp.model.Entry">
-      <point x="29.0" y="-15.0" />
-      <point x="372.77622607655496" y="150.0" />
-      <point x="449.8113935406697" y="150.0" />
-      <point x="-16.666666666666686" y="15.0" />
+      <point x="28.99999999999997" y="-15.0" />
+      <point x="246.96478174603166" y="170.0" />
+      <point x="447.7328282828283" y="170.0" />
+      <point x="-20.45454545454544" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.SectionFactory" target="by.tut.darrko.webapp.model.ListedSection">
-      <point x="-25.19999999999999" y="-15.0" />
-      <point x="395.4671650717702" y="350.0" />
-      <point x="247.79472687400306" y="350.0" />
-      <point x="0.0" y="15.0" />
-    </edge>
-    <edge source="by.tut.darrko.webapp.model.Contact" target="by.tut.darrko.webapp.model.ContactType">
-      <point x="-22.5" y="-15.0" />
-      <point x="54.833333333333314" y="360.0" />
-      <point x="58.0" y="360.0" />
+      <point x="-25.200000000000045" y="-15.0" />
+      <point x="260.8335046897546" y="400.0" />
+      <point x="130.52070707070703" y="400.0" />
       <point x="0.0" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.ListedSection" target="by.tut.darrko.webapp.model.SectionType">
       <point x="-47.19999999999999" y="-15.0" />
-      <point x="200.59472687400307" y="230.0" />
-      <point x="197.91515151515142" y="230.0" />
-      <point x="197.91515151515142" y="120.0" />
-      <point x="242.2155602073364" y="120.0" />
+      <point x="83.32070707070704" y="280.0" />
+      <point x="65.90000000000003" y="280.0" />
+      <point x="65.90000000000003" y="140.0" />
+      <point x="124.94154040404038" y="140.0" />
       <point x="-7.0625" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.Resume" target="by.tut.darrko.webapp.model.DatedEntry">
-      <point x="32.72727272727275" y="-15.0" />
-      <point x="140.66476275917051" y="490.0" />
-      <point x="701.6401515151515" y="490.0" />
-      <point x="701.6401515151515" y="270.0" />
-      <point x="707.8484848484848" y="270.0" />
+      <point x="4.5" y="-15.0" />
+      <point x="436.519246031746" y="480.0" />
+      <point x="569.625" y="480.0" />
+      <point x="569.625" y="320.0" />
+      <point x="575.8333333333334" y="320.0" />
       <point x="35.33333333333337" y="15.0" />
+    </edge>
+    <edge source="by.tut.darrko.webapp.model.ContactEntry" target="by.tut.darrko.webapp.model.ContactType">
+      <point x="-14.625" y="-15.0" />
+      <point x="672.375" y="410.0" />
+      <point x="676.7916666666667" y="410.0" />
+      <point x="38.66666666666663" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.SectionFactory" target="by.tut.darrko.webapp.model.SectionType">
       <point x="-50.400000000000034" y="-15.0" />
-      <point x="370.26716507177014" y="360.0" />
-      <point x="152.01515151515144" y="360.0" />
-      <point x="152.01515151515144" y="110.0" />
-      <point x="228.0905602073364" y="110.0" />
+      <point x="235.6335046897546" y="410.0" />
+      <point x="20.0" y="410.0" />
+      <point x="20.0" y="130.0" />
+      <point x="110.81654040404038" y="130.0" />
       <point x="-21.1875" y="15.0" />
     </edge>
+    <edge source="by.tut.darrko.webapp.model.ContactEntry" target="by.tut.darrko.webapp.model.Entry">
+      <point x="43.875" y="-15.0" />
+      <point x="730.875" y="410.0" />
+      <point x="735.9034090909092" y="410.0" />
+      <point x="735.9034090909092" y="60.0" />
+      <point x="495.460101010101" y="60.0" />
+      <point x="27.27272727272731" y="15.0" />
+    </edge>
     <edge source="by.tut.darrko.webapp.model.Resume" target="by.tut.darrko.webapp.model.Section">
-      <point x="16.363636363636374" y="-15.0" />
-      <point x="124.30112639553414" y="470.0" />
-      <point x="317.29472687400306" y="470.0" />
-      <point x="317.29472687400306" y="270.0" />
-      <point x="334.1095594098883" y="270.0" />
-      <point x="-9.666666666666686" y="15.0" />
+      <point x="-22.5" y="-15.0" />
+      <point x="409.519246031746" y="500.0" />
+      <point x="61.02070707070703" y="500.0" />
+      <point x="61.02070707070703" y="290.0" />
+      <point x="179.29811507936503" y="290.0" />
+      <point x="-38.66666666666666" y="15.0" />
+    </edge>
+    <edge source="by.tut.darrko.webapp.model.Resume" target="by.tut.darrko.webapp.model.ContactEntry">
+      <point x="22.5" y="-15.0" />
+      <point x="454.519246031746" y="500.0" />
+      <point x="657.75" y="500.0" />
+      <point x="-29.25" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.ListedDatedSection" target="by.tut.darrko.webapp.model.SectionType">
       <point x="-12.416666666666629" y="-15.0" />
-      <point x="591.0984848484848" y="270.0" />
-      <point x="598.0151515151515" y="270.0" />
-      <point x="598.0151515151515" y="90.0" />
-      <point x="298.7155602073364" y="90.0" />
+      <point x="459.08333333333337" y="320.0" />
+      <point x="466.0" y="320.0" />
+      <point x="466.0" y="110.0" />
+      <point x="181.44154040404038" y="110.0" />
       <point x="49.4375" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.SimpleSection" target="by.tut.darrko.webapp.model.Entry">
-      <point x="49.19999999999999" y="-15.0" />
-      <point x="496.71515151515143" y="270.0" />
-      <point x="514.6671650717701" y="270.0" />
-      <point x="514.6671650717701" y="140.0" />
-      <point x="466.4780602073364" y="140.0" />
-      <point x="0.0" y="15.0" />
+      <point x="24.599999999999994" y="-15.0" />
+      <point x="340.1" y="310.0" />
+      <point x="369.03350468975464" y="310.0" />
+      <point x="369.03350468975464" y="180.0" />
+      <point x="454.5510101010101" y="180.0" />
+      <point x="-13.636363636363626" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.Resume" target="by.tut.darrko.webapp.model.SectionFactory">
-      <point x="24.545454545454504" y="-15.0" />
-      <point x="132.48294457735227" y="480.0" />
-      <point x="420.6671650717701" y="480.0" />
+      <point x="-4.5" y="-15.0" />
+      <point x="427.519246031746" y="480.0" />
+      <point x="286.03350468975464" y="480.0" />
       <point x="0.0" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.ListedDatedSection" target="by.tut.darrko.webapp.model.Entry">
-      <point x="12.416666666666657" y="-15.0" />
-      <point x="615.931818181818" y="270.0" />
-      <point x="609.0151515151515" y="270.0" />
-      <point x="609.0151515151515" y="80.0" />
-      <point x="474.81139354066977" y="80.0" />
-      <point x="8.333333333333371" y="15.0" />
-    </edge>
-    <edge source="by.tut.darrko.webapp.model.Resume" target="by.tut.darrko.webapp.model.Contact">
-      <point x="-32.72727272727275" y="-15.0" />
-      <point x="75.21021730462502" y="490.0" />
-      <point x="47.333333333333314" y="490.0" />
-      <point x="-30.0" y="15.0" />
+      <point x="12.416666666666686" y="-15.0" />
+      <point x="483.9166666666667" y="320.0" />
+      <point x="477.0" y="320.0" />
+      <point x="477.0" y="100.0" />
+      <point x="468.1873737373737" y="100.0" />
+      <point x="0.0" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.Resume" target="by.tut.darrko.webapp.model.SectionType">
-      <point x="0.0" y="-15.0" />
-      <point x="107.93749003189777" y="450.0" />
-      <point x="141.01515151515144" y="450.0" />
-      <point x="141.01515151515144" y="100.0" />
-      <point x="213.9655602073364" y="100.0" />
+      <point x="-31.5" y="-15.0" />
+      <point x="400.519246031746" y="510.0" />
+      <point x="9.0" y="510.0" />
+      <point x="9.0" y="120.0" />
+      <point x="96.69154040404038" y="120.0" />
       <point x="-35.3125" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.SectionFactory" target="by.tut.darrko.webapp.model.SimpleSection">
       <point x="25.19999999999999" y="-15.0" />
-      <point x="445.86716507177016" y="360.0" />
-      <point x="447.5151515151514" y="360.0" />
+      <point x="311.2335046897546" y="410.0" />
+      <point x="315.5" y="410.0" />
       <point x="0.0" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.ListedDatedSection" target="by.tut.darrko.webapp.model.Section">
       <point x="-62.083333333333314" y="-15.0" />
-      <point x="541.4318181818181" y="240.0" />
-      <point x="372.77622607655496" y="240.0" />
-      <point x="29.0" y="15.0" />
+      <point x="409.4166666666667" y="290.0" />
+      <point x="246.96478174603166" y="290.0" />
+      <point x="28.99999999999997" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.SectionFactory" target="by.tut.darrko.webapp.model.ListedDatedSection">
       <point x="50.39999999999998" y="-15.0" />
-      <point x="471.0671650717701" y="360.0" />
-      <point x="603.5151515151514" y="360.0" />
+      <point x="336.4335046897546" y="410.0" />
+      <point x="471.5" y="410.0" />
       <point x="0.0" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.SimpleSection" target="by.tut.darrko.webapp.model.Section">
-      <point x="-49.19999999999999" y="-15.0" />
-      <point x="398.31515151515146" y="260.0" />
-      <point x="353.4428927432216" y="260.0" />
-      <point x="9.666666666666657" y="15.0" />
+      <point x="-24.599999999999994" y="-15.0" />
+      <point x="290.9" y="300.0" />
+      <point x="237.298115079365" y="300.0" />
+      <point x="19.333333333333314" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.Resume" target="by.tut.darrko.webapp.model.Entry">
-      <point x="40.90909090909088" y="-15.0" />
-      <point x="148.84658094098864" y="500.0" />
-      <point x="736.0151515151515" y="500.0" />
-      <point x="736.0151515151515" y="50.0" />
-      <point x="499.81139354066977" y="50.0" />
-      <point x="33.33333333333337" y="15.0" />
+      <point x="40.5" y="-15.0" />
+      <point x="472.519246031746" y="520.0" />
+      <point x="756.0" y="520.0" />
+      <point x="756.0" y="50.0" />
+      <point x="502.2782828282828" y="50.0" />
+      <point x="34.090909090909065" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.Resume" target="by.tut.darrko.webapp.model.ContactType">
-      <point x="-40.90909090909088" y="-15.0" />
-      <point x="67.02839912280689" y="500.0" />
-      <point x="21.833333333333314" y="500.0" />
-      <point x="21.833333333333314" y="360.0" />
-      <point x="19.33333333333337" y="360.0" />
+      <point x="13.5" y="-15.0" />
+      <point x="445.519246031746" y="490.0" />
+      <point x="589.0416666666667" y="490.0" />
+      <point x="589.0416666666667" y="410.0" />
+      <point x="599.4583333333335" y="410.0" />
       <point x="-38.66666666666663" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.SimpleSection" target="by.tut.darrko.webapp.model.SectionType">
       <point x="0.0" y="-15.0" />
-      <point x="447.5151515151514" y="100.0" />
-      <point x="284.5905602073364" y="100.0" />
+      <point x="315.5" y="320.0" />
+      <point x="327.20404040404037" y="320.0" />
+      <point x="327.20404040404037" y="120.0" />
+      <point x="167.31654040404038" y="120.0" />
       <point x="35.3125" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.DatedEntry" target="by.tut.darrko.webapp.model.Entry">
       <point x="-26.5" y="-15.0" />
-      <point x="646.0151515151515" y="70.0" />
-      <point x="483.1447268740031" y="70.0" />
-      <point x="16.666666666666686" y="15.0" />
+      <point x="514.0" y="90.0" />
+      <point x="475.00555555555553" y="90.0" />
+      <point x="6.818181818181813" y="15.0" />
     </edge>
     <edge source="by.tut.darrko.webapp.model.Section" target="by.tut.darrko.webapp.model.SectionType">
-      <point x="-29.0" y="-15.0" />
-      <point x="314.77622607655496" y="120.0" />
-      <point x="256.3405602073364" y="120.0" />
-      <point x="7.0625" y="15.0" />
+      <point x="-2.8421709430404007E-14" y="-15.0" />
+      <point x="217.96478174603166" y="130.0" />
+      <point x="153.19154040404038" y="130.0" />
+      <point x="21.1875" y="15.0" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="0.9" x="368.5" y="275.0" />
-  <SelectedNodes>
-    <node>by.tut.darrko.webapp.model.Resume</node>
-  </SelectedNodes>
+  <settings layout="Hierarchic Group" zoom="1.0" x="254.5" y="170.0" />
+  <SelectedNodes />
   <Categories />
   <SCOPE>All</SCOPE>
   <VISIBILITY>private</VISIBILITY>

@@ -1,5 +1,6 @@
 package by.tut.darrko.webapp.model;
 
+import java.text.ParseException;
 import java.util.Objects;
 
 public class Entry implements Comparable<Entry> {
@@ -38,4 +39,11 @@ public class Entry implements Comparable<Entry> {
     public int compareTo(Entry entry) {
         return description.compareTo(entry.description);
     }
+
+    public String toStringForPrint() throws ParseException {
+       return description + ", ";
+    }
+
+
+
 }

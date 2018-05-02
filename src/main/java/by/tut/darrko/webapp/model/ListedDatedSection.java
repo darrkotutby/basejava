@@ -1,14 +1,11 @@
 package by.tut.darrko.webapp.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.text.ParseException;
+import java.util.*;
 
 public class ListedDatedSection extends Section<DatedEntry> {
 
-    // private List<Entry> entries = new ArrayList<>();
-    private Map<String, List<DatedEntry>> entries = new TreeMap<>();
+    private Map<String, Set<DatedEntry>> entries = new TreeMap<>();
 
     ListedDatedSection(SectionType sectionType) {
         super(sectionType);
@@ -16,12 +13,12 @@ public class ListedDatedSection extends Section<DatedEntry> {
 
     @Override
     public void addEntry(DatedEntry entry) {
-        List<DatedEntry> list = entries.computeIfAbsent(entry.getOrganisation(), k -> new ArrayList<>());
-        list.add(entry);
+        Set<DatedEntry> set = entries.computeIfAbsent(entry.getOrganisation(), k -> new TreeSet<>());
+        set.add(entry);
     }
 
     @Override
-    public List<Entry> getEntries(DatedEntry entry) {
+    public List<Entry> getEntries() {
         List<Entry> list = new ArrayList<>();
         for (String organisation : entries.keySet()) {
             list.addAll(entries.get(organisation));
@@ -31,21 +28,19 @@ public class ListedDatedSection extends Section<DatedEntry> {
 
     @Override
     public String toString() {
-        return "ListedSection{" +
+        return "ListedDatedSection{" +
                 "entries=" + entries +
                 "} " + super.toString();
     }
 
-    public void print() {
+    public void print() throws ParseException {
         super.print();
         for (String organisation : entries.keySet()) {
             System.out.println(organisation + ":");
             for (DatedEntry datedEntry : entries.get(organisation)) {
-                System.out.println(datedEntry.getDateFrom() + "\t" + datedEntry.getDateTo() + "\t" + datedEntry.getPosition());
-                System.out.println("\t" + datedEntry.getDescription());
+                System.out.println(datedEntry.toStringForPrint());
             }
             System.out.println();
         }
-        System.out.println();
     }
 }

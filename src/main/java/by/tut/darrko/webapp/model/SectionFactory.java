@@ -3,6 +3,8 @@ package by.tut.darrko.webapp.model;
 class SectionFactory {
     static Section createSection(SectionType sectionType) {
         switch (sectionType) {
+            case CONTACTS:
+                return new ListedSection(sectionType);
             case OBJECTIVE:
                 return new SimpleSection(sectionType);
             case PERSONAL:

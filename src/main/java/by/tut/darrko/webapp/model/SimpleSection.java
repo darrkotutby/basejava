@@ -1,5 +1,6 @@
 package by.tut.darrko.webapp.model;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,15 +24,21 @@ public class SimpleSection extends Section<Entry> {
     }
 
     @Override
-    public List<Entry> getEntries(Entry entry) {
+    public List<Entry> getEntries() {
         List<Entry> list = new ArrayList<>();
         list.add(entry);
         return list;
     }
 
-    public void print() {
+    public void print() throws ParseException {
         super.print();
-        System.out.println(entry.getDescription());
+        String string = null;
+        try {
+            string = entry.toStringForPrint().replace(", \n", "\n");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println(string.substring(0,string.length()-2));
         System.out.println();
     }
 }

@@ -1,13 +1,13 @@
 package by.tut.darrko.webapp.model;
 
 public enum ContactType {
-    ADDRESS("Адрес:"),
-    PHONE("Телефон:"),
-    EMAIL("E-mail:"),
-    SKYPE("Skype"),
-    LINKEDIN("Квалификация"),
-    GITHUB("Опыт работы"),
-    EDUCATION("Обраование");
+    ADDRESS("Адрес: "),
+    PHONE("Телефон: "),
+    EMAIL("E-mail: "),
+    SKYPE("Skype "),
+    LINKEDIN("Квалификация "),
+    GITHUB("Опыт работы "),
+    EDUCATION("Обраование ");
 
     private String title;
 
