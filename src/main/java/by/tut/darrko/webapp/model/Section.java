@@ -1,17 +1,19 @@
 package by.tut.darrko.webapp.model;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 public abstract class Section<T extends Entry> {
-    private final SectionType  sectionType;
-
-    public abstract void addEntry(T entry);
-    public abstract List<Entry> getEntries();
+    private final SectionType sectionType;
 
     Section(SectionType sectionType) {
         this.sectionType = sectionType;
     }
+
+    public abstract void addEntry(T entry);
+
+    public abstract List<Entry> getEntries();
 
     @Override
     public boolean equals(Object o) {

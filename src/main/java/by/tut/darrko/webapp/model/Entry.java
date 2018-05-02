@@ -41,9 +41,8 @@ public class Entry implements Comparable<Entry> {
     }
 
     public String toStringForPrint() throws ParseException {
-       return description + ", ";
+        return description + ", ";
     }
-
 
 
 }

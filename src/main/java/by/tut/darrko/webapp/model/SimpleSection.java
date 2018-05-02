@@ -32,13 +32,8 @@ public class SimpleSection extends Section<Entry> {
 
     public void print() throws ParseException {
         super.print();
-        String string = null;
-        try {
-            string = entry.toStringForPrint().replace(", \n", "\n");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        System.out.println(string.substring(0,string.length()-2));
+        String string = entry.toStringForPrint().replace(", \n", "\n");
+        System.out.println(string.substring(0, string.length() - 2));
         System.out.println();
     }
 }

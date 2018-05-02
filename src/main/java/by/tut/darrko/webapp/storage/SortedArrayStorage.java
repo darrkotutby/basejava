@@ -15,8 +15,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public void remove(int index) {
-        int idx = index;
-        System.arraycopy(STORAGE, idx + 1, STORAGE, idx, size - idx - 1);
+        System.arraycopy(STORAGE, index + 1, STORAGE, index, size - index - 1);
     }
 
     protected Integer findResumeElementNumber(String uuid) {

@@ -22,7 +22,7 @@ public class MainArray {
         Resume r;
         while (true) {
             System.out.print("Введите одну из команд - (list | save uuid | delete uuid | get uuid | " +
-                    "clear | update uuid |exit): ");
+                    "clear | update uuid fullName |exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
             if (params.length < 1 || params.length > 2) {
                 System.out.println("Неверная команда.");
@@ -64,12 +64,16 @@ public class MainArray {
                     }
                     break;
                 case "update":
-                    try {
-                        Resume resume = new Resume(param, params[2]);
-                        ARRAY_STORAGE.update(resume);
-                        printAll();
-                    } catch (NotExistStorageException e) {
-                        System.out.println(e.getMessage());
+                    if (params.length > 1) {
+                        try {
+                            Resume resume = new Resume(param, params[2]);
+                            ARRAY_STORAGE.update(resume);
+                            printAll();
+                        } catch (NotExistStorageException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    } else {
+
                     }
                     break;
                 case "clear":
