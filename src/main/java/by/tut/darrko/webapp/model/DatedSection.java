@@ -1,25 +1,23 @@
 package by.tut.darrko.webapp.model;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class DatedSection implements Section<DatedEntry> {
 
-    private Map<String, Set<DatedEntry>> entries = new TreeMap<>();
+    private Set<DatedEntry> entries = new TreeSet<>();
 
     @Override
     public void addEntry(DatedEntry entry) {
-        Set<DatedEntry> set = entries.computeIfAbsent(entry.getOrganisation(), k -> new TreeSet<>());
-        set.add(entry);
+        entries.add(entry);
     }
 
     @Override
     public List<DatedEntry> getEntries() {
-        List<DatedEntry> list = new ArrayList<>();
-        for (String organisation : entries.keySet()) {
-            list.addAll(entries.get(organisation));
-        }
-        return list;
+        return new ArrayList<>(entries);
     }
 
     @Override
@@ -30,12 +28,10 @@ public class DatedSection implements Section<DatedEntry> {
     }
 
     public void print() throws ParseException {
-        for (String organisation : entries.keySet()) {
-            System.out.println(organisation + ":");
-            for (DatedEntry datedEntry : entries.get(organisation)) {
-                System.out.println(datedEntry.toStringForPrint());
-            }
-            System.out.println();
+        for (DatedEntry datedEntry : entries) {
+            System.out.println(datedEntry.getOrganisation());
+            System.out.println(datedEntry.toStringForPrint());
         }
+        System.out.println();
     }
 }

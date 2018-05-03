@@ -12,15 +12,15 @@ public class DateUtil {
         return stringToDate(string, "dd.MM.yyyy");
     }
 
-    public static LocalDate stringToDate(String string, String format) {
+    public static LocalDate stringToDate(String string, String format) throws ParseException {
         return LocalDate.parse(string, DateTimeFormatter.ofPattern(format));
     }
 
-    public static String dateToString(LocalDate date) {
+    public static String dateToString(LocalDate date) throws ParseException {
         return dateToString(date, "dd.MM.yyyy");
     }
 
-    public static String dateToString(LocalDate date, String format) {
+    public static String dateToString(LocalDate date, String format) throws ParseException {
         DateFormat dateFormat = new SimpleDateFormat(format, Locale.ENGLISH);
         return date.format(DateTimeFormatter.ofPattern(format));
     }

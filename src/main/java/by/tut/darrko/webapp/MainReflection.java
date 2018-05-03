@@ -40,8 +40,8 @@ public class MainReflection {
         DateFormat format = new SimpleDateFormat("dd.mm.yyyy", Locale.ENGLISH);
         r.addSectionsEntry(SectionType.EXPERIENCE, "Банк", DateUtil.stringToDate("02.01.2000"), "31.12.2003", "Ведущий программист", "Oracle forms");
         r.addSectionsEntry(SectionType.EXPERIENCE, "Банк", DateUtil.stringToDate("10.01.2004"), "NOW", "Главный программист", "Oracle forms");
-        r.addSectionsEntry(SectionType.EDUCATION, "РТИ", DateUtil.stringToDate("03.01.1995"), "01.08.2000", "Студент", "ФКП");
         r.addSectionsEntry(SectionType.EDUCATION, "РТИ", DateUtil.stringToDate("04.01.2000"), "01.08.2005", "Студент", "ФКП");
+        r.addSectionsEntry(SectionType.EDUCATION, "РТИ", DateUtil.stringToDate("03.01.1995"), "01.08.2000", "Студент", "ФКП");
         r.addSectionsEntry(SectionType.EDUCATION, "javaops", DateUtil.stringToDate("04.01.2017"), "NOW", "Студент", "JAVA, JSP, SQL");
 
         System.out.println(r);
