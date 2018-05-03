@@ -47,5 +47,7 @@ public class MainReflection {
         System.out.println();
         r.print();
 
+        System.out.println(System.getProperty("user.dir"));
+
     }
 }
