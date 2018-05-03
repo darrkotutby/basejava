@@ -113,6 +113,13 @@ public class Resume implements Comparable<Resume> {
     public void print() throws ParseException {
         System.out.println(fullName);
         System.out.println();
+
+        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            System.out.println(entry.getKey().getTitle() + " " + entry.getValue());
+        }
+
+        System.out.println();
+
         for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
             System.out.println(entry.getKey().getTitle());
             entry.getValue().print();
