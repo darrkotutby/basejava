@@ -23,4 +23,9 @@ public class ListedSection implements Section<String> {
                 "entries=" + entries +
                 "} " + super.toString();
     }
+
+    public void print() {
+        System.out.println(entries);
+    }
+
 }

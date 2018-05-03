@@ -113,9 +113,9 @@ public class DatedEntry implements Comparable<DatedEntry> {
     }
 
     public String toStringForPrint() throws ParseException {
-        return DateUtil.dateToString(dateFrom, "mm.yyy") + " - " +
+        return DateUtil.dateToString(dateFrom, "MM.yyy") + " - " +
                 (dateTo.equalsIgnoreCase("NOW") ?
-                        "NOW" : DateUtil.dateToString(DateUtil.stringToDate(dateTo), "mm.yyyy")) +
+                        "NOW" : DateUtil.dateToString(DateUtil.stringToDate(dateTo), "MM.yyyy")) +
                 "\t" + position + "\n\t" + description;
     }
 }

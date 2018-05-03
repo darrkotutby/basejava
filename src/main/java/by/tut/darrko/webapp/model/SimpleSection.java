@@ -1,5 +1,6 @@
 package by.tut.darrko.webapp.model;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,5 +24,9 @@ public class SimpleSection implements Section<String> {
         List<String> list = new ArrayList<>();
         list.add(entry);
         return list;
+    }
+
+    public void print()  {
+        System.out.println(entry);
     }
 }

@@ -1,5 +1,6 @@
 package by.tut.darrko.webapp.model;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Objects;
@@ -107,5 +108,12 @@ public class Resume implements Comparable<Resume> {
     @Override
     public int compareTo(Resume o) {
         return uuid.compareTo(o.uuid);
+    }
+
+    public void print() throws ParseException {
+        for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
+            System.out.println(entry.getKey().getTitle());
+            entry.getValue().print();
+        }
     }
 }

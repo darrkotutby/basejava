@@ -46,6 +46,7 @@ public class MainReflection {
 
         System.out.println(r);
         System.out.println();
+        r.print();
 
     }
 }
