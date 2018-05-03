@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class DatedEntry implements Comparable<DatedEntry> {
+
     private String organisationName;
     private LocalDate dateFrom;
     private String dateTo;

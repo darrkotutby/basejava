@@ -12,7 +12,7 @@ public class DateUtil {
         return stringToDate(string, "dd.MM.yyyy");
     }
 
-    public static LocalDate stringToDate(String string, String format) throws ParseException {
+    public static LocalDate stringToDate(String string, String format) {
         return LocalDate.parse(string, DateTimeFormatter.ofPattern(format));
     }
 

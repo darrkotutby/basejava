@@ -2,17 +2,30 @@ package by.tut.darrko.webapp.model;
 
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.Objects;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.util.*;
 
 public class Resume implements Comparable<Resume> {
+
+    private static EnumMap<SectionType, String> sectionTypeMap = new EnumMap<>(SectionType.class);
+    private static EnumMap<ContactType, String> contactTypeMap = new EnumMap<>(ContactType.class);
+
+    static {
+        sectionTypeMap.put(SectionType.OBJECTIVE, "Позиция:");
+        sectionTypeMap.put(SectionType.PERSONAL, "Личные качества:");
+        sectionTypeMap.put(SectionType.ACHIEVEMENT, "Достжения:");
+        sectionTypeMap.put(SectionType.QUALIFICATION, "Квалификация:");
+        sectionTypeMap.put(SectionType.EXPERIENCE, "Опыт работы:");
+        sectionTypeMap.put(SectionType.EDUCATION, "Образование:");
+
+        contactTypeMap.put(ContactType.ADDRESS, "Адрес: ");
+        contactTypeMap.put(ContactType.PHONE, "Телефон: ");
+        contactTypeMap.put(ContactType.EMAIL, "E-mail: ");
+        contactTypeMap.put(ContactType.SKYPE, "SKYPE :");
+    }
 
     // Unique identifier
     private final String uuid;
     private final String fullName;
-
     private Map<ContactType, String> contacts = new TreeMap<>();
     private Map<SectionType, Section> sections = new TreeMap<>();
 
@@ -111,17 +124,24 @@ public class Resume implements Comparable<Resume> {
     }
 
     public void print() throws ParseException {
+
+        System.out.println(contactTypeMap);
+        System.out.println(sectionTypeMap);
+
+        System.out.println();
+
+
         System.out.println(fullName);
         System.out.println();
 
         for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-            System.out.println(entry.getKey().getTitle() + " " + entry.getValue());
+            System.out.println(contactTypeMap.get(entry.getKey()) + entry.getValue());
         }
 
         System.out.println();
 
         for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
-            System.out.println(entry.getKey().getTitle());
+            System.out.println(sectionTypeMap.get(entry.getKey()));
             entry.getValue().print();
         }
     }
