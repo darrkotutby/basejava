@@ -25,7 +25,8 @@ public class ListedSection implements Section<String> {
     }
 
     public void print() {
-        System.out.println(entries);
+        System.out.println(entries.toString().replace("[", "").replace("]", ""));
+        System.out.println();
     }
 
 }

@@ -28,5 +28,6 @@ public class SimpleSection implements Section<String> {
 
     public void print()  {
         System.out.println(entry);
+        System.out.println();
     }
 }
