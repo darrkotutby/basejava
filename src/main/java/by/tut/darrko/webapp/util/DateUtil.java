@@ -3,25 +3,25 @@ package by.tut.darrko.webapp.util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class DateUtil {
-    public static Date stringToDate(String string) throws ParseException {
-        return stringToDate(string, "dd.mm.yyyy");
+    public static LocalDate stringToDate(String string) throws ParseException {
+        return stringToDate(string, "dd.MM.yyyy");
     }
 
-    public static Date stringToDate(String string, String format) throws ParseException {
+    public static LocalDate stringToDate(String string, String format) throws ParseException {
+        return LocalDate.parse(string, DateTimeFormatter.ofPattern(format));
+    }
+
+    public static String dateToString(LocalDate date) {
+        return dateToString(date, "dd.MM.yyyy");
+    }
+
+    public static String dateToString(LocalDate date, String format) {
         DateFormat dateFormat = new SimpleDateFormat(format, Locale.ENGLISH);
-        return dateFormat.parse(string);
-    }
-
-    public static String dateToString(Date date) {
-        return dateToString(date, "dd.mm.yyyy");
-    }
-
-    public static String dateToString(Date date, String format) {
-        DateFormat dateFormat = new SimpleDateFormat(format, Locale.ENGLISH);
-        return dateFormat.format(date);
+        return date.format(DateTimeFormatter.ofPattern(format));
     }
 }

@@ -1,7 +1,10 @@
 package by.tut.darrko.webapp.model;
 
-import java.text.ParseException;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
+import java.util.UUID;
 
 public class Resume implements Comparable<Resume> {
 
@@ -9,6 +12,7 @@ public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
 
+    private Map<ContactType, String> contacts = new TreeMap<>();
     private Map<SectionType, Section> sections = new TreeMap<>();
 
     public Resume(String fullName) {
@@ -30,45 +34,49 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-    private List getContacts() {
-        return sections.get(SectionType.CONTACTS).getEntries();
-    }
 
     public void addContact(ContactType contactType, String description) {
-        getSection(SectionType.CONTACTS).addEntry(new ContactEntry(contactType, description));
+        contacts.put(contactType, description);
     }
 
-    public List<ContactEntry> getContactsByType(ContactType contactType) {
-        List<ContactEntry> list = getContacts();
-        if (contactType == null) {
-            return list;
-        }
-        List<ContactEntry> subList = new ArrayList<>();
-        for (ContactEntry contact : list) {
-            if (contact.getContactType().equals(contactType))
-                subList.add(contact);
-        }
-        return subList;
+    public String getContactsByType(ContactType contactType) {
+        return contacts.get(contactType);
     }
 
     public Map<SectionType, Section> getSections() {
         return sections;
     }
 
+    private void addSection(SectionType sectionType) {
+        switch (sectionType) {
+            case OBJECTIVE:
+                sections.put(sectionType, new SimpleSection());
+                break;
+            case PERSONAL:
+            case ACHIEVEMENT:
+            case QUALIFICATION:
+                sections.put(sectionType, new ListedSection());
+                break;
+            case EXPERIENCE:
+            case EDUCATION:
+                sections.put(sectionType, new DatedSection());
+        }
+    }
+
     private Section getSection(SectionType sectionType) {
         Section section = sections.get(sectionType);
         if (section == null) {
-            section = SectionFactory.createSection(sectionType);
-            sections.put(sectionType, section);
+            addSection(sectionType);
+            section = sections.get(sectionType);
         }
         return section;
     }
 
     public void addSectionsEntry(SectionType sectionType, String description) {
-        getSection(sectionType).addEntry(new Entry(description));
+        getSection(sectionType).addEntry(description);
     }
 
-    public void addSectionsEntry(SectionType sectionType, String organisationName, Date dateFrom, String dateTo, String position, String
+    public void addSectionsEntry(SectionType sectionType, String organisationName, LocalDate dateFrom, String dateTo, String position, String
             description) {
         getSection(sectionType).addEntry(new DatedEntry(organisationName, dateFrom, dateTo, position, description));
     }
@@ -89,23 +97,15 @@ public class Resume implements Comparable<Resume> {
     @Override
     public String toString() {
         return "Resume{" +
-                "\nuuid='" + uuid + '\'' +
-                ",\n fullName='" + fullName + '\'' +
-                //  ",\n contacts=" + contacts +
-                ",\n sections=" + sections +
-                "\n}";
+                "uuid='" + uuid + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", contacts=" + contacts +
+                ", sections=" + sections +
+                '}';
     }
 
     @Override
     public int compareTo(Resume o) {
         return uuid.compareTo(o.uuid);
-    }
-
-    public void print() throws ParseException {
-        System.out.println(fullName);
-        System.out.println();
-        for (SectionType contactType : sections.keySet()) {
-            sections.get(contactType).print();
-        }
     }
 }

@@ -1,24 +1,19 @@
 package by.tut.darrko.webapp.model;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListedSection extends Section<Entry> {
+public class ListedSection implements Section<String> {
 
-    private List<Entry> entries = new ArrayList<>();
-
-    ListedSection(SectionType sectionType) {
-        super(sectionType);
-    }
+    private List<String> entries = new ArrayList<>();
 
     @Override
-    public void addEntry(Entry entry) {
+    public void addEntry(String entry) {
         entries.add(entry);
     }
 
     @Override
-    public List<Entry> getEntries() {
+    public List<String> getEntries() {
         return entries;
     }
 
@@ -28,16 +23,4 @@ public class ListedSection extends Section<Entry> {
                 "entries=" + entries +
                 "} " + super.toString();
     }
-
-    public void print() throws ParseException {
-        super.print();
-        StringBuilder sb = new StringBuilder();
-        for (Entry entry : entries) {
-            sb.append(entry.toStringForPrint()).append("\n");
-        }
-        String string = sb.toString().replace(", \n", "\n");
-        System.out.println(string.substring(0, string.length() - 1));
-        System.out.println();
-    }
-
 }

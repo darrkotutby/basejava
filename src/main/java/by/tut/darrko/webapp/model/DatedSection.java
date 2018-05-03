@@ -3,13 +3,9 @@ package by.tut.darrko.webapp.model;
 import java.text.ParseException;
 import java.util.*;
 
-public class ListedDatedSection extends Section<DatedEntry> {
+public class DatedSection implements Section<DatedEntry> {
 
     private Map<String, Set<DatedEntry>> entries = new TreeMap<>();
-
-    ListedDatedSection(SectionType sectionType) {
-        super(sectionType);
-    }
 
     @Override
     public void addEntry(DatedEntry entry) {
@@ -18,8 +14,8 @@ public class ListedDatedSection extends Section<DatedEntry> {
     }
 
     @Override
-    public List<Entry> getEntries() {
-        List<Entry> list = new ArrayList<>();
+    public List<DatedEntry> getEntries() {
+        List<DatedEntry> list = new ArrayList<>();
         for (String organisation : entries.keySet()) {
             list.addAll(entries.get(organisation));
         }
@@ -28,13 +24,12 @@ public class ListedDatedSection extends Section<DatedEntry> {
 
     @Override
     public String toString() {
-        return "ListedDatedSection{" +
+        return "DatedSection{" +
                 "entries=" + entries +
                 "} " + super.toString();
     }
 
     public void print() throws ParseException {
-        super.print();
         for (String organisation : entries.keySet()) {
             System.out.println(organisation + ":");
             for (DatedEntry datedEntry : entries.get(organisation)) {
