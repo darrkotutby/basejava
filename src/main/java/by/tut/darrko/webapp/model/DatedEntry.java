@@ -10,11 +10,11 @@ public class DatedEntry implements Comparable<DatedEntry> {
 
     private String organisationName;
     private LocalDate dateFrom;
-    private String dateTo;
+    private LocalDate dateTo;
     private String position;
     private String description;
 
-    DatedEntry(String organisationName, LocalDate dateFrom, String dateTo, String position, String description) {
+    public DatedEntry(String organisationName, LocalDate dateFrom, LocalDate dateTo, String position, String description) {
         this.organisationName = organisationName;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
@@ -30,7 +30,7 @@ public class DatedEntry implements Comparable<DatedEntry> {
         return dateFrom;
     }
 
-    String getDateTo() {
+    LocalDate getDateTo() {
         return dateTo;
     }
 
@@ -72,36 +72,8 @@ public class DatedEntry implements Comparable<DatedEntry> {
         if (cmp != 0) {
             return cmp;
         }
-        LocalDate thisDateTo = null;
-        if (dateTo == null || dateTo.equalsIgnoreCase("NOW")) {
-            thisDateTo = LocalDate.now();
-        } else {
-            try {
-                thisDateTo = DateUtil.stringToDate(dateTo);
-            } catch (ParseException e) {
-                try {
-                    thisDateTo = DateUtil.stringToDate("01.01.1900");
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-        LocalDate otherDateTo = null;
-        if (datedEntry.dateTo == null || datedEntry.dateTo.equalsIgnoreCase("NOW")) {
-            otherDateTo = LocalDate.now();
-        } else {
-            try {
-                otherDateTo = DateUtil.stringToDate(datedEntry.dateTo);
-            } catch (ParseException e) {
-                try {
-                    otherDateTo = DateUtil.stringToDate("01.01.1900");
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-        assert thisDateTo != null;
-        assert otherDateTo != null;
+        LocalDate thisDateTo = dateTo == null ? LocalDate.now() : dateTo;
+        LocalDate otherDateTo = datedEntry.dateTo == null ? LocalDate.now() : datedEntry.dateTo;;
         cmp = thisDateTo.compareTo(otherDateTo);
         if (cmp != 0) {
             return cmp;
@@ -115,8 +87,8 @@ public class DatedEntry implements Comparable<DatedEntry> {
 
     public String toStringForPrint() throws ParseException {
         return DateUtil.dateToString(dateFrom, "MM.yyy") + " - " +
-                (dateTo.equalsIgnoreCase("NOW") ?
-                        "NOW" : DateUtil.dateToString(DateUtil.stringToDate(dateTo), "MM.yyyy")) +
+                (dateTo==null ?
+                        "NOW" : DateUtil.dateToString(dateTo, "MM.yyyy")) +
                 "\t" + position + "\n\t" + description;
     }
 }

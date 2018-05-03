@@ -7,7 +7,7 @@ public interface Section<T> {
 
     void addEntry(T t);
 
-    List<T> getEntries();
+    T getContent();
 
     void print() throws ParseException;
 }

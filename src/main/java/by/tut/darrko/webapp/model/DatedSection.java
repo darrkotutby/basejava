@@ -6,18 +6,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class DatedSection implements Section<DatedEntry> {
+public class DatedSection implements Section<List<DatedEntry>> {
 
-    private Set<DatedEntry> entries = new TreeSet<>();
+    private List<DatedEntry> entries = new ArrayList<>();
 
     @Override
-    public void addEntry(DatedEntry entry) {
-        entries.add(entry);
+    public void addEntry(List<DatedEntry> entry) {
+        entries.addAll(entry);
     }
 
     @Override
-    public List<DatedEntry> getEntries() {
-        return new ArrayList<>(entries);
+    public List<DatedEntry> getContent() {
+        return entries;
     }
 
     @Override

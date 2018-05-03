@@ -19,10 +19,8 @@ public class SimpleSection implements Section<String> {
     }
 
     @Override
-    public List<String> getEntries() {
-        List<String> list = new ArrayList<>();
-        list.add(entry);
-        return list;
+    public String getContent() {
+        return entry;
     }
 
     public void print() {

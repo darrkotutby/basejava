@@ -2,32 +2,18 @@ package by.tut.darrko.webapp.model;
 
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 public class Resume implements Comparable<Resume> {
-
-    private static EnumMap<SectionType, String> sectionTypeMap = new EnumMap<>(SectionType.class);
-    private static EnumMap<ContactType, String> contactTypeMap = new EnumMap<>(ContactType.class);
-
-    static {
-        sectionTypeMap.put(SectionType.OBJECTIVE, "Позиция:");
-        sectionTypeMap.put(SectionType.PERSONAL, "Личные качества:");
-        sectionTypeMap.put(SectionType.ACHIEVEMENT, "Достжения:");
-        sectionTypeMap.put(SectionType.QUALIFICATION, "Квалификация:");
-        sectionTypeMap.put(SectionType.EXPERIENCE, "Опыт работы:");
-        sectionTypeMap.put(SectionType.EDUCATION, "Образование:");
-
-        contactTypeMap.put(ContactType.ADDRESS, "Адрес: ");
-        contactTypeMap.put(ContactType.PHONE, "Телефон: ");
-        contactTypeMap.put(ContactType.EMAIL, "E-mail: ");
-        contactTypeMap.put(ContactType.SKYPE, "SKYPE :");
-    }
 
     // Unique identifier
     private final String uuid;
     private final String fullName;
-    private Map<ContactType, String> contacts = new TreeMap<>();
-    private Map<SectionType, Section> sections = new TreeMap<>();
+    private EnumMap<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private EnumMap<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -61,39 +47,43 @@ public class Resume implements Comparable<Resume> {
         return sections;
     }
 
-    private void addSection(SectionType sectionType) {
+    private Section getDefaultSection(SectionType sectionType) {
+        Section section = null;
         switch (sectionType) {
-            case OBJECTIVE:
-                sections.put(sectionType, new SimpleSection());
-                break;
             case PERSONAL:
             case ACHIEVEMENT:
             case QUALIFICATION:
-                sections.put(sectionType, new ListedSection());
+                section = new ListedSection();
                 break;
             case EXPERIENCE:
             case EDUCATION:
-                sections.put(sectionType, new DatedSection());
+                section = new DatedSection();
+                break;
+            default:
+                section = new SimpleSection();
+
         }
+        sections.put(sectionType, section);
+        return section;
     }
 
-    private Section getSection(SectionType sectionType) {
-        Section section = sections.get(sectionType);
+    public Section getSection(SectionType sectionType) {
+        Section section = sections.getOrDefault(sectionType, getDefaultSection(sectionType)); //((HashMap)sections).getOrDefault() .get(sectionType);
         if (section == null) {
-            addSection(sectionType);
+            getDefaultSection(sectionType);
             section = sections.get(sectionType);
         }
         return section;
     }
 
-    public void addSectionsEntry(SectionType sectionType, String description) {
+  /*  public void addSectionsEntry(SectionType sectionType, String description) {
         getSection(sectionType).addEntry(description);
     }
 
-    public void addSectionsEntry(SectionType sectionType, String organisationName, LocalDate dateFrom, String dateTo, String position, String
+    public void addSectionsEntry(SectionType sectionType, String organisationName, LocalDate dateFrom, LocalDate dateTo, String position, String
             description) {
         getSection(sectionType).addEntry(new DatedEntry(organisationName, dateFrom, dateTo, position, description));
-    }
+    } */
 
     @Override
     public boolean equals(Object o) {
@@ -125,23 +115,17 @@ public class Resume implements Comparable<Resume> {
 
     public void print() throws ParseException {
 
-        System.out.println(contactTypeMap);
-        System.out.println(sectionTypeMap);
-
-        System.out.println();
-
-
         System.out.println(fullName);
         System.out.println();
 
         for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-            System.out.println(contactTypeMap.get(entry.getKey()) + entry.getValue());
+            System.out.println(entry.getKey().getTitle() + entry.getValue());
         }
 
         System.out.println();
 
         for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
-            System.out.println(sectionTypeMap.get(entry.getKey()));
+            System.out.println(entry.getKey().getTitle());
             entry.getValue().print();
         }
     }

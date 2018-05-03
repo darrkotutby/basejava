@@ -3,17 +3,17 @@ package by.tut.darrko.webapp.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListedSection implements Section<String> {
+public class ListedSection implements Section<List<String>> {
 
     private List<String> entries = new ArrayList<>();
 
     @Override
-    public void addEntry(String entry) {
-        entries.add(entry);
+    public void addEntry(List<String> entry) {
+        entries.addAll(entry);
     }
 
     @Override
-    public List<String> getEntries() {
+    public List<String> getContent() {
         return entries;
     }
 
@@ -28,5 +28,4 @@ public class ListedSection implements Section<String> {
         System.out.println(entries.toString().replace("[", "").replace("]", ""));
         System.out.println();
     }
-
 }
