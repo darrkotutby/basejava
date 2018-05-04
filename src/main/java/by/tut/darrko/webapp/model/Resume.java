@@ -1,6 +1,5 @@
 package by.tut.darrko.webapp.model;
 
-import java.text.ParseException;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
@@ -56,7 +55,7 @@ public class Resume implements Comparable<Resume> {
                 break;
             case EXPERIENCE:
             case EDUCATION:
-                section = new DatedSection();
+                section = new OrganisationSection();
                 break;
             default:
                 section = new SimpleSection();
@@ -98,7 +97,7 @@ public class Resume implements Comparable<Resume> {
         return uuid.compareTo(o.uuid);
     }
 
-    public void print() throws ParseException {
+    public void print() {
 
         System.out.println(fullName);
         System.out.println();
