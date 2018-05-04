@@ -1,16 +1,17 @@
 package by.tut.darrko.webapp;
 
 import by.tut.darrko.webapp.model.ContactType;
+import by.tut.darrko.webapp.model.DatedEntry;
 import by.tut.darrko.webapp.model.Resume;
 import by.tut.darrko.webapp.model.SectionType;
+import by.tut.darrko.webapp.util.DateUtil;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainReflection {
 
@@ -30,18 +31,32 @@ public class MainReflection {
         r.addContact(ContactType.ADDRESS, "Minsk");
         r.addContact(ContactType.PHONE, "123");
         r.addContact(ContactType.PHONE, "456");
-        r.addSectionsEntry(SectionType.OBJECTIVE, "Ведущий инженер программист");
-        r.addSectionsEntry(SectionType.PERSONAL, "Упорный");
-        r.addSectionsEntry(SectionType.PERSONAL, "Дотошный");
-        r.addSectionsEntry(SectionType.ACHIEVEMENT, "Разработка информационной системы");
-        r.addSectionsEntry(SectionType.QUALIFICATION, "Oracle, SQL, PL/SQL");
-        r.addSectionsEntry(SectionType.QUALIFICATION, "Java, C++");
-        DateFormat format = new SimpleDateFormat("dd.mm.yyyy", Locale.ENGLISH);
-        r.addSectionsEntry(SectionType.EXPERIENCE, "Банк", format.parse("02.01.2000"), "31.12.2003", "Ведущий программист", "Oracle forms");
-        r.addSectionsEntry(SectionType.EXPERIENCE, "Банк", format.parse("10.01.2004"), "NOW", "Главный программист", "Oracle forms");
-        r.addSectionsEntry(SectionType.EDUCATION, "РТИ", format.parse("03.01.1995"), "01.08.2000", "Студент", "ФКП");
-        r.addSectionsEntry(SectionType.EDUCATION, "РТИ", format.parse("04.01.2000"), "01.08.2005", "Студент", "ФКП");
-        r.addSectionsEntry(SectionType.EDUCATION, "javaops", format.parse("04.01.2017"), "NOW", "Студент", "JAVA, JSP, SQL");
+        r.getSection(SectionType.OBJECTIVE).addEntry("Ведущий инженер программист");
+
+        List<String> list = new ArrayList<>();
+        list.add("Дотошный");
+        list.add("Упорный");
+        r.getSection(SectionType.PERSONAL).addEntry(list);
+
+        list = new ArrayList<>();
+        list.add("Разработка информационной системы");
+        r.getSection(SectionType.ACHIEVEMENT).addEntry(list);
+
+        list = new ArrayList<>();
+        list.add("Oracle, SQL, PL/SQL");
+        list.add("Java, C++");
+        r.getSection(SectionType.QUALIFICATION).addEntry(list);
+
+        List<DatedEntry> list1 = new ArrayList<>();
+        list1.add(new DatedEntry("Банк", DateUtil.stringToDate("02.01.2000"), DateUtil.stringToDate("31.12.2003"), "Ведущий программист", "Oracle forms"));
+        list1.add(new DatedEntry("Банк", DateUtil.stringToDate("10.01.2004"), null, "Главный программист", "Oracle forms"));
+        r.getSection(SectionType.EXPERIENCE).addEntry(list1);
+
+        list1 = new ArrayList<>();
+        list1.add(new DatedEntry("РТИ", DateUtil.stringToDate("04.01.2000"), DateUtil.stringToDate("01.08.2005"), "Студент", "ФКП"));
+        list1.add(new DatedEntry("РТИ", DateUtil.stringToDate("03.01.1995"), DateUtil.stringToDate("01.08.2000"), "Студент", "ФКП"));
+        list1.add(new DatedEntry("javaops", DateUtil.stringToDate("04.01.2017"), null, "Студент", "JAVA, JSP, SQL"));
+        r.getSection(SectionType.EDUCATION).addEntry(list1);
 
         System.out.println(r);
         System.out.println();

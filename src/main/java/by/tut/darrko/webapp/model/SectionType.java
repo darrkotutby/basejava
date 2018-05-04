@@ -2,7 +2,6 @@ package by.tut.darrko.webapp.model;
 
 public enum SectionType {
 
-    CONTACTS("Контакты:"),
     OBJECTIVE("Позиция:"),
     PERSONAL("Личные качества:"),
     ACHIEVEMENT("Достжения:"),

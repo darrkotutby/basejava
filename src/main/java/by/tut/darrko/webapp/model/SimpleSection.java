@@ -1,16 +1,8 @@
 package by.tut.darrko.webapp.model;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+public class SimpleSection implements Section<String> {
 
-public class SimpleSection extends Section<Entry> {
-
-    private Entry entry;
-
-    SimpleSection(SectionType sectionType) {
-        super(sectionType);
-    }
+    private String entry;
 
     @Override
     public String toString() {
@@ -19,21 +11,17 @@ public class SimpleSection extends Section<Entry> {
                 "} " + super.toString();
     }
 
-    public void addEntry(Entry entry) {
+    public void addEntry(String entry) {
         this.entry = entry;
     }
 
     @Override
-    public List<Entry> getEntries() {
-        List<Entry> list = new ArrayList<>();
-        list.add(entry);
-        return list;
+    public String getContent() {
+        return entry;
     }
 
-    public void print() throws ParseException {
-        super.print();
-        String string = entry.toStringForPrint().replace(", \n", "\n");
-        System.out.println(string.substring(0, string.length() - 2));
+    public void print() {
+        System.out.println(entry);
         System.out.println();
     }
 }

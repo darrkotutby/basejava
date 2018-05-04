@@ -4,33 +4,33 @@ import by.tut.darrko.webapp.util.DateUtil;
 
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Objects;
 
-public class DatedEntry extends Entry {
-    private String organisationName;
-    private Date dateFrom;
-    private String dateTo;
-    private String position;
+public class DatedEntry implements Comparable<DatedEntry> {
 
-    DatedEntry(String organisationName, Date dateFrom, String dateTo, String position, String description) {
-        super(description);
+    private String organisationName;
+    private LocalDate dateFrom;
+    private LocalDate dateTo;
+    private String position;
+    private String description;
+
+    public DatedEntry(String organisationName, LocalDate dateFrom, LocalDate dateTo, String position, String description) {
         this.organisationName = organisationName;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.position = position;
+        this.description = description;
     }
 
     String getOrganisation() {
         return organisationName;
     }
 
-    Date getDateFrom() {
+    LocalDate getDateFrom() {
         return dateFrom;
     }
 
-    String getDateTo() {
+    LocalDate getDateTo() {
         return dateTo;
     }
 
@@ -62,56 +62,19 @@ public class DatedEntry extends Entry {
                 ", dateFrom='" + dateFrom + '\'' +
                 ", dateTo='" + dateTo + '\'' +
                 ", position='" + position + '\'' +
-                ", description='" + getDescription() + '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 
     @Override
-    public int compareTo(Entry entry) {
-        DatedEntry datedEntry = (DatedEntry) entry;
-
+    public int compareTo(DatedEntry datedEntry) {
         int cmp = dateFrom.compareTo(datedEntry.getDateFrom());
         if (cmp != 0) {
             return cmp;
         }
-        LocalDate thisDateTo = null;
-        if (dateTo == null || dateTo.equalsIgnoreCase("NOW")) {
-            thisDateTo = LocalDate.now();
-        } else {
-            try {
-                thisDateTo = DateUtil.stringToDate(dateTo).toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate();
-            } catch (ParseException e) {
-                try {
-                    thisDateTo = DateUtil.stringToDate("01.01.1900").toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate();
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-        LocalDate otherDateTo = null;
-        if (datedEntry.dateTo == null || datedEntry.dateTo.equalsIgnoreCase("NOW")) {
-            otherDateTo = LocalDate.now();
-        } else {
-            try {
-                otherDateTo = DateUtil.stringToDate(datedEntry.dateTo).toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate();
-            } catch (ParseException e) {
-                try {
-                    otherDateTo = DateUtil.stringToDate("01.01.1900").toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate();
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-        assert thisDateTo != null;
-        assert otherDateTo != null;
+        LocalDate thisDateTo = dateTo == null ? LocalDate.now() : dateTo;
+        LocalDate otherDateTo = datedEntry.dateTo == null ? LocalDate.now() : datedEntry.dateTo;
+        ;
         cmp = thisDateTo.compareTo(otherDateTo);
         if (cmp != 0) {
             return cmp;
@@ -124,9 +87,9 @@ public class DatedEntry extends Entry {
     }
 
     public String toStringForPrint() throws ParseException {
-        return DateUtil.dateToString(dateFrom, "mm.yyy") + " - " +
-                (dateTo.equalsIgnoreCase("NOW") ?
-                        "NOW" : DateUtil.dateToString(DateUtil.stringToDate(dateTo), "mm.yyyy")) +
-                "\t" + position + "\n\t" + getDescription();
+        return DateUtil.dateToString(dateFrom, "MM.yyy") + " - " +
+                (dateTo == null ?
+                        "NOW" : DateUtil.dateToString(dateTo, "MM.yyyy")) +
+                "\t" + position + "\n\t" + description;
     }
 }
