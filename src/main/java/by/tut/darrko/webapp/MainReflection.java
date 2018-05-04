@@ -20,7 +20,6 @@ public class MainReflection {
 
         FileUtil.recursiveDirPrint(new File("e:\\JavaOPs_work"),"");
 
-
         String resumeClassName = "by.tut.darrko.webapp.model.Resume";
         Class<?> resumeClass = Class.forName(resumeClassName);
         Constructor<?> dogConstructor = resumeClass.getConstructor(String.class);
@@ -32,7 +31,6 @@ public class MainReflection {
 
         Resume r = new Resume("UUID1", "Alex Ivanov");
         r.addContact(ContactType.ADDRESS, "Minsk");
-        r.addContact(ContactType.PHONE, "123");
         r.addContact(ContactType.PHONE, "456");
         r.getSection(SectionType.OBJECTIVE).addEntry("Ведущий инженер программист");
 
