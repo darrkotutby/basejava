@@ -2,7 +2,9 @@ package by.tut.darrko.webapp;
 
 import by.tut.darrko.webapp.model.*;
 import by.tut.darrko.webapp.util.DateUtil;
+import by.tut.darrko.webapp.util.FileUtil;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,7 +16,11 @@ public class MainReflection {
 
     public static void main(String[] args)
             throws IllegalAccessException, NoSuchMethodException, InvocationTargetException,
-            ClassNotFoundException, InstantiationException, ParseException {
+            ClassNotFoundException, InstantiationException {
+
+        FileUtil.recursiveDirPrint(new File("e:\\JavaOPs_work"),"");
+
+
         String resumeClassName = "by.tut.darrko.webapp.model.Resume";
         Class<?> resumeClass = Class.forName(resumeClassName);
         Constructor<?> dogConstructor = resumeClass.getConstructor(String.class);
