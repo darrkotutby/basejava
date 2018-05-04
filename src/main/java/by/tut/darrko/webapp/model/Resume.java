@@ -1,7 +1,6 @@
 package by.tut.darrko.webapp.model;
 
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
@@ -68,22 +67,8 @@ public class Resume implements Comparable<Resume> {
     }
 
     public Section getSection(SectionType sectionType) {
-        Section section = sections.getOrDefault(sectionType, getDefaultSection(sectionType)); //((HashMap)sections).getOrDefault() .get(sectionType);
-        if (section == null) {
-            getDefaultSection(sectionType);
-            section = sections.get(sectionType);
-        }
-        return section;
+        return sections.getOrDefault(sectionType, getDefaultSection(sectionType));
     }
-
-  /*  public void addSectionsEntry(SectionType sectionType, String description) {
-        getSection(sectionType).addEntry(description);
-    }
-
-    public void addSectionsEntry(SectionType sectionType, String organisationName, LocalDate dateFrom, LocalDate dateTo, String position, String
-            description) {
-        getSection(sectionType).addEntry(new DatedEntry(organisationName, dateFrom, dateTo, position, description));
-    } */
 
     @Override
     public boolean equals(Object o) {

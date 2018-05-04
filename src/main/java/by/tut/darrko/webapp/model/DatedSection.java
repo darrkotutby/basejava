@@ -3,8 +3,6 @@ package by.tut.darrko.webapp.model;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class DatedSection implements Section<List<DatedEntry>> {
 

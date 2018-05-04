@@ -1,8 +1,5 @@
 package by.tut.darrko.webapp.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SimpleSection implements Section<String> {
 
     private String entry;

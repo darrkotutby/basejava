@@ -73,7 +73,8 @@ public class DatedEntry implements Comparable<DatedEntry> {
             return cmp;
         }
         LocalDate thisDateTo = dateTo == null ? LocalDate.now() : dateTo;
-        LocalDate otherDateTo = datedEntry.dateTo == null ? LocalDate.now() : datedEntry.dateTo;;
+        LocalDate otherDateTo = datedEntry.dateTo == null ? LocalDate.now() : datedEntry.dateTo;
+        ;
         cmp = thisDateTo.compareTo(otherDateTo);
         if (cmp != 0) {
             return cmp;
@@ -87,7 +88,7 @@ public class DatedEntry implements Comparable<DatedEntry> {
 
     public String toStringForPrint() throws ParseException {
         return DateUtil.dateToString(dateFrom, "MM.yyy") + " - " +
-                (dateTo==null ?
+                (dateTo == null ?
                         "NOW" : DateUtil.dateToString(dateTo, "MM.yyyy")) +
                 "\t" + position + "\n\t" + description;
     }
