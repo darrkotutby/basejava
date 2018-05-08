@@ -48,29 +48,29 @@ public abstract class AbstractStorageTest {
         datedEntryList.add(new DatedEntry(DateUtil.stringToDate("02.01.2000"), DateUtil.stringToDate("31.12.2003"), "Ведущий программист", "Oracle forms"));
         datedEntryList.add(new DatedEntry(DateUtil.stringToDate("10.01.2004"), null, "Главный программист", "Oracle forms"));
 
-        OrganisationDatedEntry bank = new OrganisationDatedEntry("Банк");
+        OrganisationEntry bank = new OrganisationEntry("Банк");
         bank.addEntries(datedEntryList);
-        List<OrganisationDatedEntry> organisationDatedEntryList = new ArrayList<>();
-        organisationDatedEntryList.add(bank);
+        List<OrganisationEntry> organisationEntryList = new ArrayList<>();
+        organisationEntryList.add(bank);
 
-        resume1.getSection(SectionType.EXPERIENCE).addEntry(organisationDatedEntryList);
+        resume1.getSection(SectionType.EXPERIENCE).addEntry(organisationEntryList);
 
         List<DatedEntry> datedEntryList1 = new ArrayList<>();
         datedEntryList1.add(new DatedEntry(DateUtil.stringToDate("04.01.2000"), DateUtil.stringToDate("01.08.2005"), "Студент", "ФКП"));
         datedEntryList1.add(new DatedEntry(DateUtil.stringToDate("03.01.1995"), DateUtil.stringToDate("01.08.2000"), "Студент", "ФКП"));
-        OrganisationDatedEntry rti = new OrganisationDatedEntry("РТИ");
+        OrganisationEntry rti = new OrganisationEntry("РТИ");
         rti.addEntries(datedEntryList1);
 
-        List<OrganisationDatedEntry> organisationDatedEntryList1 = new ArrayList<>();
-        organisationDatedEntryList1.add(rti);
+        List<OrganisationEntry> organisationEntryList1 = new ArrayList<>();
+        organisationEntryList1.add(rti);
 
         List<DatedEntry> datedEntryList2 = new ArrayList<>();
         datedEntryList2.add(new DatedEntry(DateUtil.stringToDate("04.01.2017"), null, "Студент", "JAVA, JSP, SQL"));
-        OrganisationDatedEntry javaops = new OrganisationDatedEntry("javaops");
+        OrganisationEntry javaops = new OrganisationEntry("javaops");
         javaops.addEntries(datedEntryList2);
-        organisationDatedEntryList1.add(javaops);
+        organisationEntryList1.add(javaops);
 
-        resume1.getSection(SectionType.EDUCATION).addEntry(organisationDatedEntryList1);
+        resume1.getSection(SectionType.EDUCATION).addEntry(organisationEntryList1);
 
 
         storage.clear();

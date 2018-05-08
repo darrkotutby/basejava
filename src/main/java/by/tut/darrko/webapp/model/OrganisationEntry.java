@@ -3,14 +3,12 @@ package by.tut.darrko.webapp.model;
 import java.time.LocalDate;
 import java.util.*;
 
-public class OrganisationDatedEntry implements Comparable<OrganisationDatedEntry> {
+public class OrganisationEntry implements Comparable<OrganisationEntry> {
 
     List<DatedEntry> entries = new ArrayList<>();
     private String organisationName;
-    private LocalDate dateFrom;
-    private LocalDate dateTo;
 
-    public OrganisationDatedEntry(String organisationName) {
+    public OrganisationEntry(String organisationName) {
         this.organisationName = organisationName;
     }
 
@@ -19,24 +17,17 @@ public class OrganisationDatedEntry implements Comparable<OrganisationDatedEntry
     }
 
     LocalDate getDateFrom() {
-        return (dateFrom == null) ? LocalDate.now() : dateFrom;
+        Set<DatedEntry> set = new TreeSet<>(entries);
+        return ((TreeSet<DatedEntry>) set).last().getDateTo();
     }
 
     LocalDate getDateTo() {
-        return (dateTo == null) ? LocalDate.now() : dateTo;
+        Set<DatedEntry> set = new TreeSet<>(entries);
+        return ((TreeSet<DatedEntry>) set).first().getDateFrom();
     }
 
     public void addEntries(List<DatedEntry> entries) {
-        for (DatedEntry entry : entries) {
-            this.entries.add(entry);
-            if (dateFrom == null || dateFrom.compareTo(entry.getDateFrom()) > 0) {
-                dateFrom = entry.getDateFrom();
-            }
-
-            if (dateTo == null || dateTo.compareTo(entry.getDateTo()) < 0) {
-                dateTo = entry.getDateTo();
-            }
-        }
+        this.entries.addAll(entries);
     }
 
     public List<DatedEntry> getEntries() {
@@ -47,7 +38,7 @@ public class OrganisationDatedEntry implements Comparable<OrganisationDatedEntry
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OrganisationDatedEntry that = (OrganisationDatedEntry) o;
+        OrganisationEntry that = (OrganisationEntry) o;
         return Objects.equals(organisationName, that.organisationName);
     }
 
@@ -57,24 +48,22 @@ public class OrganisationDatedEntry implements Comparable<OrganisationDatedEntry
     }
 
     @Override
-    public int compareTo(OrganisationDatedEntry organisationDatedEntry) {
-        int cmp = organisationDatedEntry.getDateFrom().compareTo(getDateFrom());
+    public int compareTo(OrganisationEntry organisationEntry) {
+        int cmp = organisationEntry.getDateFrom().compareTo(getDateFrom());
         if (cmp != 0) {
             return cmp;
         }
-        cmp = organisationDatedEntry.getDateTo().compareTo(getDateTo());
+        cmp = organisationEntry.getDateTo().compareTo(getDateTo());
         if (cmp != 0) {
             return cmp;
         }
-        return organisationName.compareTo(organisationDatedEntry.getOrganisationName());
+        return organisationName.compareTo(organisationEntry.getOrganisationName());
     }
 
     @Override
     public String toString() {
-        return "OrganisationDatedEntry{" +
+        return "OrganisationEntry{" +
                 "organisationName='" + organisationName + '\'' +
-                ", dateFrom=" + dateFrom +
-                ", dateTo=" + dateTo +
                 ", entries=" + entries +
                 '}';
     }

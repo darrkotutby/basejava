@@ -5,17 +5,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class OrganisationSection implements Section<List<OrganisationDatedEntry>> {
+public class OrganisationSection implements Section<List<OrganisationEntry>> {
 
-    private List<OrganisationDatedEntry> entries = new ArrayList<>();
+    private List<OrganisationEntry> entries = new ArrayList<>();
 
     @Override
-    public void addEntry(List<OrganisationDatedEntry> entry) {
+    public void addEntry(List<OrganisationEntry> entry) {
         entries.addAll(entry);
     }
 
     @Override
-    public List<OrganisationDatedEntry> getContent() {
+    public List<OrganisationEntry> getContent() {
         return entries;
     }
 
@@ -27,10 +27,10 @@ public class OrganisationSection implements Section<List<OrganisationDatedEntry>
     }
 
     public void print() {
-        Set<OrganisationDatedEntry> set = new TreeSet<>(entries);
-        for (OrganisationDatedEntry organisationDatedEntry : set) {
-            System.out.println(organisationDatedEntry.getOrganisationName());
-            System.out.println(organisationDatedEntry.toStringForPrint());
+        Set<OrganisationEntry> set = new TreeSet<>(entries);
+        for (OrganisationEntry organisationEntry : set) {
+            System.out.println(organisationEntry.getOrganisationName());
+            System.out.println(organisationEntry.toStringForPrint());
         }
         System.out.println();
     }
