@@ -46,9 +46,8 @@ public class Resume implements Comparable<Resume> {
     }
 
     private Section getDefaultSection(SectionType sectionType) {
-        Section section = null;
+        Section section;
         switch (sectionType) {
-            case PERSONAL:
             case ACHIEVEMENT:
             case QUALIFICATION:
                 section = new ListedSection();
@@ -57,8 +56,12 @@ public class Resume implements Comparable<Resume> {
             case EDUCATION:
                 section = new OrganisationSection();
                 break;
-            default:
+            case PERSONAL:
+            case OBJECTIVE:
                 section = new SimpleSection();
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown section type:" + sectionType);
 
         }
         sections.put(sectionType, section);

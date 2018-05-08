@@ -8,7 +8,6 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,10 @@ public class MainReflection {
             throws IllegalAccessException, NoSuchMethodException, InvocationTargetException,
             ClassNotFoundException, InstantiationException {
 
-        FileUtil.recursiveDirPrint(new File("e:\\JavaOPs_work"),"");
+        File directory = new File("").getAbsoluteFile();
+
+        System.out.println(directory.getAbsolutePath());
+        FileUtil.recursiveDirPrint(directory, "");
 
         String resumeClassName = "by.tut.darrko.webapp.model.Resume";
         Class<?> resumeClass = Class.forName(resumeClassName);
@@ -33,13 +35,9 @@ public class MainReflection {
         r.addContact(ContactType.ADDRESS, "Minsk");
         r.addContact(ContactType.PHONE, "456");
         r.getSection(SectionType.OBJECTIVE).addEntry("Ведущий инженер программист");
+        r.getSection(SectionType.PERSONAL).addEntry("Дотошный, упорный");
 
         List<String> list = new ArrayList<>();
-        list.add("Дотошный");
-        list.add("Упорный");
-        r.getSection(SectionType.PERSONAL).addEntry(list);
-
-        list = new ArrayList<>();
         list.add("Разработка информационной системы");
         r.getSection(SectionType.ACHIEVEMENT).addEntry(list);
 
@@ -80,6 +78,5 @@ public class MainReflection {
         System.out.println(r);
         System.out.println();
         r.print();
-
     }
 }

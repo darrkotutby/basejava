@@ -22,7 +22,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         this.directory = directory;
     }
 
-    protected abstract void add(Resume resume, File file);
+    protected abstract void doWrite(Resume resume, File file) throws IOException;
+
+    protected abstract Resume doRead(File file) throws IOException;
 
     protected void remove(File file) {
         if (!file.delete()) {
@@ -37,14 +39,20 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public Resume getByIndex(File file) {
-        return null;
+        Resume resume;
+        try {
+            resume = doRead(file);
+        } catch (IOException e) {
+            throw new StorageException("IO error", e);
+        }
+        return resume;
     }
 
     @Override
     protected void saveByIndex(Resume resume, File file) {
         try {
             file.createNewFile();
-            add(resume, file);
+            updateByIndex(resume, file);
         } catch (IOException e) {
             throw new StorageException("IO error", e);
         }
@@ -59,8 +67,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void updateByIndex(Resume resume, File file) {
-        remove(file);
-        saveByIndex(resume, file);
+        try {
+            doWrite(resume, file);
+        } catch (IOException e) {
+            throw new StorageException("IO error", e);
+        }
     }
 
     @Override

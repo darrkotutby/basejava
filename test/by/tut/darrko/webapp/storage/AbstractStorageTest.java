@@ -32,13 +32,9 @@ public abstract class AbstractStorageTest {
         resume1.addContact(ContactType.ADDRESS, "Minsk");
         resume1.addContact(ContactType.PHONE, "456");
         resume1.getSection(SectionType.OBJECTIVE).addEntry("Ведущий инженер программист");
+        resume1.getSection(SectionType.PERSONAL).addEntry("Дотошный, упорный");
 
         List<String> list = new ArrayList<>();
-        list.add("Дотошный");
-        list.add("Упорный");
-        resume1.getSection(SectionType.PERSONAL).addEntry(list);
-
-        list = new ArrayList<>();
         list.add("Разработка информационной системы");
         resume1.getSection(SectionType.ACHIEVEMENT).addEntry(list);
 
