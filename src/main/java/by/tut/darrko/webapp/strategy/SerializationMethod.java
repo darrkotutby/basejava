@@ -1,4 +1,4 @@
-package by.tut.darrko.webapp.storage;
+package by.tut.darrko.webapp.strategy;
 
 import by.tut.darrko.webapp.model.Resume;
 

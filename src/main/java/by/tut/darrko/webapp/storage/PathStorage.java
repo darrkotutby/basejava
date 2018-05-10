@@ -2,8 +2,11 @@ package by.tut.darrko.webapp.storage;
 
 import by.tut.darrko.webapp.exception.StorageException;
 import by.tut.darrko.webapp.model.Resume;
+import by.tut.darrko.webapp.strategy.SerializationMethod;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,14 +32,6 @@ public class PathStorage extends AbstractStorage<Path> {
         this.serializationMethod = serializationMethod;
     }
 
-    protected void doWrite(Resume r, OutputStream os) throws IOException {
-        serializationMethod.doWrite(r, os);
-    }
-
-    protected Resume doRead(InputStream is) throws IOException {
-        return serializationMethod.doRead(is);
-    }
-
     @Override
     public void clear() {
         try {
@@ -57,15 +52,14 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected Path getSearchKey(String uuid) {
-        return Paths.get(directory.toString(), uuid);
+        return directory.resolve(uuid);
     }
 
     @Override
     protected void doUpdate(Resume r, Path path) {
-
-        try (OutputStream out = new BufferedOutputStream(
-                Files.newOutputStream(path, CREATE))) {
-            doWrite(r, out);
+        try {
+            serializationMethod.doWrite(r, new BufferedOutputStream(
+                    Files.newOutputStream(path, CREATE)));
         } catch (IOException e) {
             throw new StorageException("Path write error", r.getUuid(), e);
         }
@@ -83,9 +77,9 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected Resume doGet(Path path) {
-        try (InputStream in = new BufferedInputStream(
-                Files.newInputStream(path, READ))) {
-            return doRead(in);
+        try {
+            return serializationMethod.doRead(new BufferedInputStream(
+                    Files.newInputStream(path, READ)));
         } catch (IOException e) {
             throw new StorageException("Path write error", path.toString(), e);
         }
@@ -102,10 +96,8 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> doCopyAll() {
-        List<Resume> list;
         try {
-            list = Files.list(directory).map(this::doGet).collect(Collectors.toList());
-            return list;
+            return Files.list(directory).map(this::doGet).collect(Collectors.toList());
         } catch (IOException e) {
             throw new StorageException("Directory read error", null);
         }

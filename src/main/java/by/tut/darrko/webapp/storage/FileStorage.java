@@ -2,16 +2,13 @@ package by.tut.darrko.webapp.storage;
 
 import by.tut.darrko.webapp.exception.StorageException;
 import by.tut.darrko.webapp.model.Resume;
+import by.tut.darrko.webapp.strategy.SerializationMethod;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * gkislin
- * 22.07.2016
- */
 public class FileStorage extends AbstractStorage<File> {
     private File directory;
     private SerializationMethod serializationMethod;
@@ -32,15 +29,7 @@ public class FileStorage extends AbstractStorage<File> {
         this.serializationMethod = serializationMethod;
     }
 
-    private void doWrite(Resume r, OutputStream os) throws IOException {
-        serializationMethod.doWrite(r, os);
-    }
-
-    private Resume doRead(InputStream is) throws IOException {
-        return serializationMethod.doRead(is);
-    }
-
-    @Override
+     @Override
     public void clear() {
         File[] files = directory.listFiles();
         if (files != null) {
@@ -67,7 +56,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected void doUpdate(Resume r, File file) {
         try {
-            doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
+            serializationMethod.doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File write error", r.getUuid(), e);
         }
@@ -91,7 +80,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected Resume doGet(File file) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(file)));
+            return serializationMethod.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File read error", file.getName(), e);
         }

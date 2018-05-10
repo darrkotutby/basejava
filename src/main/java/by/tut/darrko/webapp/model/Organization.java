@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static ru.javawebinar.basejava.util.DateUtil.NOW;
-import static ru.javawebinar.basejava.util.DateUtil.of;
+import static by.tut.darrko.webapp.util.DateUtil.NOW;
+import static by.tut.darrko.webapp.util.DateUtil.of;
 
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
