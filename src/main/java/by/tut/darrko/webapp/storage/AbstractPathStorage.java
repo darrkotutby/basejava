@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.READ;
@@ -97,29 +96,14 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> doCopyAll() {
-      /*  Stream<Path> stream;
+        List<Resume> list = new ArrayList<>();
         try {
-            stream = Files.;
-
-            {
-
+            for (Path path : Files.list(directory).collect(Collectors.toList())) {
+                list.add(doGet(path));
             }
-
-
-            return stream.collect(Collectors.toList());
+            return list;
         } catch (IOException e) {
             throw new StorageException("Directory read error", null);
         }
-
-
-        if (Paths == null) {
-
-        }
-        List<Resume> list = new ArrayList<>(Paths.length);
-        for (Path Path : Paths) {
-            list.add(doGet(Path));
-        }
-        return list;*/
-      return null;
     }
 }
