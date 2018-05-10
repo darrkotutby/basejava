@@ -12,15 +12,16 @@ import java.util.Objects;
  * gkislin
  * 22.07.2016
  */
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public class FileStorage extends AbstractStorage<File> {
     private File directory;
+    private SerializationMethod serializationMethod;
 
-    protected abstract void doWrite(Resume r, OutputStream os) throws IOException;
+    protected FileStorage(String path, SerializationMethod serializationMethod) {
+        Objects.requireNonNull(path, "directory must not be null");
+        Objects.requireNonNull(serializationMethod, "Serialization method must not be null");
 
-    protected abstract Resume doRead(InputStream is) throws IOException;
+        File directory = new File(path);
 
-    protected AbstractFileStorage(File directory) {
-        Objects.requireNonNull(directory, "directory must not be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
@@ -28,6 +29,15 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = directory;
+        this.serializationMethod = serializationMethod;
+    }
+
+    private void doWrite(Resume r, OutputStream os) throws IOException {
+        serializationMethod.doWrite(r, os);
+    }
+
+    private Resume doRead(InputStream is) throws IOException {
+        return serializationMethod.doRead(is);
     }
 
     @Override

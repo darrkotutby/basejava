@@ -3,12 +3,9 @@ package by.tut.darrko.webapp.storage;
 import by.tut.darrko.webapp.exception.ExistStorageException;
 import by.tut.darrko.webapp.exception.NotExistStorageException;
 import by.tut.darrko.webapp.model.*;
-import by.tut.darrko.webapp.storage.Storage;
 import org.junit.Before;
 import org.junit.Test;
 
-
-import java.io.File;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
@@ -17,15 +14,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = new File("C:\\projects\\storage");
-
-    protected Storage storage;
-
+    protected static final String STORAGE_DIR = "e:\\JavaOPs_work\\basejava\\storage";
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
-
     private static final Resume R1;
     private static final Resume R2;
     private static final Resume R3;
@@ -56,11 +49,13 @@ public abstract class AbstractStorageTest {
                         new Organization("Organization12", "http://Organization12.ru")));
         R2.addContact(ContactType.SKYPE, "skype2");
         R2.addContact(ContactType.PHONE, "22222");
-        R1.addSection(SectionType.EXPERIENCE,
+        R2.addSection(SectionType.EXPERIENCE,
                 new OrganizationSection(
                         new Organization("Organization2", "http://Organization2.ru",
                                 new Organization.Position(2015, Month.JANUARY, "position1", "content1"))));
     }
+
+    protected Storage storage;
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;

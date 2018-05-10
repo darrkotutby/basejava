@@ -35,8 +35,31 @@ public class Resume implements Comparable<Resume>, Serializable {
         return contacts.get(type);
     }
 
+    private Section getDefaultSection(SectionType sectionType) {
+        Section section;
+        switch (sectionType) {
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                section = new ListSection();
+                break;
+            case EXPERIENCE:
+            case EDUCATION:
+                section = new OrganizationSection();
+                break;
+            case PERSONAL:
+            case OBJECTIVE:
+                section = new TextSection();
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown section type:" + sectionType);
+
+        }
+        sections.put(sectionType, section);
+        return section;
+    }
+
     public Section getSection(SectionType type) {
-        return sections.get(type);
+        return sections.getOrDefault(type, getDefaultSection(type));
     }
 
     public void addContact(ContactType type, String value) {
@@ -68,7 +91,12 @@ public class Resume implements Comparable<Resume>, Serializable {
 
     @Override
     public String toString() {
-        return uuid + '(' + fullName + ')';
+        return "Resume{" +
+                "uuid='" + uuid + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", contacts=" + contacts +
+                ", sections=" + sections +
+                '}';
     }
 
     @Override

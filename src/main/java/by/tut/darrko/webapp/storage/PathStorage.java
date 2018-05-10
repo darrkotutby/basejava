@@ -7,7 +7,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -16,20 +15,27 @@ import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.READ;
 
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
     private Path directory;
+    private SerializationMethod serializationMethod;
 
-    protected AbstractPathStorage(String dir) {
+    protected PathStorage(String dir, SerializationMethod serializationMethod) {
+        Objects.requireNonNull(dir, "directory must not be null");
+        Objects.requireNonNull(serializationMethod, "Serialization method must not be null");
         directory = Paths.get(dir);
-        Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
+        this.serializationMethod = serializationMethod;
     }
 
-    protected abstract void doWrite(Resume r, OutputStream os) throws IOException;
+    protected void doWrite(Resume r, OutputStream os) throws IOException {
+        serializationMethod.doWrite(r, os);
+    }
 
-    protected abstract Resume doRead(InputStream is) throws IOException;
+    protected Resume doRead(InputStream is) throws IOException {
+        return serializationMethod.doRead(is);
+    }
 
     @Override
     public void clear() {
@@ -96,11 +102,9 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> doCopyAll() {
-        List<Resume> list = new ArrayList<>();
+        List<Resume> list;
         try {
-            for (Path path : Files.list(directory).collect(Collectors.toList())) {
-                list.add(doGet(path));
-            }
+            list = Files.list(directory).map(this::doGet).collect(Collectors.toList());
             return list;
         } catch (IOException e) {
             throw new StorageException("Directory read error", null);
