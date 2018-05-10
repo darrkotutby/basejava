@@ -1,6 +1,5 @@
 package by.tut.darrko.webapp.model;
 
-import java.text.ParseException;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
@@ -47,19 +46,22 @@ public class Resume implements Comparable<Resume> {
     }
 
     private Section getDefaultSection(SectionType sectionType) {
-        Section section = null;
+        Section section;
         switch (sectionType) {
-            case PERSONAL:
             case ACHIEVEMENT:
             case QUALIFICATION:
                 section = new ListedSection();
                 break;
             case EXPERIENCE:
             case EDUCATION:
-                section = new DatedSection();
+                section = new OrganisationSection();
+                break;
+            case PERSONAL:
+            case OBJECTIVE:
+                section = new SimpleSection();
                 break;
             default:
-                section = new SimpleSection();
+                throw new IllegalArgumentException("Unknown section type:" + sectionType);
 
         }
         sections.put(sectionType, section);
@@ -98,7 +100,7 @@ public class Resume implements Comparable<Resume> {
         return uuid.compareTo(o.uuid);
     }
 
-    public void print() throws ParseException {
+    public void print() {
 
         System.out.println(fullName);
         System.out.println();
