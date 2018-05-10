@@ -1,8 +1,7 @@
 package by.tut.darrko.webapp.exception;
 
 public class ExistStorageException extends StorageException {
-
-    public ExistStorageException(String message) {
-        super(message);
+    public ExistStorageException(String uuid) {
+        super("Resume " + uuid + " already exist", uuid);
     }
 }

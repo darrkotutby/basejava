@@ -1,25 +1,28 @@
 package by.tut.darrko.webapp.model;
 
+import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Resume implements Comparable<Resume> {
-
+public class Resume implements Comparable<Resume>, Serializable {
+    private static final long serialVersionUID = 1L;
     // Unique identifier
     private final String uuid;
+
     private final String fullName;
-    private EnumMap<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-    private EnumMap<SectionType, Section> sections = new EnumMap<>(SectionType.class);
+
+    private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
     }
 
     public Resume(String uuid, String fullName) {
-        Objects.requireNonNull(fullName, "FullName has to be not null");
-        Objects.requireNonNull(uuid, "Uuid has to be not null");
+        Objects.requireNonNull(uuid, "uuid must not be null");
+        Objects.requireNonNull(fullName, "fullName must not be null");
         this.uuid = uuid;
         this.fullName = fullName;
     }
@@ -28,92 +31,49 @@ public class Resume implements Comparable<Resume> {
         return uuid;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getContact(ContactType type) {
+        return contacts.get(type);
     }
 
-
-    public void addContact(ContactType contactType, String description) {
-        contacts.put(contactType, description);
+    public Section getSection(SectionType type) {
+        return sections.get(type);
     }
 
-    public String getContactsByType(ContactType contactType) {
-        return contacts.get(contactType);
+    public void addContact(ContactType type, String value) {
+        contacts.put(type, value);
     }
 
-    public Map<SectionType, Section> getSections() {
-        return sections;
-    }
-
-    private Section getDefaultSection(SectionType sectionType) {
-        Section section;
-        switch (sectionType) {
-            case ACHIEVEMENT:
-            case QUALIFICATION:
-                section = new ListedSection();
-                break;
-            case EXPERIENCE:
-            case EDUCATION:
-                section = new OrganisationSection();
-                break;
-            case PERSONAL:
-            case OBJECTIVE:
-                section = new SimpleSection();
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown section type:" + sectionType);
-
-        }
-        sections.put(sectionType, section);
-        return section;
-    }
-
-    public Section getSection(SectionType sectionType) {
-        return sections.getOrDefault(sectionType, getDefaultSection(sectionType));
+    public void addSection(SectionType type, Section section) {
+        sections.put(type, section);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Resume resume = (Resume) o;
-        return Objects.equals(uuid, resume.uuid);
+
+        if (!uuid.equals(resume.uuid)) return false;
+        return fullName.equals(resume.fullName);
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid);
+        int result = uuid.hashCode();
+        result = 31 * result + fullName.hashCode();
+        return result;
     }
 
     @Override
     public String toString() {
-        return "Resume{" +
-                "uuid='" + uuid + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", contacts=" + contacts +
-                ", sections=" + sections +
-                '}';
+        return uuid + '(' + fullName + ')';
     }
 
     @Override
     public int compareTo(Resume o) {
-        return uuid.compareTo(o.uuid);
-    }
-
-    public void print() {
-
-        System.out.println(fullName);
-        System.out.println();
-
-        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-            System.out.println(entry.getKey().getTitle() + entry.getValue());
-        }
-
-        System.out.println();
-
-        for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
-            System.out.println(entry.getKey().getTitle());
-            entry.getValue().print();
-        }
+        int cmp = fullName.compareTo(o.fullName);
+        return cmp != 0 ? cmp : uuid.compareTo(o.uuid);
     }
 }

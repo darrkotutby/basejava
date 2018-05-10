@@ -1,26 +1,17 @@
-package by.tut.darrko.webapp.util;
+package ru.javawebinar.basejava.util;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+import java.time.Month;
 
+/**
+ * gkislin
+ * 20.07.2016
+ */
 public class DateUtil {
-    public static LocalDate stringToDate(String string) {
-        return stringToDate(string, "dd.MM.yyyy");
-    }
 
-    public static LocalDate stringToDate(String string, String format) {
-        return LocalDate.parse(string, DateTimeFormatter.ofPattern(format));
-    }
+    public static final LocalDate NOW = LocalDate.of(3000, 1, 1);
 
-    public static String dateToString(LocalDate date) {
-        return dateToString(date, "dd.MM.yyyy");
-    }
-
-    public static String dateToString(LocalDate date, String format) {
-        DateFormat dateFormat = new SimpleDateFormat(format, Locale.ENGLISH);
-        return date.format(DateTimeFormatter.ofPattern(format));
+    public static LocalDate of(int year, Month month) {
+        return LocalDate.of(year, month, 1);
     }
 }
