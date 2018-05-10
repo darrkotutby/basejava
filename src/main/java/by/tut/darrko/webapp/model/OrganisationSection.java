@@ -2,8 +2,6 @@ package by.tut.darrko.webapp.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class OrganisationSection implements Section<List<OrganisationEntry>> {
 
@@ -27,8 +25,7 @@ public class OrganisationSection implements Section<List<OrganisationEntry>> {
     }
 
     public void print() {
-        Set<OrganisationEntry> set = new TreeSet<>(entries);
-        for (OrganisationEntry organisationEntry : set) {
+        for (OrganisationEntry organisationEntry : entries) {
             System.out.println(organisationEntry.getOrganisationName());
             System.out.println(organisationEntry.toStringForPrint());
         }

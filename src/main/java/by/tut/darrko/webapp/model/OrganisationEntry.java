@@ -1,9 +1,10 @@
 package by.tut.darrko.webapp.model;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-public class OrganisationEntry implements Comparable<OrganisationEntry> {
+public class OrganisationEntry {
 
     List<DatedEntry> entries = new ArrayList<>();
     private String organisationName;
@@ -14,16 +15,6 @@ public class OrganisationEntry implements Comparable<OrganisationEntry> {
 
     String getOrganisationName() {
         return organisationName;
-    }
-
-    LocalDate getDateFrom() {
-        Set<DatedEntry> set = new TreeSet<>(entries);
-        return ((TreeSet<DatedEntry>) set).last().getDateTo();
-    }
-
-    LocalDate getDateTo() {
-        Set<DatedEntry> set = new TreeSet<>(entries);
-        return ((TreeSet<DatedEntry>) set).first().getDateFrom();
     }
 
     public void addEntries(List<DatedEntry> entries) {
@@ -48,19 +39,6 @@ public class OrganisationEntry implements Comparable<OrganisationEntry> {
     }
 
     @Override
-    public int compareTo(OrganisationEntry organisationEntry) {
-        int cmp = organisationEntry.getDateFrom().compareTo(getDateFrom());
-        if (cmp != 0) {
-            return cmp;
-        }
-        cmp = organisationEntry.getDateTo().compareTo(getDateTo());
-        if (cmp != 0) {
-            return cmp;
-        }
-        return organisationName.compareTo(organisationEntry.getOrganisationName());
-    }
-
-    @Override
     public String toString() {
         return "OrganisationEntry{" +
                 "organisationName='" + organisationName + '\'' +
@@ -69,9 +47,8 @@ public class OrganisationEntry implements Comparable<OrganisationEntry> {
     }
 
     public String toStringForPrint() {
-        Set<DatedEntry> set = new TreeSet<>(entries);
         StringBuilder sb = new StringBuilder();
-        for (DatedEntry entry : set) {
+        for (DatedEntry entry : entries) {
             sb.append(entry.toStringForPrint()).append("\n");
         }
         return sb.toString();
