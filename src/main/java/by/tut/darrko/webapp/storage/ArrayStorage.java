@@ -1,23 +1,26 @@
 package by.tut.darrko.webapp.storage;
 
+
 import by.tut.darrko.webapp.model.Resume;
 
 /**
- * Array based STORAGE for Resumes
+ * Array based storage for Resumes
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public void add(Resume resume, Integer index) {
-        STORAGE[size] = resume;
+    @Override
+    protected void fillDeletedElement(int index) {
+        storage[index] = storage[size - 1];
     }
 
-    public void remove(int index) {
-        STORAGE[index] = STORAGE[size - 1];
+    @Override
+    protected void insertElement(Resume r, int index) {
+        storage[size] = r;
     }
 
-    protected Integer findResumeElementNumber(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (STORAGE[i].getUuid().equals(uuid)) {
+            if (uuid.equals(storage[i].getUuid())) {
                 return i;
             }
         }

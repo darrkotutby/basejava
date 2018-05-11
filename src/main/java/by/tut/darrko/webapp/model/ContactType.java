@@ -1,13 +1,17 @@
 package by.tut.darrko.webapp.model;
 
 public enum ContactType {
+    PHONE("Тел."),
+    MOBILE("Мобильный"),
+    HOME_PHONE("Домашний тел."),
+    SKYPE("Skype"),
+    MAIL("Почта"),
+    LINKEDIN("Профиль LinkedIn"),
+    GITHUB("Профиль GitHub"),
+    STATCKOVERFLOW("Профиль Stackoverflow"),
+    HOME_PAGE("Домашняя страница");
 
-    ADDRESS("Адрес: "),
-    PHONE("Телефон: "),
-    EMAIL("E-mail: "),
-    SKYPE("Skype: ");
-
-    private String title;
+    private final String title;
 
     ContactType(String title) {
         this.title = title;
@@ -17,4 +21,3 @@ public enum ContactType {
         return title;
     }
 }
-

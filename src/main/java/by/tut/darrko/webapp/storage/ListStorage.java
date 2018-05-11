@@ -1,64 +1,61 @@
 package by.tut.darrko.webapp.storage;
 
+
 import by.tut.darrko.webapp.model.Resume;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage<Integer> {
+    private List<Resume> list = new ArrayList<>();
 
-    protected List<Resume> storage;
+    @Override
+    protected Integer getSearchKey(String uuid) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return null;
+    }
 
-    public ListStorage() {
-        storage = new ArrayList<>();
+    @Override
+    protected boolean isExist(Integer searchKey) {
+        return searchKey != null;
+    }
+
+    @Override
+    protected void doUpdate(Resume r, Integer searchKey) {
+        list.set(searchKey, r);
+    }
+
+    @Override
+    protected void doSave(Resume r, Integer searchKey) {
+        list.add(r);
+    }
+
+    @Override
+    protected Resume doGet(Integer searchKey) {
+        return list.get(searchKey);
+    }
+
+    @Override
+    protected void doDelete(Integer searchKey) {
+        list.remove(searchKey.intValue());
     }
 
     @Override
     public void clear() {
-        storage.clear();
+        list.clear();
     }
 
     @Override
-    public int size() {
-        return storage.size();
+    public List<Resume> doCopyAll() {
+        return new ArrayList<>(list);
     }
 
     @Override
-    public Resume getByIndex(Integer index) {
-        return storage.get(index);
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return storage.toArray(new Resume[0]);
-    }
-
-    @Override
-    public void saveByIndex(Resume resume, Integer index) {
-        storage.add(resume);
-    }
-
-    @Override
-    public void deleteByIndex(Integer index) {
-        storage.remove(index.intValue());
-    }
-
-    @Override
-    public void updateByIndex(Resume resume, Integer index) {
-        storage.set(index, resume);
-    }
-
-    @Override
-    boolean check(Integer index) {
-        return index > -1;
-    }
-
-    protected Integer findResumeElementNumber(String uuid) {
-        for (int i = 0; i < storage.size(); i++) {
-            if (storage.get(i).getUuid().equals(uuid)) {
-                return i;
-            }
-        }
-        return -1;
+    public long size() {
+        return list.size();
     }
 }

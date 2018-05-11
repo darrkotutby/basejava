@@ -1,72 +1,71 @@
 package by.tut.darrko.webapp.storage;
 
-import by.tut.darrko.webapp.exception.NotExistStorageException;
+import by.tut.darrko.webapp.exception.StorageException;
 import by.tut.darrko.webapp.model.Resume;
 
 import java.util.Arrays;
+import java.util.List;
 
+/**
+ * Array based storage for Resumes
+ */
 public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
+    protected static final int STORAGE_LIMIT = 10000;
 
-    private static final int MAX_SIZE = 10000;
-    final Resume[] STORAGE;
-    int size = 0;
+    protected Resume[] storage = new Resume[STORAGE_LIMIT];
+    protected int size = 0;
 
-    AbstractArrayStorage() {
-        STORAGE = new Resume[MAX_SIZE];
+    public long size() {
+        return size;
     }
 
-    protected abstract void add(Resume resume, Integer index);
-
-    protected abstract void remove(int index);
-
-    public int getMaxSize() {
-        return MAX_SIZE;
-    }
-
-    @Override
     public void clear() {
-        Arrays.fill(STORAGE, 0, size, null);
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
     @Override
-    public int size() {
-        return size;
+    protected void doUpdate(Resume r, Integer index) {
+        storage[index] = r;
+    }
+
+    /**
+     * @return array, contains only Resumes in storage (without null)
+     */
+    @Override
+    public List<Resume> doCopyAll() {
+        return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
     }
 
     @Override
-    public Resume getByIndex(Integer index) {
-        return STORAGE[index];
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return Arrays.copyOf(STORAGE, size);
-    }
-
-    @Override
-    public void saveByIndex(Resume resume, Integer index) {
-        if (size >= MAX_SIZE) {
-            throw new NotExistStorageException("Can't save resume. Storage is full");
+    protected void doSave(Resume r, Integer index) {
+        if (size == STORAGE_LIMIT) {
+            throw new StorageException("Storage overflow", r.getUuid());
+        } else {
+            insertElement(r, index);
+            size++;
         }
-        add(resume, index);
-        size++;
     }
 
     @Override
-    public void deleteByIndex(Integer index) {
-        remove(index);
+    public void doDelete(Integer index) {
+        fillDeletedElement(index);
+        storage[size - 1] = null;
         size--;
-        STORAGE[size] = null;
+    }
+
+    public Resume doGet(Integer index) {
+        return storage[index];
     }
 
     @Override
-    public void updateByIndex(Resume resume, Integer index) {
-        STORAGE[index] = resume;
+    protected boolean isExist(Integer index) {
+        return index >= 0;
     }
 
-    @Override
-    boolean check(Integer index) {
-        return index > -1;
-    }
+    protected abstract void fillDeletedElement(int index);
+
+    protected abstract void insertElement(Resume r, int index);
+
+    protected abstract Integer getSearchKey(String uuid);
 }

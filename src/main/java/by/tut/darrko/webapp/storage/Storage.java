@@ -8,17 +8,18 @@ public interface Storage {
 
     void clear();
 
-    int size();
+    void update(Resume r);
+
+    void save(Resume r);
 
     Resume get(String uuid);
 
-    Resume[] getAll();
-
-    List<Resume> getAllSorted();
-
-    void save(Resume resume);
-
     void delete(String uuid);
 
-    void update(Resume resume);
+    /**
+     * @return array, contains only Resumes in storage (without null)
+     */
+    List<Resume> getAllSorted();
+
+    long size();
 }

@@ -1,15 +1,13 @@
 package by.tut.darrko.webapp;
 
 import by.tut.darrko.webapp.model.*;
-import by.tut.darrko.webapp.util.DateUtil;
 import by.tut.darrko.webapp.util.FileUtil;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Month;
 
 public class MainReflection {
 
@@ -32,51 +30,32 @@ public class MainReflection {
         System.out.println("toString: " + getUuidMethod.invoke(resume));
 
         Resume r = new Resume("UUID1", "Alex Ivanov");
-        r.addContact(ContactType.ADDRESS, "Minsk");
         r.addContact(ContactType.PHONE, "456");
-        r.getSection(SectionType.OBJECTIVE).addEntry("Ведущий инженер программист");
-        r.getSection(SectionType.PERSONAL).addEntry("Дотошный, упорный");
+        r.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий инженер программист"));
+        r.addSection(SectionType.PERSONAL, new TextSection("Дотошный, упорный"));
 
-        List<String> list = new ArrayList<>();
-        list.add("Разработка информационной системы");
-        r.getSection(SectionType.ACHIEVEMENT).addEntry(list);
-
-        list = new ArrayList<>();
-        list.add("Oracle, SQL, PL/SQL");
-        list.add("Java, C++");
-        r.getSection(SectionType.QUALIFICATION).addEntry(list);
+        r.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
+        r.addSection(SectionType.ACHIEVEMENT, new ListSection("Achivment11", "Achivment12", "Achivment13"));
+        r.addSection(SectionType.QUALIFICATIONS, new ListSection("Java", "SQL", "JavaScript"));
 
 
-        List<DatedEntry> datedEntryList = new ArrayList<>();
-        datedEntryList.add(new DatedEntry(DateUtil.stringToDate("02.01.2000"), DateUtil.stringToDate("31.12.2003"), "Ведущий программист", "Oracle forms"));
-        datedEntryList.add(new DatedEntry(DateUtil.stringToDate("10.01.2004"), null, "Главный программист", "Oracle forms"));
+        r.addSection(SectionType.EXPERIENCE,
+                new OrganizationSection(
+                        new Organization("Organization11", "http://Organization11.ru",
+                                new Organization.Position(2005, Month.JANUARY, "position1",
+                                        "content1"),
+                                new Organization.Position(2001, Month.MARCH, 2005, Month.JANUARY,
+                                        "position2", "content2"))));
 
-        OrganisationEntry bank = new OrganisationEntry("Банк");
-        bank.addEntries(datedEntryList);
-        List<OrganisationEntry> organisationEntryList = new ArrayList<>();
-        organisationEntryList.add(bank);
 
-        r.getSection(SectionType.EXPERIENCE).addEntry(organisationEntryList);
+        r.addSection(SectionType.EDUCATION,
+                new OrganizationSection(
+                        new Organization("Institute", null,
+                                new Organization.Position(1996, Month.JANUARY, 2000, Month.DECEMBER, "aspirant", null),
+                                new Organization.Position(2001, Month.MARCH, 2005, Month.JANUARY, "student", "IT facultet")),
+                        new Organization("Organization12", "http://Organization12.ru")));
 
-        List<DatedEntry> datedEntryList1 = new ArrayList<>();
-        datedEntryList1.add(new DatedEntry(DateUtil.stringToDate("03.01.1995"), DateUtil.stringToDate("01.08.2000"), "Студент", "ФКП"));
-        datedEntryList1.add(new DatedEntry(DateUtil.stringToDate("04.01.2000"), DateUtil.stringToDate("01.08.2005"), "Студент", "ФКП"));
-        OrganisationEntry rti = new OrganisationEntry("РТИ");
-        rti.addEntries(datedEntryList1);
-
-        List<OrganisationEntry> organisationEntryList1 = new ArrayList<>();
-        organisationEntryList1.add(rti);
-
-        List<DatedEntry> datedEntryList2 = new ArrayList<>();
-        datedEntryList2.add(new DatedEntry(DateUtil.stringToDate("04.01.2017"), null, "Студент", "JAVA, JSP, SQL"));
-        OrganisationEntry javaops = new OrganisationEntry("javaops");
-        javaops.addEntries(datedEntryList2);
-        organisationEntryList1.add(javaops);
-
-        r.getSection(SectionType.EDUCATION).addEntry(organisationEntryList1);
 
         System.out.println(r);
-        System.out.println();
-        r.print();
     }
 }

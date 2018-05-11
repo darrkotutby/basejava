@@ -1,37 +1,58 @@
 package by.tut.darrko.webapp.storage;
 
+
 import by.tut.darrko.webapp.model.Resume;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class MapUuidStorage extends AbstractMapStorage<String> {
+public class MapUuidStorage extends AbstractStorage<String> {
+    private Map<String, Resume> map = new HashMap<>();
 
-    public MapUuidStorage() {
-        storage = new HashMap<>();
-    }
-
-    public Resume getByIndex(String index) {
-        return storage.get(index);
-    }
-
-    public void saveByIndex(Resume resume, String index) {
-        storage.put(index, resume);
-    }
-
-    public void deleteByIndex(String index) {
-        storage.remove(index);
-    }
-
-    public void updateByIndex(Resume resume, String index) {
-        saveByIndex(resume, index);
-    }
-
-    protected String findResumeElementNumber(String uuid) {
+    @Override
+    protected String getSearchKey(String uuid) {
         return uuid;
     }
 
     @Override
-    boolean check(String index) {
-        return storage.containsKey(index);
+    protected void doUpdate(Resume r, String uuid) {
+        map.put(uuid, r);
+    }
+
+    @Override
+    protected boolean isExist(String uuid) {
+        return map.containsKey(uuid);
+    }
+
+    @Override
+    protected void doSave(Resume r, String uuid) {
+        map.put(uuid, r);
+    }
+
+    @Override
+    protected Resume doGet(String uuid) {
+        return map.get(uuid);
+    }
+
+    @Override
+    protected void doDelete(String uuid) {
+        map.remove(uuid);
+    }
+
+    @Override
+    public void clear() {
+        map.clear();
+    }
+
+    @Override
+    public List<Resume> doCopyAll() {
+        return new ArrayList<>(map.values());
+    }
+
+    @Override
+    public long size() {
+        return map.size();
     }
 }

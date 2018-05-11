@@ -2,25 +2,27 @@ package by.tut.darrko.webapp.storage;
 
 import by.tut.darrko.webapp.exception.StorageException;
 import by.tut.darrko.webapp.model.Resume;
+import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.fail;
-
+/**
+ * gkislin
+ * 12.06.2016
+ */
 public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
-
-    AbstractArrayStorageTest(Storage storage) {
+    protected AbstractArrayStorageTest(Storage storage) {
         super(storage);
     }
 
     @Test(expected = StorageException.class)
-    public void saveOverflowStorageTest() {
+    public void saveOverflow() throws Exception {
         try {
-            for (int i = 0; i <= ((AbstractArrayStorage) storage).getMaxSize() - 4; i++) {
-                storage.save(new Resume("test1"));
+            for (int i = 4; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
+                storage.save(new Resume("Name" + i));
             }
         } catch (StorageException e) {
-            fail("Storage is not full");
+            Assert.fail();
         }
-        storage.save(new Resume("test1"));
+        storage.save(new Resume("Overflow"));
     }
 }

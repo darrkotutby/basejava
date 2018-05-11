@@ -3,147 +3,143 @@ package by.tut.darrko.webapp.storage;
 import by.tut.darrko.webapp.exception.ExistStorageException;
 import by.tut.darrko.webapp.exception.NotExistStorageException;
 import by.tut.darrko.webapp.model.*;
-import by.tut.darrko.webapp.util.DateUtil;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 public abstract class AbstractStorageTest {
+    protected static final String STORAGE_DIR = "e:\\JavaOPs_work\\basejava\\storage";
+    private static final String UUID_1 = "uuid1";
+    private static final String UUID_2 = "uuid2";
+    private static final String UUID_3 = "uuid3";
+    private static final String UUID_4 = "uuid4";
+    private static final Resume R1;
+    private static final Resume R2;
+    private static final Resume R3;
+    private static final Resume R4;
 
-    Resume resume1 = new Resume("UUID1", "Alex Ivanov");
-    Resume resume2 = new Resume("UUID2", "Petr Sidorov");
-    Resume resume3 = new Resume("UUID3", "Herman Shults");
-    Storage storage;
-    //  Resume[] array = null;
+    static {
+        R1 = new Resume(UUID_1, "Name1");
+        R2 = new Resume(UUID_2, "Name2");
+        R3 = new Resume(UUID_3, "Name3");
+        R4 = new Resume(UUID_4, "Name4");
 
-    AbstractStorageTest(Storage storage) {
+        R1.addContact(ContactType.MAIL, "mail1@ya.ru");
+        R1.addContact(ContactType.PHONE, "11111");
+        R1.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
+        R1.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
+        R1.addSection(SectionType.ACHIEVEMENT, new ListSection("Achivment11", "Achivment12", "Achivment13"));
+        R1.addSection(SectionType.QUALIFICATIONS, new ListSection("Java", "SQL", "JavaScript"));
+        R1.addSection(SectionType.EXPERIENCE,
+                new OrganizationSection(
+                        new Organization("Organization11", "http://Organization11.ru",
+                                new Organization.Position(2005, Month.JANUARY, "position1", "content1"),
+                                new Organization.Position(2001, Month.MARCH, 2005, Month.JANUARY, "position2", "content2"))));
+        R1.addSection(SectionType.EDUCATION,
+                new OrganizationSection(
+                        new Organization("Institute", null,
+                                new Organization.Position(1996, Month.JANUARY, 2000, Month.DECEMBER, "aspirant", null),
+                                new Organization.Position(2001, Month.MARCH, 2005, Month.JANUARY, "student", "IT facultet")),
+                        new Organization("Organization12", "http://Organization12.ru")));
+        R2.addContact(ContactType.SKYPE, "skype2");
+        R2.addContact(ContactType.PHONE, "22222");
+        R2.addSection(SectionType.EXPERIENCE,
+                new OrganizationSection(
+                        new Organization("Organization2", "http://Organization2.ru",
+                                new Organization.Position(2015, Month.JANUARY, "position1", "content1"))));
+    }
+
+    protected Storage storage;
+
+    protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
 
     @Before
-    public void setUp() {
-
-        resume1.addContact(ContactType.ADDRESS, "Minsk");
-        resume1.addContact(ContactType.PHONE, "456");
-        resume1.getSection(SectionType.OBJECTIVE).addEntry("Ведущий инженер программист");
-        resume1.getSection(SectionType.PERSONAL).addEntry("Дотошный, упорный");
-
-        List<String> list = new ArrayList<>();
-        list.add("Разработка информационной системы");
-        resume1.getSection(SectionType.ACHIEVEMENT).addEntry(list);
-
-        list = new ArrayList<>();
-        list.add("Oracle, SQL, PL/SQL");
-        list.add("Java, C++");
-        resume1.getSection(SectionType.QUALIFICATION).addEntry(list);
-
-
-        List<DatedEntry> datedEntryList = new ArrayList<>();
-        datedEntryList.add(new DatedEntry(DateUtil.stringToDate("02.01.2000"), DateUtil.stringToDate("31.12.2003"), "Ведущий программист", "Oracle forms"));
-        datedEntryList.add(new DatedEntry(DateUtil.stringToDate("10.01.2004"), null, "Главный программист", "Oracle forms"));
-
-        OrganisationEntry bank = new OrganisationEntry("Банк");
-        bank.addEntries(datedEntryList);
-        List<OrganisationEntry> organisationEntryList = new ArrayList<>();
-        organisationEntryList.add(bank);
-
-        resume1.getSection(SectionType.EXPERIENCE).addEntry(organisationEntryList);
-
-        List<DatedEntry> datedEntryList1 = new ArrayList<>();
-        datedEntryList1.add(new DatedEntry(DateUtil.stringToDate("04.01.2000"), DateUtil.stringToDate("01.08.2005"), "Студент", "ФКП"));
-        datedEntryList1.add(new DatedEntry(DateUtil.stringToDate("03.01.1995"), DateUtil.stringToDate("01.08.2000"), "Студент", "ФКП"));
-        OrganisationEntry rti = new OrganisationEntry("РТИ");
-        rti.addEntries(datedEntryList1);
-
-        List<OrganisationEntry> organisationEntryList1 = new ArrayList<>();
-        organisationEntryList1.add(rti);
-
-        List<DatedEntry> datedEntryList2 = new ArrayList<>();
-        datedEntryList2.add(new DatedEntry(DateUtil.stringToDate("04.01.2017"), null, "Студент", "JAVA, JSP, SQL"));
-        OrganisationEntry javaops = new OrganisationEntry("javaops");
-        javaops.addEntries(datedEntryList2);
-        organisationEntryList1.add(javaops);
-
-        resume1.getSection(SectionType.EDUCATION).addEntry(organisationEntryList1);
-
-
+    public void setUp() throws Exception {
         storage.clear();
-        storage.save(resume1);
-        storage.save(resume3);
-        storage.save(resume2);
+        storage.save(R1);
+        storage.save(R2);
+        storage.save(R3);
     }
 
     @Test
-    public void clearTest() {
+    public void size() throws Exception {
+        assertSize(3);
+    }
+
+    @Test
+    public void clear() throws Exception {
         storage.clear();
-        assertEquals(0, storage.size());
+        assertSize(0);
     }
 
     @Test
-    public void sizeTest() {
-        assertEquals(3, storage.size());
-    }
-
-    @Test
-    public void getTest() {
-        assertEquals(resume1, storage.get(resume1.getUuid()));
+    public void update() throws Exception {
+        Resume newResume = new Resume(UUID_1, "New Name");
+        storage.update(newResume);
+        assertTrue(newResume.equals(storage.get(UUID_1)));
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void getNotExistsTest() {
-        storage.get("test1");
+    public void updateNotExist() throws Exception {
+        storage.get("dummy");
     }
 
     @Test
-    public void save() {
-        Resume newResume = new Resume("test1", "Dummy");
-        storage.save(newResume);
-        assertEquals(4, storage.size());
-        assertEquals(newResume, storage.get(newResume.getUuid()));
+    public void getAllSorted() throws Exception {
+        List<Resume> list = storage.getAllSorted();
+        assertEquals(3, list.size());
+        assertEquals(list, Arrays.asList(R1, R2, R3));
+    }
+
+    @Test
+    public void save() throws Exception {
+        storage.save(R4);
+        assertSize(4);
+        assertGet(R4);
     }
 
     @Test(expected = ExistStorageException.class)
-    public void saveExistTest() {
-        storage.save(resume2);
+    public void saveExist() throws Exception {
+        storage.save(R1);
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void deleteTest() {
-        try {
-            storage.delete(resume1.getUuid());
-        } catch (NotExistStorageException e) {
-            fail(e.getMessage());
-        }
-        assertEquals(2, storage.size());
-        storage.get(resume1.getUuid());
+    public void delete() throws Exception {
+        storage.delete(UUID_1);
+        assertSize(2);
+        storage.get(UUID_1);
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void deleteNotExistTest() {
-        storage.delete("test1");
+    public void deleteNotExist() throws Exception {
+        storage.delete("dummy");
     }
 
     @Test
-    public void updateTest() {
-        Resume newResume = new Resume(resume1.getUuid(), "Test");
-        storage.update(newResume);
-        assertEquals(newResume.getFullName(), storage.get(resume1.getUuid()).getFullName());
-
+    public void get() throws Exception {
+        assertGet(R1);
+        assertGet(R2);
+        assertGet(R3);
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void updateNotExistTest() {
-        storage.update(new Resume("test1"));
+    public void getNotExist() throws Exception {
+        storage.get("dummy");
     }
 
-    @Test
-    public void getAllSortedTest() {
-        assertEquals(Arrays.asList(resume1, resume3, resume2), storage.getAllSorted());
+    private void assertGet(Resume r) {
+        assertEquals(r, storage.get(r.getUuid()));
+    }
+
+    private void assertSize(int size) {
+        assertEquals(size, storage.size());
     }
 }

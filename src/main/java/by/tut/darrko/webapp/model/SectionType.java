@@ -1,13 +1,12 @@
 package by.tut.darrko.webapp.model;
 
 public enum SectionType {
-
-    OBJECTIVE("Позиция:"),
-    PERSONAL("Личные качества:"),
-    ACHIEVEMENT("Достжения:"),
-    QUALIFICATION("Квалификация:"),
-    EXPERIENCE("Опыт работы:"),
-    EDUCATION("Образование:");
+    PERSONAL("Личные качества"),
+    OBJECTIVE("Позиция"),
+    ACHIEVEMENT("Достижения"),
+    QUALIFICATIONS("Квалификация"),
+    EXPERIENCE("Опыт работы"),
+    EDUCATION("Образование");
 
     private String title;
 
@@ -19,3 +18,4 @@ public enum SectionType {
         return title;
     }
 }
+

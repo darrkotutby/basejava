@@ -1,10 +1,10 @@
 package by.tut.darrko.webapp.model;
 
-public interface Section<T> {
+import java.io.Serializable;
 
-    void addEntry(T t);
-
-    T getContent();
-
-    void print();
+/**
+ * gkislin
+ * 19.07.2016
+ */
+abstract public class Section implements Serializable {
 }
