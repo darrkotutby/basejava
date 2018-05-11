@@ -29,7 +29,7 @@ public class FileStorage extends AbstractStorage<File> {
         this.serializationMethod = serializationMethod;
     }
 
-     @Override
+    @Override
     public void clear() {
         File[] files = directory.listFiles();
         if (files != null) {
@@ -70,7 +70,9 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected void doSave(Resume r, File file) {
         try {
-            file.createNewFile();
+            if (!file.createNewFile()) {
+                throw new StorageException("Couldn't create file " + file.getAbsolutePath() + ". File already exists.", file.getName());
+            }
         } catch (IOException e) {
             throw new StorageException("Couldn't create file " + file.getAbsolutePath(), file.getName(), e);
         }

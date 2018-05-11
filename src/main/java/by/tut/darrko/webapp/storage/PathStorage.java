@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.READ;
+import static java.nio.file.StandardOpenOption.WRITE;
 
 
 public class PathStorage extends AbstractStorage<Path> {
@@ -59,7 +59,7 @@ public class PathStorage extends AbstractStorage<Path> {
     protected void doUpdate(Resume r, Path path) {
         try {
             serializationMethod.doWrite(r, new BufferedOutputStream(
-                    Files.newOutputStream(path, CREATE)));
+                    Files.newOutputStream(path, WRITE)));
         } catch (IOException e) {
             throw new StorageException("Path write error", r.getUuid(), e);
         }
@@ -71,8 +71,13 @@ public class PathStorage extends AbstractStorage<Path> {
     }
 
     @Override
-    protected void doSave(Resume r, Path Path) {
-        doUpdate(r, Path);
+    protected void doSave(Resume r, Path path) {
+        try {
+            Files.createFile(path);
+            doUpdate(r, path);
+        } catch (IOException e) {
+            throw new StorageException("Path write error", r.getUuid(), e);
+        }
     }
 
     @Override
