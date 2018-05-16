@@ -59,7 +59,7 @@ public class PathStorage extends AbstractStorage<Path> {
     protected void doUpdate(Resume r, Path path) {
         try {
             serializationMethod.doWrite(r, new BufferedOutputStream(
-                    Files.newOutputStream(path, WRITE)));
+                    Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path write error", r.getUuid(), e);
         }
