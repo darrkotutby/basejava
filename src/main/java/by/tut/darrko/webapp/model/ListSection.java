@@ -1,5 +1,10 @@
 package by.tut.darrko.webapp.model;
 
+import by.tut.darrko.webapp.exception.StorageException;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +18,7 @@ public class ListSection extends Section {
 
     private static final long serialVersionUID = 1L;
 
-    private final List<String> items;
+    private List<String> items;
 
     public ListSection() {
         items = new ArrayList<>();
@@ -51,6 +56,32 @@ public class ListSection extends Section {
     @Override
     public int hashCode() {
         return items.hashCode();
+    }
+
+    @Override
+    public void writeUTF(DataOutputStream dos) {
+        try {
+            dos.writeInt(items.size());
+            for (String item : items) {
+                dos.writeUTF(item);
+            }
+        } catch (IOException e) {
+            throw new StorageException("Write error", e);
+        }
+
+    }
+
+    @Override
+    public void readUTF(DataInputStream dis) {
+        try {
+            int size = dis.readInt();
+            for (int i = 0; i < size; i++) {
+                items.add(dis.readUTF());
+            }
+        } catch (IOException e) {
+            throw new StorageException("Read error", e);
+        }
+
     }
 }
 

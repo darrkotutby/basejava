@@ -1,8 +1,18 @@
 package by.tut.darrko.webapp.model;
 
+import by.tut.darrko.webapp.exception.StorageException;
+import by.tut.darrko.webapp.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,11 +21,15 @@ import java.util.Objects;
 import static by.tut.darrko.webapp.util.DateUtil.NOW;
 import static by.tut.darrko.webapp.util.DateUtil.of;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final Link homePage;
+    private Link homePage;
     private List<Position> positions = new ArrayList<>();
+
+    public Organization() {
+    }
 
     public Organization(String name, String url) {
         this.homePage = new Link(name, url);
@@ -50,15 +64,50 @@ public class Organization implements Serializable {
         return "Organization(" + homePage + "," + positions + ')';
     }
 
-    /**
-     * gkislin
-     * 28.07.2016
-     */
+    public void writeUTF(DataOutputStream dos) {
+        try {
+            dos.writeUTF(homePage.getName());
+            dos.writeUTF(homePage.getUrl()==null ? "NULL" : homePage.getUrl());
+            dos.writeInt(positions.size());
+            for (Position position : positions) {
+                position.writeUTF(dos);
+            }
+        } catch (IOException e) {
+            throw new StorageException("Write error", e);
+        }
+    }
+
+    public void readUTF(DataInputStream dis) {
+        try {
+            String name = dis.readUTF();
+            String url = dis.readUTF();
+            if (url.equalsIgnoreCase("NULL")) {
+                url = null;
+            }
+            homePage = new Link(name, url);
+            int size = dis.readInt();
+            for (int i = 0; i < size; i++) {
+                Position position = new Position();
+                position.readUTF(dis);
+                positions.add(position);
+            }
+        } catch (IOException e) {
+            throw new StorageException("Read error", e);
+        }
+    }
+
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Position implements Serializable {
-        private final LocalDate startDate;
-        private final LocalDate endDate;
-        private final String title;
-        private final String description;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate startDate;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate endDate;
+        private String title;
+        private String description;
+
+        public Position() {
+        }
+
 
         public Position(int startYear, Month startMonth, String title, String description) {
             this(of(startYear, startMonth), NOW, title, description);
@@ -114,5 +163,32 @@ public class Organization implements Serializable {
         public String toString() {
             return "Position(" + startDate + ',' + endDate + ',' + title + ',' + description + ')';
         }
+
+
+        public void writeUTF(DataOutputStream dos) {
+            try {
+                dos.writeUTF(startDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+                dos.writeUTF(endDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+                dos.writeUTF(title);
+                dos.writeUTF(description == null ? "NULL" : description);
+            } catch (IOException e) {
+                throw new StorageException("Write error", e);
+            }
+        }
+
+        public void readUTF(DataInputStream dis) {
+            try {
+                startDate = LocalDate.parse(dis.readUTF(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                endDate = LocalDate.parse(dis.readUTF(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                title = dis.readUTF();
+                description = dis.readUTF();
+                if (description.equalsIgnoreCase("NULL")) {
+                    description = null;
+                }
+            } catch (IOException e) {
+                throw new StorageException("Read error", e);
+            }
+        }
+
     }
 }

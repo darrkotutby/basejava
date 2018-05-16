@@ -1,5 +1,12 @@
 package by.tut.darrko.webapp.model;
 
+import by.tut.darrko.webapp.exception.StorageException;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,11 +16,12 @@ import java.util.Objects;
  * gkislin
  * 19.07.2016
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class OrganizationSection extends Section {
 
     private static final long serialVersionUID = 1L;
 
-    private final List<Organization> organizations;
+    private List<Organization> organizations;
 
     public OrganizationSection() {
         organizations = new ArrayList<>();
@@ -51,5 +59,31 @@ public class OrganizationSection extends Section {
     @Override
     public String toString() {
         return organizations.toString();
+    }
+
+    @Override
+    public void writeUTF(DataOutputStream dos) {
+        try {
+            dos.writeInt(organizations.size());
+            for (Organization organization : organizations) {
+                organization.writeUTF(dos);
+            }
+        } catch (IOException e) {
+            throw new StorageException("Write error", e);
+        }
+    }
+
+    @Override
+    public void readUTF(DataInputStream dis) {
+        try {
+            int size = dis.readInt();
+            for (int i = 0; i < size; i++) {
+                Organization organization = new Organization();
+                organization.readUTF(dis);
+                organizations.add(organization);
+            }
+        } catch (IOException e) {
+            throw new StorageException("Write error", e);
+        }
     }
 }
