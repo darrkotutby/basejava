@@ -1,7 +1,5 @@
 package by.tut.darrko.webapp.model;
 
-import by.tut.darrko.webapp.exception.StorageException;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.DataInputStream;
@@ -62,28 +60,20 @@ public class OrganizationSection extends Section {
     }
 
     @Override
-    public void writeUTF(DataOutputStream dos) {
-        try {
-            dos.writeInt(organizations.size());
-            for (Organization organization : organizations) {
-                organization.writeUTF(dos);
-            }
-        } catch (IOException e) {
-            throw new StorageException("Write error", e);
+    public void doWriteToDataStream(DataOutputStream dos) throws IOException {
+        dos.writeInt(organizations.size());
+        for (Organization organization : organizations) {
+            organization.writeToDataStream(dos);
         }
     }
 
     @Override
-    public void readUTF(DataInputStream dis) {
-        try {
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
-                Organization organization = new Organization();
-                organization.readUTF(dis);
-                organizations.add(organization);
-            }
-        } catch (IOException e) {
-            throw new StorageException("Write error", e);
+    public void doReadFromDataStream(DataInputStream dis) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            Organization organization = new Organization();
+            organization.readFromDataStream(dis);
+            organizations.add(organization);
         }
     }
 }
