@@ -2,9 +2,6 @@ package by.tut.darrko.webapp.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +35,10 @@ public class OrganizationSection extends Section {
         return organizations;
     }
 
+    public void setOrganizations(List<Organization> organizations) {
+        this.organizations = organizations;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -57,23 +58,5 @@ public class OrganizationSection extends Section {
     @Override
     public String toString() {
         return organizations.toString();
-    }
-
-    @Override
-    public void doWriteToDataStream(DataOutputStream dos) throws IOException {
-        dos.writeInt(organizations.size());
-        for (Organization organization : organizations) {
-            organization.writeToDataStream(dos);
-        }
-    }
-
-    @Override
-    public void doReadFromDataStream(DataInputStream dis) throws IOException {
-        int size = dis.readInt();
-        for (int i = 0; i < size; i++) {
-            Organization organization = new Organization();
-            organization.readFromDataStream(dis);
-            organizations.add(organization);
-        }
     }
 }

@@ -1,8 +1,5 @@
 package by.tut.darrko.webapp.model;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.Objects;
 
 public class TextSection extends Section {
@@ -46,16 +43,6 @@ public class TextSection extends Section {
     @Override
     public int hashCode() {
         return content.hashCode();
-    }
-
-    @Override
-    public void doWriteToDataStream(DataOutputStream dos) throws IOException {
-        dos.writeUTF(content);
-    }
-
-    @Override
-    public void doReadFromDataStream(DataInputStream dis) throws IOException {
-        content = dis.readUTF();
     }
 }
 
