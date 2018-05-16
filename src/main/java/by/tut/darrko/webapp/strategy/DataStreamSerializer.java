@@ -9,8 +9,32 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class DataStreamSerializer implements SerializationMethod {
+
+    private static <T> List<T> readList(DataInputStream dis, ReaderWriter readerWriter) {
+        try {
+            int size = dis.readInt();
+            List<T> items = new ArrayList<>();
+            if (size > 0) {
+                items = IntStream.range(0, size).mapToObj(i -> (T) readerWriter.getItem(dis)).collect(Collectors.toList());
+            }
+            return items;
+        } catch (IOException e) {
+            throw new StorageException("Write error", e);
+        }
+    }
+
+    private static <T> void writeList(List<T> list, DataOutputStream dos, ReaderWriter readerWriter) {
+        try {
+            dos.writeInt(list.size());
+            list.forEach(t -> readerWriter.writeItem(t, dos));
+        } catch (IOException e) {
+            throw new StorageException("Write error", e);
+        }
+    }
 
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {
@@ -45,14 +69,13 @@ public class DataStreamSerializer implements SerializationMethod {
             size = dis.readInt();
             for (int i = 0; i < size; i++) {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
-                Section section = readSection(sectionType, dis);
-                resume.addSection(sectionType, section);
+                resume.addSection(sectionType, readSection(sectionType, dis));
             }
             return resume;
         }
     }
 
-    public void writeSection(SectionType sectionType, Section section, DataOutputStream dos) {
+    private void writeSection(SectionType sectionType, Section section, DataOutputStream dos) {
         switch (sectionType) {
             case ACHIEVEMENT:
             case QUALIFICATIONS:
@@ -72,11 +95,10 @@ public class DataStreamSerializer implements SerializationMethod {
                 break;
             default:
                 throw new IllegalArgumentException("Unknown section type:" + sectionType);
-
         }
     }
 
-    public Section readSection(SectionType sectionType, DataInputStream dis) {
+    private Section readSection(SectionType sectionType, DataInputStream dis) {
         switch (sectionType) {
             case ACHIEVEMENT:
             case QUALIFICATIONS: {
@@ -93,47 +115,19 @@ public class DataStreamSerializer implements SerializationMethod {
             case PERSONAL:
             case OBJECTIVE: {
                 try {
-                    TextSection testSection = new TextSection();
-                    testSection.setContent(dis.readUTF());
-                    return testSection;
+                    TextSection textSection = new TextSection();
+                    textSection.setContent(dis.readUTF());
+                    return textSection;
                 } catch (IOException e) {
                     throw new StorageException("Read error", e);
                 }
             }
             default:
                 throw new IllegalArgumentException("Unknown section type:" + sectionType);
-
-        }
-
-    }
-
-    public <T> List<T> readList(DataInputStream dis, ReaderWriter readerWriter) {
-        try {
-            int size = dis.readInt();
-            List<T> items = new ArrayList<>();
-            if (size > 0) {
-                for (int i = 0; i < size; i++) {
-                    items.add((T) readerWriter.getItem(dis));
-                }
-            }
-            return items;
-        } catch (IOException e) {
-            throw new StorageException("Write error", e);
         }
     }
 
-    public <T> void writeList(List<T> list, DataOutputStream dos, ReaderWriter readerWriter) {
-        try {
-            dos.writeInt(list.size());
-            for (T t : list) {
-                readerWriter.writeItem(t, dos);
-            }
-        } catch (IOException e) {
-            throw new StorageException("Write error", e);
-        }
-    }
-
-    public class StringReaderWriter implements ReaderWriter<String> {
+    private static class StringReaderWriter implements ReaderWriter<String> {
 
         @Override
         public String getItem(DataInputStream dis) {
@@ -154,7 +148,7 @@ public class DataStreamSerializer implements SerializationMethod {
         }
     }
 
-    public class OrganizationReaderWriter implements ReaderWriter<Organization> {
+    private static class OrganizationReaderWriter implements ReaderWriter<Organization> {
 
         @Override
         public Organization getItem(DataInputStream dis) {
@@ -184,7 +178,7 @@ public class DataStreamSerializer implements SerializationMethod {
         }
     }
 
-    public class OrganizationPositionReaderWriter implements ReaderWriter<Organization.Position> {
+    private static class OrganizationPositionReaderWriter implements ReaderWriter<Organization.Position> {
 
         @Override
         public Organization.Position getItem(DataInputStream dis) {
@@ -212,7 +206,6 @@ public class DataStreamSerializer implements SerializationMethod {
             } catch (IOException e) {
                 throw new StorageException("Write error", e);
             }
-
         }
     }
 }
