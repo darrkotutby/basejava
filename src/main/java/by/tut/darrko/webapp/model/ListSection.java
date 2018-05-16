@@ -1,8 +1,5 @@
 package by.tut.darrko.webapp.model;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +32,10 @@ public class ListSection extends Section {
         return items;
     }
 
+    public void setItems(List<String> items) {
+        this.items = items;
+    }
+
     @Override
     public String toString() {
         return items.toString();
@@ -54,22 +55,6 @@ public class ListSection extends Section {
     @Override
     public int hashCode() {
         return items.hashCode();
-    }
-
-    @Override
-    public void doWriteToDataStream(DataOutputStream dos) throws IOException {
-        dos.writeInt(items.size());
-        for (String item : items) {
-            dos.writeUTF(item);
-        }
-    }
-
-    @Override
-    public void doReadFromDataStream(DataInputStream dis) throws IOException {
-        int size = dis.readInt();
-        for (int i = 0; i < size; i++) {
-            items.add(dis.readUTF());
-        }
     }
 }
 

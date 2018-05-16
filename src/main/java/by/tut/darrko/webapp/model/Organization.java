@@ -5,13 +5,9 @@ import by.tut.darrko.webapp.util.LocalDateAdapter;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +40,22 @@ public class Organization implements Serializable {
         this.positions = positions;
     }
 
+    public Link getHomePage() {
+        return homePage;
+    }
+
+    public void setHomePage(Link homePage) {
+        this.homePage = homePage;
+    }
+
+    public List<Position> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(List<Position> positions) {
+        this.positions = positions;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -61,32 +73,6 @@ public class Organization implements Serializable {
     @Override
     public String toString() {
         return "Organization(" + homePage + "," + positions + ')';
-    }
-
-    public void writeToDataStream(DataOutputStream dos) throws IOException {
-        dos.writeUTF(homePage.getName());
-        dos.writeUTF(homePage.getUrl() == null ? "NULL" : homePage.getUrl());
-        dos.writeInt(positions.size());
-        for (Position position : positions) {
-            position.writeToDataStream(dos);
-        }
-    }
-
-    public void readFromDataStream(DataInputStream dis) throws IOException {
-
-        String name = dis.readUTF();
-        String url = dis.readUTF();
-        if (url.equalsIgnoreCase("NULL")) {
-            url = null;
-        }
-        homePage = new Link(name, url);
-        int size = dis.readInt();
-        for (int i = 0; i < size; i++) {
-            Position position = new Position();
-            position.readFromDataStream(dis);
-            positions.add(position);
-        }
-
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -155,23 +141,6 @@ public class Organization implements Serializable {
         @Override
         public String toString() {
             return "Position(" + startDate + ',' + endDate + ',' + title + ',' + description + ')';
-        }
-
-        public void writeToDataStream(DataOutputStream dos) throws IOException {
-            dos.writeUTF(startDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-            dos.writeUTF(endDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-            dos.writeUTF(title);
-            dos.writeUTF(description == null ? "NULL" : description);
-        }
-
-        public void readFromDataStream(DataInputStream dis) throws IOException {
-            startDate = LocalDate.parse(dis.readUTF(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-            endDate = LocalDate.parse(dis.readUTF(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-            title = dis.readUTF();
-            description = dis.readUTF();
-            if (description.equalsIgnoreCase("NULL")) {
-                description = null;
-            }
         }
     }
 }
