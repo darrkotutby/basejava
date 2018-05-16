@@ -15,7 +15,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.nio.file.StandardOpenOption.READ;
-import static java.nio.file.StandardOpenOption.WRITE;
 
 
 public class PathStorage extends AbstractStorage<Path> {
@@ -37,7 +36,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.list(directory).forEach(this::doDelete);
         } catch (IOException e) {
-            throw new StorageException("Path delete error", null);
+            throw new StorageException("Path delete error", e);
         }
     }
 
@@ -46,7 +45,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             return Files.list(directory).count();
         } catch (IOException e) {
-            throw new StorageException("Directory read error", null);
+            throw new StorageException("Directory read error", e);
         }
     }
 
@@ -104,7 +103,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             return Files.list(directory).map(this::doGet).collect(Collectors.toList());
         } catch (IOException e) {
-            throw new StorageException("Directory read error", null);
+            throw new StorageException("Directory read error", e);
         }
     }
 }

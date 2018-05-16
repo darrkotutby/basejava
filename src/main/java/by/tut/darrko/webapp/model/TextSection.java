@@ -1,7 +1,5 @@
 package by.tut.darrko.webapp.model;
 
-import by.tut.darrko.webapp.exception.StorageException;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -51,21 +49,13 @@ public class TextSection extends Section {
     }
 
     @Override
-    public void writeUTF(DataOutputStream dos) {
-        try {
-            dos.writeUTF(content);
-        } catch (IOException e) {
-            throw new StorageException("Write error", e);
-        }
+    public void doWriteToDataStream(DataOutputStream dos) throws IOException {
+        dos.writeUTF(content);
     }
 
     @Override
-    public void readUTF(DataInputStream dis) {
-        try {
-            content = dis.readUTF();
-        } catch (IOException e) {
-            throw new StorageException("Read error", e);
-        }
+    public void doReadFromDataStream(DataInputStream dis) throws IOException {
+        content = dis.readUTF();
     }
 }
 

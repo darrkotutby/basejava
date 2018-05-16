@@ -25,7 +25,7 @@ public class DataStreamSerializer implements SerializationMethod {
             dos.writeInt(sections.size());
             for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
                 dos.writeUTF(entry.getKey().name());
-                entry.getValue().writeUTF(dos);
+                entry.getValue().WriteToDataStream(dos);
             }
         }
     }
@@ -43,7 +43,7 @@ public class DataStreamSerializer implements SerializationMethod {
             size = dis.readInt();
             for (int i = 0; i < size; i++) {
                 Section section = resume.getDefaultSection(SectionType.valueOf(dis.readUTF()));
-                section.readUTF(dis);
+                section.readFromDataStream(dis);
             }
             return resume;
         }
