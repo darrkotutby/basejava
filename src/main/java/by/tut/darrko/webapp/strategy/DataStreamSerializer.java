@@ -1,6 +1,5 @@
 package by.tut.darrko.webapp.strategy;
 
-import by.tut.darrko.webapp.exception.StorageException;
 import by.tut.darrko.webapp.model.*;
 
 import java.io.*;
@@ -9,32 +8,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class DataStreamSerializer implements SerializationMethod {
-
-    private static <T> List<T> readList(DataInputStream dis, ReaderWriter readerWriter) {
-        try {
-            int size = dis.readInt();
-            List<T> items = new ArrayList<>();
-            if (size > 0) {
-                items = IntStream.range(0, size).mapToObj(i -> (T) readerWriter.getItem(dis)).collect(Collectors.toList());
-            }
-            return items;
-        } catch (IOException e) {
-            throw new StorageException("Write error", e);
-        }
-    }
-
-    private static <T> void writeList(List<T> list, DataOutputStream dos, ReaderWriter readerWriter) {
-        try {
-            dos.writeInt(list.size());
-            list.forEach(t -> readerWriter.writeItem(t, dos));
-        } catch (IOException e) {
-            throw new StorageException("Write error", e);
-        }
-    }
 
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {
@@ -75,137 +50,109 @@ public class DataStreamSerializer implements SerializationMethod {
         }
     }
 
-    private void writeSection(SectionType sectionType, Section section, DataOutputStream dos) {
+    private void writeSection(SectionType sectionType, Section section, DataOutputStream dos) throws IOException {
         switch (sectionType) {
+            case PERSONAL:
+            case OBJECTIVE:
+                dos.writeUTF(((TextSection) section).getContent());
+                break;
             case ACHIEVEMENT:
             case QUALIFICATIONS:
-                writeList(((ListSection) section).getItems(), dos, new StringReaderWriter());
+                writeList(((ListSection) section).getItems(), dos, (Writer<String>) DataStreamSerializer::writeStringItem);
                 break;
             case EXPERIENCE:
             case EDUCATION:
-                writeList(((OrganizationSection) section).getOrganizations(), dos, new OrganizationReaderWriter());
-                break;
-            case PERSONAL:
-            case OBJECTIVE:
-                try {
-                    dos.writeUTF(((TextSection) section).getContent());
-                } catch (IOException e) {
-                    throw new StorageException("Write error", e);
-                }
+                writeList(((OrganizationSection) section).getOrganizations(), dos, (Writer<Organization>) DataStreamSerializer::writeOrganizationItem);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown section type:" + sectionType);
         }
     }
 
-    private Section readSection(SectionType sectionType, DataInputStream dis) {
+    private Section readSection(SectionType sectionType, DataInputStream dis) throws IOException {
         switch (sectionType) {
+            case PERSONAL:
+            case OBJECTIVE: {
+                TextSection textSection = new TextSection();
+                textSection.setContent(dis.readUTF());
+                return textSection;
+            }
             case ACHIEVEMENT:
             case QUALIFICATIONS: {
                 ListSection listSection = new ListSection();
-                listSection.setItems(readList(dis, new StringReaderWriter()));
+                listSection.setItems(readList(dis, (Reader<String>) DataInput::readUTF));
                 return listSection;
             }
             case EXPERIENCE:
             case EDUCATION: {
                 OrganizationSection organizationSection = new OrganizationSection();
-                organizationSection.setOrganizations(readList(dis, new OrganizationReaderWriter()));
+                organizationSection.setOrganizations(readList(dis, (Reader<Organization>) DataStreamSerializer::getOrganizationItem));
                 return organizationSection;
-            }
-            case PERSONAL:
-            case OBJECTIVE: {
-                try {
-                    TextSection textSection = new TextSection();
-                    textSection.setContent(dis.readUTF());
-                    return textSection;
-                } catch (IOException e) {
-                    throw new StorageException("Read error", e);
-                }
             }
             default:
                 throw new IllegalArgumentException("Unknown section type:" + sectionType);
         }
     }
 
-    private static class StringReaderWriter implements ReaderWriter<String> {
 
-        @Override
-        public String getItem(DataInputStream dis) {
-            try {
-                return dis.readUTF();
-            } catch (IOException e) {
-                throw new StorageException("Read error", e);
-            }
-        }
 
-        @Override
-        public void writeItem(String s, DataOutputStream dos) {
-            try {
-                dos.writeUTF(s);
-            } catch (IOException e) {
-                throw new StorageException("Write error", e);
-            }
-        }
+    private static void writeStringItem(String item, DataOutputStream dos) throws IOException {
+        dos.writeUTF(item);
     }
 
-    private static class OrganizationReaderWriter implements ReaderWriter<Organization> {
-
-        @Override
-        public Organization getItem(DataInputStream dis) {
-            try {
-                String name = dis.readUTF();
-                String homePage = dis.readUTF();
-                if (homePage.equalsIgnoreCase("NULL")) {
-                    homePage = null;
-                }
-                Organization organization = new Organization(name, homePage);
-                organization.setPositions(readList(dis, new OrganizationPositionReaderWriter()));
-                return organization;
-            } catch (IOException e) {
-                throw new StorageException("Read error", e);
-            }
-        }
-
-        @Override
-        public void writeItem(Organization organization, DataOutputStream dos) {
-            try {
-                dos.writeUTF(organization.getHomePage().getName());
-                dos.writeUTF(organization.getHomePage().getUrl() == null ? "NULL" : organization.getHomePage().getUrl());
-                writeList(organization.getPositions(), dos, new OrganizationPositionReaderWriter());
-            } catch (IOException e) {
-                throw new StorageException("Write error", e);
-            }
-        }
+    private static void writeOrganizationItem(Organization organization, DataOutputStream dos) throws IOException {
+        dos.writeUTF(organization.getHomePage().getName());
+        dos.writeUTF(organization.getHomePage().getUrl() == null ? "" : organization.getHomePage().getUrl());
+        writeList(organization.getPositions(), dos, (Writer<Organization.Position>) DataStreamSerializer::writePositionItem);
     }
 
-    private static class OrganizationPositionReaderWriter implements ReaderWriter<Organization.Position> {
+    private static void writePositionItem(Organization.Position position, DataOutputStream dos) throws IOException {
+        dos.writeUTF(position.getStartDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+        dos.writeUTF(position.getEndDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+        dos.writeUTF(position.getTitle());
+        dos.writeUTF(position.getDescription() == null ? "" : position.getDescription());
+    }
 
-        @Override
-        public Organization.Position getItem(DataInputStream dis) {
-            try {
-                LocalDate startDate = LocalDate.parse(dis.readUTF(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-                LocalDate endDate = LocalDate.parse(dis.readUTF(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-                String title = dis.readUTF();
-                String description = dis.readUTF();
-                if (description.equalsIgnoreCase("NULL")) {
-                    description = null;
-                }
-                return new Organization.Position(startDate, endDate, title, description);
-            } catch (IOException e) {
-                throw new StorageException("Read error", e);
-            }
+    private static Organization getOrganizationItem(DataInputStream dis12) throws IOException {
+        String name = dis12.readUTF();
+        String homePage = dis12.readUTF();
+        if (homePage.equalsIgnoreCase("")) {
+            homePage = null;
         }
+        Organization organization = new Organization(name, homePage);
+        organization.setPositions(readList(dis12, (Reader<Organization.Position>) DataStreamSerializer::getPositionItem));
+        return organization;
+    }
 
-        @Override
-        public void writeItem(Organization.Position position, DataOutputStream dos) {
-            try {
-                dos.writeUTF(position.getStartDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-                dos.writeUTF(position.getEndDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-                dos.writeUTF(position.getTitle());
-                dos.writeUTF(position.getDescription() == null ? "NULL" : position.getDescription());
-            } catch (IOException e) {
-                throw new StorageException("Write error", e);
+    private static Organization.Position getPositionItem(DataInputStream dis13) throws IOException {
+        LocalDate startDate = LocalDate.parse(dis13.readUTF(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        LocalDate endDate = LocalDate.parse(dis13.readUTF(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        String title = dis13.readUTF();
+        String description = dis13.readUTF();
+        if (description.equalsIgnoreCase("")) {
+            description = null;
+        }
+        return new Organization.Position(startDate, endDate, title, description);
+    }
+
+    private static <T> List<T> readList(DataInputStream dis, Reader reader) throws IOException {
+        int size = dis.readInt();
+        List<T> items = new ArrayList<>();
+        if (size > 0) {
+            List<T> list = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                T item = (T) reader.getItem(dis);
+                list.add(item);
             }
+            items = list;
+        }
+        return items;
+    }
+
+    private static <T> void writeList(List<T> list, DataOutputStream dos, Writer writer) throws IOException {
+        dos.writeInt(list.size());
+        for (T t1 : list) {
+            writer.writeItem(t1, dos);
         }
     }
 }
