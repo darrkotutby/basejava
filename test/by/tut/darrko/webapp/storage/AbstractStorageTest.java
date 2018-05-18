@@ -62,7 +62,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         storage.clear();
         storage.save(R1);
         storage.save(R2);
@@ -70,68 +70,68 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void size() throws Exception {
+    public void size() {
         assertSize(3);
     }
 
     @Test
-    public void clear() throws Exception {
+    public void clear() {
         storage.clear();
         assertSize(0);
     }
 
     @Test
-    public void update() throws Exception {
+    public void update() {
         Resume newResume = new Resume(UUID_1, "New Name");
         storage.update(newResume);
         assertTrue(newResume.equals(storage.get(UUID_1)));
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void updateNotExist() throws Exception {
+    public void updateNotExist() {
         storage.get("dummy");
     }
 
     @Test
-    public void getAllSorted() throws Exception {
+    public void getAllSorted() {
         List<Resume> list = storage.getAllSorted();
         assertEquals(3, list.size());
         assertEquals(list, Arrays.asList(R1, R2, R3));
     }
 
     @Test
-    public void save() throws Exception {
+    public void save() {
         storage.save(R4);
         assertSize(4);
         assertGet(R4);
     }
 
     @Test(expected = ExistStorageException.class)
-    public void saveExist() throws Exception {
+    public void saveExist() {
         storage.save(R1);
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void delete() throws Exception {
+    public void delete() {
         storage.delete(UUID_1);
         assertSize(2);
         storage.get(UUID_1);
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void deleteNotExist() throws Exception {
+    public void deleteNotExist() {
         storage.delete("dummy");
     }
 
     @Test
-    public void get() throws Exception {
+    public void get() {
         assertGet(R1);
         assertGet(R2);
         assertGet(R3);
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void getNotExist() throws Exception {
+    public void getNotExist() {
         storage.get("dummy");
     }
 

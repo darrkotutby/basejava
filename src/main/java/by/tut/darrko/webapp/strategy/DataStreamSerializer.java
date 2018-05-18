@@ -34,9 +34,7 @@ public class DataStreamSerializer implements SerializationMethod {
     @Override
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
-            String uuid = dis.readUTF();
-            String fullName = dis.readUTF();
-            Resume resume = new Resume(uuid, fullName);
+            Resume resume = new Resume(dis.readUTF(), dis.readUTF());
             int size = dis.readInt();
             for (int i = 0; i < size; i++) {
                 resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
@@ -64,12 +62,12 @@ public class DataStreamSerializer implements SerializationMethod {
             case EDUCATION:
                 writeList(((OrganizationSection) section).getOrganizations(), dos, organization -> {
                     dos.writeUTF(organization.getHomePage().getName());
-                    dos.writeUTF(organization.getHomePage().getUrl() == null ? "" : organization.getHomePage().getUrl());
+                    dos.writeUTF(organization.getHomePage().getUrl());
                     writeList(organization.getPositions(), dos, position -> {
                         dos.writeUTF(position.getStartDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
                         dos.writeUTF(position.getEndDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
                         dos.writeUTF(position.getTitle());
-                        dos.writeUTF(position.getDescription() == null ? "" : position.getDescription());
+                        dos.writeUTF(position.getDescription());
                     });
                 });
                 break;
@@ -93,7 +91,7 @@ public class DataStreamSerializer implements SerializationMethod {
             case EXPERIENCE:
             case EDUCATION: {
                 return new OrganizationSection()
-                        .setOrganizations(readList(dis, () -> 
+                        .setOrganizations(readList(dis, () ->
                                 new Organization(dis.readUTF(), dis.readUTF())
                                         .setPositions(readList(dis, () ->
                                                 new Organization.Position(
@@ -114,7 +112,7 @@ public class DataStreamSerializer implements SerializationMethod {
         List<T> list = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
-            T item = (T) reader.getItem();
+            T item = reader.getItem();
             list.add(item);
         }
         return list;
