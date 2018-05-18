@@ -92,24 +92,17 @@ public class DataStreamSerializer implements SerializationMethod {
             }
             case EXPERIENCE:
             case EDUCATION: {
-                return new OrganizationSection().setOrganizations(readList(dis, () -> {
-                    String name = dis.readUTF();
-                    String homePage = dis.readUTF();
-                    if (homePage.equalsIgnoreCase("")) {
-                        homePage = null;
-                    }
-                    return new Organization(name, homePage).setPositions(readList(dis, () -> {
-                        LocalDate startDate = LocalDate.parse(dis.readUTF(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-                        LocalDate endDate = LocalDate.parse(dis.readUTF(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-                        String title = dis.readUTF();
-                        String description = dis.readUTF();
-                        if (description.equalsIgnoreCase("")) {
-                            description = null;
-                        }
-                        return new Organization.Position(startDate, endDate, title, description);
-                    }));
-                }));
-
+                return new OrganizationSection()
+                        .setOrganizations(readList(dis, () -> 
+                                new Organization(dis.readUTF(), dis.readUTF())
+                                        .setPositions(readList(dis, () ->
+                                                new Organization.Position(
+                                                        LocalDate.parse(dis.readUTF(),
+                                                                DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                                                        LocalDate.parse(dis.readUTF(),
+                                                                DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                                                        dis.readUTF(),
+                                                        dis.readUTF())))));
             }
             default:
                 throw new IllegalArgumentException("Unknown section type:" + sectionType);
