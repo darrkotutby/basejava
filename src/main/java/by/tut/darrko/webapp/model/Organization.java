@@ -52,8 +52,9 @@ public class Organization implements Serializable {
         return positions;
     }
 
-    public void setPositions(List<Position> positions) {
+    public Organization setPositions(List<Position> positions) {
         this.positions = positions;
+        return this;
     }
 
     @Override

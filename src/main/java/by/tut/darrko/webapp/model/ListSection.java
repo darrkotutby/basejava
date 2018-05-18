@@ -32,8 +32,9 @@ public class ListSection extends Section {
         return items;
     }
 
-    public void setItems(List<String> items) {
+    public ListSection setItems(List<String> items) {
         this.items = items;
+        return this;
     }
 
     @Override

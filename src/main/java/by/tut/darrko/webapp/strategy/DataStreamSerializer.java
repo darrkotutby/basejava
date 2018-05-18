@@ -11,24 +11,6 @@ import java.util.Map;
 
 public class DataStreamSerializer implements SerializationMethod {
 
-    private static <T> List<T> readList(DataInputStream dis, Reader<T> reader) throws IOException {
-        int size = dis.readInt();
-        List<T> list = new ArrayList<>();
-
-        for (int i = 0; i < size; i++) {
-            T item = (T) reader.getItem();
-            list.add(item);
-        }
-        return list;
-    }
-
-    private static <T> void writeList(List<T> list, DataOutputStream dos, Writer<T> writer) throws IOException {
-        dos.writeInt(list.size());
-        for (T t1 : list) {
-            writer.writeItem(t1);
-        }
-    }
-
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {
         try (DataOutputStream dos = new DataOutputStream(os)) {
@@ -106,21 +88,17 @@ public class DataStreamSerializer implements SerializationMethod {
             }
             case ACHIEVEMENT:
             case QUALIFICATIONS: {
-                ListSection listSection = new ListSection();
-                listSection.setItems(readList(dis, dis::readUTF));
-                return listSection;
+                return new ListSection().setItems(readList(dis, dis::readUTF));
             }
             case EXPERIENCE:
             case EDUCATION: {
-                OrganizationSection organizationSection = new OrganizationSection();
-                organizationSection.setOrganizations(readList(dis, () -> {
+                return new OrganizationSection().setOrganizations(readList(dis, () -> {
                     String name = dis.readUTF();
                     String homePage = dis.readUTF();
                     if (homePage.equalsIgnoreCase("")) {
                         homePage = null;
                     }
-                    Organization organization = new Organization(name, homePage);
-                    organization.setPositions(readList(dis, () -> {
+                    return new Organization(name, homePage).setPositions(readList(dis, () -> {
                         LocalDate startDate = LocalDate.parse(dis.readUTF(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
                         LocalDate endDate = LocalDate.parse(dis.readUTF(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
                         String title = dis.readUTF();
@@ -130,12 +108,29 @@ public class DataStreamSerializer implements SerializationMethod {
                         }
                         return new Organization.Position(startDate, endDate, title, description);
                     }));
-                    return organization;
                 }));
-                return organizationSection;
+
             }
             default:
                 throw new IllegalArgumentException("Unknown section type:" + sectionType);
+        }
+    }
+
+    private <T> List<T> readList(DataInputStream dis, Reader<T> reader) throws IOException {
+        int size = dis.readInt();
+        List<T> list = new ArrayList<>();
+
+        for (int i = 0; i < size; i++) {
+            T item = (T) reader.getItem();
+            list.add(item);
+        }
+        return list;
+    }
+
+    private <T> void writeList(List<T> list, DataOutputStream dos, Writer<T> writer) throws IOException {
+        dos.writeInt(list.size());
+        for (T t1 : list) {
+            writer.writeItem(t1);
         }
     }
 
