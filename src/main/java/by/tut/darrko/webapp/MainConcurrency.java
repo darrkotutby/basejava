@@ -1,17 +1,28 @@
 package by.tut.darrko.webapp;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static java.lang.Thread.sleep;
 
 public class MainConcurrency {
     public static final int THREADS_NUMBER = 10000;
     private int counter;
-    private static final Object LOCK = new Object();
+    // private static final Object LOCK = new Object();
+    private static final Lock LOCK = new ReentrantLock();
+    private final AtomicInteger atomicCounter = new AtomicInteger();
 
     final Account account1 = new Account();
     final Account account2 = new Account();
+
+    private static final ThreadLocal<SimpleDateFormat> threadLocal = ThreadLocal.withInitial(() -> new SimpleDateFormat());
 
 
     public static void main(String[] args) throws InterruptedException {
@@ -21,7 +32,7 @@ public class MainConcurrency {
             @Override
             public void run() {
                 System.out.println(getName() + ", " + getState());
-                throw new IllegalStateException();
+                // throw new IllegalStateException();
             }
         };
         thread0.start();
@@ -44,26 +55,46 @@ public class MainConcurrency {
         System.out.println(thread0.getState());
 
         final MainConcurrency mainConcurrency = new MainConcurrency();
-        List<Thread> threads = new ArrayList<>(THREADS_NUMBER);
+        CountDownLatch countDownLatch = new CountDownLatch(THREADS_NUMBER);
+
+        ExecutorService executorService = Executors.newCachedThreadPool();
+//
+//        List<Thread> threads = new ArrayList<>(THREADS_NUMBER);
 
         for (int i = 0; i < THREADS_NUMBER; i++) {
-            Thread thread = new Thread(() -> {
+            executorService.submit(() -> {
+                for (int j = 0; j < 100; j++) {
+                    mainConcurrency.inc();
+                    // System.out.println(threadLocal.get().format(new Date()));
+                }
+                countDownLatch.countDown();
+            });
+
+            /* Thread thread = new Thread(() -> {
                 for (int j = 0; j < 100; j++) {
                     mainConcurrency.inc();
                 }
+                countDownLatch.countDown();
             });
             thread.start();
-            threads.add(thread);
+            // threads.add(thread);
+            */
+
+
         }
 
-        threads.forEach(t -> {
+        /* threads.forEach(t -> {
             try {
                 t.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        });
-        System.out.println(mainConcurrency.counter);
+        });*/
+
+        countDownLatch.await(10, TimeUnit.SECONDS);
+        executorService.shutdown();
+        // System.out.println(mainConcurrency.counter);
+        System.out.println(mainConcurrency.atomicCounter.get());
 
         Thread thread3 = new Thread(new Runnable() {
             @Override
@@ -91,19 +122,29 @@ public class MainConcurrency {
             }
         });
 
-        thread3.start();
-        thread4.start();
+        // thread3.start();
+        // thread4.start();
 
-        System.out.println(mainConcurrency.account1);
-        System.out.println(mainConcurrency.account2);
+        // System.out.println(mainConcurrency.account1);
+        // System.out.println(mainConcurrency.account2);
 
     }
 
 
-    private synchronized void inc() {
+    private void inc() {
 //        synchronized (this) {
 //        synchronized (MainConcurrency.class) {
-        counter++;
+
+
+        atomicCounter.incrementAndGet();
+
+    /*    LOCK.lock();
+        try {
+            counter++;
+        }
+        finally {
+            LOCK.unlock();
+        } */
 //                wait();
 //                readFile
 //                ...
