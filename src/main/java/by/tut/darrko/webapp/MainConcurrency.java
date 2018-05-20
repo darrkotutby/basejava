@@ -118,18 +118,14 @@ public class MainConcurrency {
         }
 
         public synchronized void setAmount(int amount) throws InterruptedException {
-
             sleep(500);
             this.amount += amount;
-
         }
 
         public synchronized void addMoney(Account anotherAccount, int amount) throws InterruptedException {
-
             sleep(500);
-            setAmount(amount);
             anotherAccount.setAmount(-amount);
-
+            setAmount(amount);
         }
 
         @Override
