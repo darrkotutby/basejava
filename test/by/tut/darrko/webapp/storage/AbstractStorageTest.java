@@ -1,5 +1,6 @@
 package by.tut.darrko.webapp.storage;
 
+import by.tut.darrko.webapp.Config;
 import by.tut.darrko.webapp.exception.ExistStorageException;
 import by.tut.darrko.webapp.exception.NotExistStorageException;
 import by.tut.darrko.webapp.model.*;
@@ -14,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public abstract class AbstractStorageTest {
-    protected static final String STORAGE_DIR = "G:\\javaops\\storage\\";
+    protected static final String STORAGE_DIR = Config.get().getStorageDir();
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
