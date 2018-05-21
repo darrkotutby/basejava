@@ -92,29 +92,23 @@ public class MainConcurrency {
         // System.out.println(mainConcurrency.counter);
         System.out.println(mainConcurrency.atomicCounter.get());
 
-        Thread thread3 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mainConcurrency.account1.addMoney(mainConcurrency.account2, 200);
-                    System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account1);
-                    System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        Thread thread3 = new Thread(() -> {
+            try {
+                mainConcurrency.account1.addMoney(mainConcurrency.account2, 200);
+                System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account1);
+                System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
 
-        Thread thread4 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mainConcurrency.account2.addMoney(mainConcurrency.account1, 300);
-                    System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account1);
-                    System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        Thread thread4 = new Thread(() -> {
+            try {
+                mainConcurrency.account2.addMoney(mainConcurrency.account1, 300);
+                System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account1);
+                System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
 

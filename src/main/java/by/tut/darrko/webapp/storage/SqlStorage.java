@@ -20,12 +20,12 @@ public class SqlStorage implements Storage {
 
     @Override
     public void clear() {
-        write("delete from resume", (Writer<Resume>) PreparedStatement::execute);
+        write("delete from resume", PreparedStatement::execute);
     }
 
     @Override
     public void update(Resume r) {
-        write("update resume set full_name = ? where uuid = ?", (Writer<Resume>) preparedStatement -> {
+        write("update resume set full_name = ? where uuid = ?", preparedStatement -> {
             preparedStatement.setString(1, r.getFullName());
             preparedStatement.setString(2, r.getUuid());
             int rowsAffected = preparedStatement.executeUpdate();
@@ -37,7 +37,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        write("insert into resume (uuid, full_name) values (?,?)", (Writer<Resume>) preparedStatement -> {
+        write("insert into resume (uuid, full_name) values (?,?)", preparedStatement -> {
             try {
                 preparedStatement.setString(1, r.getUuid());
                 preparedStatement.setString(2, r.getFullName());
@@ -65,7 +65,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        write("delete from resume where uuid = ?", (Writer<String>) preparedStatement -> {
+        write("delete from resume where uuid = ?", preparedStatement -> {
             preparedStatement.setString(1, uuid);
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected == 0) {
@@ -106,7 +106,7 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private <T> void write(String sql, Writer<T> writer) {
+    private void write(String sql, Writer writer) {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement preparedStatement =
                      conn.prepareStatement(sql)) {
@@ -122,7 +122,7 @@ public class SqlStorage implements Storage {
     }
 
     @FunctionalInterface
-    private interface Writer<T> {
+    private interface Writer {
         void write(PreparedStatement preparedStatement) throws SQLException;
     }
 }

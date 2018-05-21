@@ -8,7 +8,6 @@ import java.util.Properties;
 public class Config {
     private static final String PROPS = "./config/resumes.properties";
     private static final Config INSTANCE = new Config();
-    private Properties props = new Properties();
     private String storageDir;
     private String dbUrl;
     private String dbUser;
@@ -16,6 +15,7 @@ public class Config {
 
     private Config() {
         try (InputStream is = new FileInputStream(PROPS)) {
+            Properties props = new Properties();
             props.load(is);
             storageDir = props.getProperty("storage.dir");
             dbUrl = props.getProperty("db.url");
