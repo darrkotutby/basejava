@@ -1,9 +1,9 @@
 create table resume
 (
-  uuid      char(36) not null
+  uuid      varchar(36) not null
     constraint resume_pkey
     primary key,
-  full_name text     not null
+  full_name text        not null
 );
 
 create table contact

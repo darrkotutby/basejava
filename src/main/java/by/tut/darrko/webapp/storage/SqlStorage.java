@@ -20,24 +20,25 @@ public class SqlStorage implements Storage {
 
     @Override
     public void clear() {
-        write("delete from resume", PreparedStatement::execute);
+        read("delete from resume", PreparedStatement::execute);
     }
 
     @Override
     public void update(Resume r) {
-        write("update resume set full_name = ? where uuid = ?", preparedStatement -> {
+        read("update resume set full_name = ? where uuid = ?", preparedStatement -> {
             preparedStatement.setString(1, r.getFullName());
             preparedStatement.setString(2, r.getUuid());
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected == 0) {
                 throw new NotExistStorageException(r.getUuid());
             }
+            return null;
         });
     }
 
     @Override
     public void save(Resume r) {
-        write("insert into resume (uuid, full_name) values (?,?)", preparedStatement -> {
+        read("insert into resume (uuid, full_name) values (?,?)", preparedStatement -> {
             try {
                 preparedStatement.setString(1, r.getUuid());
                 preparedStatement.setString(2, r.getFullName());
@@ -48,6 +49,7 @@ public class SqlStorage implements Storage {
                 }
                 throw e;
             }
+            return null;
         });
     }
 
@@ -65,12 +67,13 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        write("delete from resume where uuid = ?", preparedStatement -> {
+        read("delete from resume where uuid = ?", preparedStatement -> {
             preparedStatement.setString(1, uuid);
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected == 0) {
                 throw new NotExistStorageException(uuid);
             }
+            return null;
         });
     }
 
@@ -106,23 +109,8 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void write(String sql, Writer writer) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement preparedStatement =
-                     conn.prepareStatement(sql)) {
-            writer.write(preparedStatement);
-        } catch (SQLException e) {
-            throw new StorageException("Error", e);
-        }
-    }
-
     @FunctionalInterface
     private interface Reader<T> {
         T get(PreparedStatement preparedStatement) throws SQLException;
-    }
-
-    @FunctionalInterface
-    private interface Writer {
-        void write(PreparedStatement preparedStatement) throws SQLException;
     }
 }
