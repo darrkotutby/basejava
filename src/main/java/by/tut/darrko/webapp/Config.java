@@ -14,10 +14,6 @@ public class Config {
     private String dbUser;
     private String dbPassword;
 
-    public static Config get() {
-        return INSTANCE;
-    }
-
     private Config() {
         try (InputStream is = new FileInputStream(PROPS)) {
             props.load(is);
@@ -28,6 +24,10 @@ public class Config {
         } catch (IOException e) {
             throw new IllegalStateException("Invalid config file " + PROPS);
         }
+    }
+
+    public static Config get() {
+        return INSTANCE;
     }
 
     public String getStorageDir() {

@@ -4,8 +4,6 @@ import by.tut.darrko.webapp.model.*;
 import by.tut.darrko.webapp.util.XmlParser;
 
 import java.io.*;
-import java.io.Reader;
-import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
 public class XmlStreamSerializer implements SerializationMethod {
