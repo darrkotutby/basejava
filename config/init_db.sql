@@ -1,3 +1,7 @@
+drop table contact;
+
+drop table resume;
+
 create table resume
 (
   uuid      varchar(36) not null

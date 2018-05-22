@@ -3,6 +3,7 @@ package by.tut.darrko.webapp.storage;
 import by.tut.darrko.webapp.exception.ExistStorageException;
 import by.tut.darrko.webapp.exception.NotExistStorageException;
 import by.tut.darrko.webapp.exception.StorageException;
+import by.tut.darrko.webapp.model.ContactType;
 import by.tut.darrko.webapp.model.Resume;
 import by.tut.darrko.webapp.sql.ConnectionFactory;
 import org.postgresql.util.PSQLException;
@@ -10,6 +11,7 @@ import org.postgresql.util.PSQLException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SqlStorage implements Storage {
     private final ConnectionFactory connectionFactory;
@@ -51,6 +53,25 @@ public class SqlStorage implements Storage {
             }
             return null;
         });
+
+        execute("insert into contact (uuid, contact_type, value) values (?,?,?)", preparedStatement -> {
+            try {
+                for (Map.Entry<ContactType, String> entry :
+                        r.getContacts().entrySet()) {
+                    preparedStatement.setString(1, r.getUuid());
+                    preparedStatement.setString(2, entry.getKey().toString());
+                    preparedStatement.setString(3, entry.getValue());
+                    preparedStatement.execute();
+                }
+            } catch (PSQLException e) {
+                if (e.getSQLState().equals("23505")) {
+                    throw new ExistStorageException(r.getUuid());
+                }
+                throw e;
+            }
+            return null;
+        });
+
     }
 
     @Override
@@ -61,7 +82,20 @@ public class SqlStorage implements Storage {
             if (!resultSet.next()) {
                 throw new NotExistStorageException(uuid);
             }
-            return new Resume(uuid, resultSet.getString("full_name"));
+
+            Resume resume = new Resume(uuid, resultSet.getString("full_name"));
+
+            execute("select contact_type, value from contact where uuid = ?", preparedStatement1 -> {
+                preparedStatement1.setString(1, uuid);
+                ResultSet resultSet1 = preparedStatement1.executeQuery();
+                while (resultSet1.next()) {
+                    resume.addContact(ContactType.valueOf(resultSet1.getString("contact_type")),
+                            resultSet1.getString("value"));
+                }
+                return null;
+            });
+
+            return resume;
         });
     }
 
@@ -83,8 +117,20 @@ public class SqlStorage implements Storage {
             ResultSet resultSet = preparedStatement.executeQuery();
             List<Resume> list = new ArrayList<>();
             while (resultSet.next()) {
-                list.add(new Resume(resultSet.getString("uuid"),
-                        resultSet.getString("full_name")));
+                Resume resume = new Resume(resultSet.getString("uuid"), resultSet.getString("full_name"));
+
+                execute("select contact_type, value from contact where uuid = ?", preparedStatement1 -> {
+                    preparedStatement1.setString(1, resume.getUuid());
+                    ResultSet resultSet1 = preparedStatement1.executeQuery();
+
+                    while (resultSet1.next()) {
+                        resume.addContact(ContactType.valueOf(resultSet1.getString("contact_type")),
+                                resultSet1.getString("value"));
+                    }
+                    return null;
+                });
+
+                list.add(resume);
             }
             return list;
         });
@@ -103,7 +149,7 @@ public class SqlStorage implements Storage {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement preparedStatement =
                      conn.prepareStatement(sql)) {
-            return executor.get(preparedStatement);
+            return executor.execute(preparedStatement);
         } catch (SQLException e) {
             throw new StorageException("Error", e);
         }
@@ -111,6 +157,9 @@ public class SqlStorage implements Storage {
 
     @FunctionalInterface
     private interface Executor<T> {
-        T get(PreparedStatement preparedStatement) throws SQLException;
+        T execute(PreparedStatement preparedStatement) throws SQLException;
     }
+
+
+
 }
