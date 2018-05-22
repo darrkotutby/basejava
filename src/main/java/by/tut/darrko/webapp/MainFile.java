@@ -36,7 +36,6 @@ public class MainFile {
         printDirectoryDeeply(dir);
     }
 
-    // TODO: make pretty output
     public static void printDirectoryDeeply(File dir) {
         File[] files = dir.listFiles();
 
