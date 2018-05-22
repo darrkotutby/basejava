@@ -166,8 +166,9 @@ public class SqlStorage implements Storage {
                         preparedStatement.setString(2, entry.getKey().toString());
                         preparedStatement.setString(3, entry.getValue());
                         preparedStatement.setString(4, entry.getValue());
-                        preparedStatement.execute();
+                        preparedStatement.addBatch();
                     }
+                    preparedStatement.executeBatch();
                     return null;
                 });
     }
