@@ -3,13 +3,13 @@ package by.tut.darrko.webapp.storage;
 import by.tut.darrko.webapp.exception.ExistStorageException;
 import by.tut.darrko.webapp.exception.NotExistStorageException;
 import by.tut.darrko.webapp.exception.StorageException;
+import by.tut.darrko.webapp.model.ContactType;
 import by.tut.darrko.webapp.model.Resume;
 import by.tut.darrko.webapp.sql.ConnectionFactory;
 import org.postgresql.util.PSQLException;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SqlStorage implements Storage {
     private final ConnectionFactory connectionFactory;
@@ -20,54 +20,78 @@ public class SqlStorage implements Storage {
 
     @Override
     public void clear() {
-        read("delete from resume", PreparedStatement::execute);
+        execute("delete from resume", preparedStatement -> {
+            preparedStatement.execute();
+            return null;
+        });
     }
 
     @Override
     public void update(Resume r) {
-        read("update resume set full_name = ? where uuid = ?", preparedStatement -> {
-            preparedStatement.setString(1, r.getFullName());
-            preparedStatement.setString(2, r.getUuid());
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected == 0) {
-                throw new NotExistStorageException(r.getUuid());
-            }
+        executeTransactional(connection -> {
+            execute("update resume set full_name = ? where uuid = ?", connection,
+                    preparedStatement -> {
+                        preparedStatement.setString(1, r.getFullName());
+                        preparedStatement.setString(2, r.getUuid());
+                        int rowsAffected = preparedStatement.executeUpdate();
+                        if (rowsAffected == 0) {
+                            throw new NotExistStorageException(r.getUuid());
+                        }
+                        return null;
+                    });
+            execute("delete from contact where uuid = ?", connection,
+                    preparedStatement -> {
+                        preparedStatement.setString(1, r.getUuid());
+                        preparedStatement.execute();
+                        return null;
+                    });
+            insertContacts(r, connection);
             return null;
         });
     }
 
     @Override
     public void save(Resume r) {
-        read("insert into resume (uuid, full_name) values (?,?)", preparedStatement -> {
-            try {
-                preparedStatement.setString(1, r.getUuid());
-                preparedStatement.setString(2, r.getFullName());
-                preparedStatement.execute();
-            } catch (PSQLException e) {
-                if (e.getSQLState().equals("23505")) {
-                    throw new ExistStorageException(r.getUuid());
-                }
-                throw e;
-            }
+        executeTransactional(connection -> {
+            execute("insert into resume (uuid, full_name) values (?,?)", connection,
+                    preparedStatement -> {
+                        try {
+                            preparedStatement.setString(1, r.getUuid());
+                            preparedStatement.setString(2, r.getFullName());
+                            preparedStatement.execute();
+                            return null;
+                        } catch (PSQLException e) {
+                            if (e.getSQLState().equals("23505")) {
+                                throw new ExistStorageException(r.getUuid());
+                            }
+                            throw e;
+                        }
+                    });
+            insertContacts(r, connection);
             return null;
         });
     }
 
     @Override
     public Resume get(String uuid) {
-        return read("select uuid, full_name from resume where uuid = ?", preparedStatement -> {
-            preparedStatement.setString(1, uuid);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()) {
-                throw new NotExistStorageException(uuid);
-            }
-            return new Resume(uuid, resultSet.getString("full_name"));
+        return executeTransactional(connection -> {
+            Resume resume = execute("select uuid, full_name from resume where uuid = ?", connection,
+                    (preparedStatement) -> {
+                        preparedStatement.setString(1, uuid);
+                        ResultSet resultSet = preparedStatement.executeQuery();
+                        if (!resultSet.next()) {
+                            throw new NotExistStorageException(uuid);
+                        }
+                        return new Resume(uuid, resultSet.getString("full_name"));
+                    });
+            resume.setContacts(loadContacts(uuid, connection));
+            return resume;
         });
     }
 
     @Override
     public void delete(String uuid) {
-        read("delete from resume where uuid = ?", preparedStatement -> {
+        execute("delete from resume where uuid = ?", preparedStatement -> {
             preparedStatement.setString(1, uuid);
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected == 0) {
@@ -79,38 +103,119 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return read("select uuid, full_name from resume order by full_name", preparedStatement -> {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            List<Resume> list = new ArrayList<>();
-            while (resultSet.next()) {
-                list.add(new Resume(resultSet.getString("uuid"),
-                        resultSet.getString("full_name")));
-            }
-            return list;
+        return executeTransactional(connection -> {
+            Map<String, Map<ContactType, String>> contacts =
+                    execute("select uuid, contact_type, value from contact order by uuid", connection,
+                            preparedStatement -> {
+                                ResultSet resultSet = preparedStatement.executeQuery();
+                                Map<String, Map<ContactType, String>> map = new HashMap<>();
+
+                                while (resultSet.next()) {
+                                    String uuid = resultSet.getString("uuid");
+                                    Map<ContactType, String> contactsMap =
+                                            map.getOrDefault(uuid,
+                                                    new EnumMap<>(ContactType.class));
+                                    contactsMap.put(ContactType.valueOf(resultSet.getString("contact_type")),
+                                            resultSet.getString("value"));
+                                    map.put(uuid, contactsMap);
+                                }
+                                return map;
+                            });
+            return execute("select uuid, full_name from resume order by full_name, uuid", connection,
+                    preparedStatement -> {
+                        ResultSet resultSet = preparedStatement.executeQuery();
+                        List<Resume> list = new ArrayList<>();
+                        while (resultSet.next()) {
+                            Resume resume = new Resume(resultSet.getString("uuid"),
+                                    resultSet.getString("full_name"));
+                            Map<ContactType, String> contactsMap = contacts.get(resume.getUuid());
+                            if (contactsMap != null) {
+                                resume.setContacts(contactsMap);
+                            }
+                            list.add(resume);
+                        }
+                        return list;
+                    });
         });
     }
 
     @Override
     public long size() {
-        return read("select count(1) size from resume", preparedStatement -> {
+        return execute("select count(1) size from resume", (preparedStatement) -> {
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return resultSet.getLong(1);
         });
     }
 
-    private <T> T read(String sql, Reader<T> reader) {
-        try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement preparedStatement =
-                     conn.prepareStatement(sql)) {
-            return reader.get(preparedStatement);
+    private <T> T executeTransactional(ExecutorTransactional<T> executor) {
+        try (Connection conn = connectionFactory.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                T t = executor.executeTransactional(conn);
+                conn.commit();
+                return t;
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
         } catch (SQLException e) {
             throw new StorageException("Error", e);
         }
     }
 
+    private <T> T execute(String sql, Connection conn, Executor<T> executor) throws SQLException {
+        try (PreparedStatement preparedStatement =
+                     conn.prepareStatement(sql)) {
+            return executor.execute(preparedStatement);
+        }
+    }
+
+    private <T> T execute(String sql, Executor<T> executor) {
+        try (Connection conn = connectionFactory.getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            return executor.execute(preparedStatement);
+        } catch (SQLException e) {
+            throw new StorageException("Error", e);
+        }
+    }
+
+    private void insertContacts(Resume r, Connection connection) throws SQLException {
+        execute("insert into contact (uuid, contact_type, value) values (?,?,?)", connection,
+                preparedStatement -> {
+                    for (Map.Entry<ContactType, String> entry :
+                            r.getContacts().entrySet()) {
+                        preparedStatement.setString(1, r.getUuid());
+                        preparedStatement.setString(2, entry.getKey().toString());
+                        preparedStatement.setString(3, entry.getValue());
+                        preparedStatement.addBatch();
+                    }
+                    preparedStatement.executeBatch();
+                    return null;
+                });
+    }
+
+    private Map<ContactType, String> loadContacts(String uuid, Connection connection) throws SQLException {
+        return execute("select contact_type, value from contact where uuid = ?", connection,
+                (preparedStatement) -> {
+                    preparedStatement.setString(1, uuid);
+                    ResultSet resultSet1 = preparedStatement.executeQuery();
+                    Map<ContactType, String> map = new EnumMap<>(ContactType.class);
+                    while (resultSet1.next()) {
+                        map.putIfAbsent(ContactType.valueOf(resultSet1.getString("contact_type")),
+                                resultSet1.getString("value"));
+                    }
+                    return map;
+                });
+    }
+
     @FunctionalInterface
-    private interface Reader<T> {
-        T get(PreparedStatement preparedStatement) throws SQLException;
+    private interface Executor<T> {
+        T execute(PreparedStatement preparedStatement) throws SQLException;
+    }
+
+    @FunctionalInterface
+    private interface ExecutorTransactional<T> {
+        T executeTransactional(Connection connection) throws SQLException;
     }
 }
