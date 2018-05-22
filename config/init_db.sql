@@ -20,11 +20,17 @@ create table contact
     references resume
     on delete cascade,
   contact_type text   not null,
-  value        text   not null
+  value        text   not null,
+  constraint contact_uuid_contact_type_uk
+  unique (uuid, contact_type)
 );
 
 create unique index contact_uuid_contact_type
   on contact (uuid, contact_type);
+
+
+
+
 
 
 

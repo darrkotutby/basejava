@@ -61,7 +61,7 @@ public class MainConcurrency {
             executorService.submit(() -> {
                 for (int j = 0; j < 100; j++) {
                     mainConcurrency.inc();
-                    // System.out.println(threadLocal.execute().format(new Date()));
+                    // System.out.println(threadLocal.get().format(new Date()));
                 }
                 countDownLatch.countDown();
             });
