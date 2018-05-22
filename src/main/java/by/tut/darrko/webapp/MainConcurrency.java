@@ -1,7 +1,6 @@
 package by.tut.darrko.webapp;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -14,16 +13,13 @@ import static java.lang.Thread.sleep;
 
 public class MainConcurrency {
     public static final int THREADS_NUMBER = 10000;
-    private int counter;
     // private static final Object LOCK = new Object();
     private static final Lock LOCK = new ReentrantLock();
-    private final AtomicInteger atomicCounter = new AtomicInteger();
-
+    private static final ThreadLocal<SimpleDateFormat> threadLocal = ThreadLocal.withInitial(() -> new SimpleDateFormat());
     final Account account1 = new Account();
     final Account account2 = new Account();
-
-    private static final ThreadLocal<SimpleDateFormat> threadLocal = ThreadLocal.withInitial(() -> new SimpleDateFormat());
-
+    private final AtomicInteger atomicCounter = new AtomicInteger();
+    private int counter;
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println(Thread.currentThread().getName());
@@ -96,29 +92,23 @@ public class MainConcurrency {
         // System.out.println(mainConcurrency.counter);
         System.out.println(mainConcurrency.atomicCounter.get());
 
-        Thread thread3 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mainConcurrency.account1.addMoney(mainConcurrency.account2, 200);
-                    System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account1);
-                    System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        Thread thread3 = new Thread(() -> {
+            try {
+                mainConcurrency.account1.addMoney(mainConcurrency.account2, 200);
+                System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account1);
+                System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
 
-        Thread thread4 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mainConcurrency.account2.addMoney(mainConcurrency.account1, 300);
-                    System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account1);
-                    System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        Thread thread4 = new Thread(() -> {
+            try {
+                mainConcurrency.account2.addMoney(mainConcurrency.account1, 300);
+                System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account1);
+                System.out.println(Thread.currentThread().getName() + ", " + mainConcurrency.account2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
 

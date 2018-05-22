@@ -7,10 +7,6 @@ public class LazySingleton {
     private LazySingleton() {
     }
 
-    private static class LazySingletonHolder {
-        private static final LazySingleton INSTANCE = new LazySingleton();
-    }
-
     public static LazySingleton getInstance() {
         return LazySingletonHolder.INSTANCE;
 //        if (INSTANCE == null) {
@@ -21,6 +17,10 @@ public class LazySingleton {
 //            }
 //        }
 //        return INSTANCE;
+    }
+
+    private static class LazySingletonHolder {
+        private static final LazySingleton INSTANCE = new LazySingleton();
     }
 }
 
