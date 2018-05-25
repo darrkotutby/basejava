@@ -3,8 +3,7 @@ package by.tut.darrko.webapp.storage;
 import by.tut.darrko.webapp.Config;
 import by.tut.darrko.webapp.exception.ExistStorageException;
 import by.tut.darrko.webapp.exception.NotExistStorageException;
-import by.tut.darrko.webapp.model.ContactType;
-import by.tut.darrko.webapp.model.Resume;
+import by.tut.darrko.webapp.model.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,11 +31,11 @@ public abstract class AbstractStorageTest {
 
         R1.addContact(ContactType.MAIL, "mail1@ya.ru");
         R1.addContact(ContactType.PHONE, "11111");
-       /* R1.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
+        R1.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
         R1.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
         R1.addSection(SectionType.ACHIEVEMENT, new ListSection("Achivment11", "Achivment12", "Achivment13"));
         R1.addSection(SectionType.QUALIFICATIONS, new ListSection("Java", "SQL", "JavaScript"));
-        R1.addSection(SectionType.EXPERIENCE,
+       /*  R1.addSection(SectionType.EXPERIENCE,
                 new OrganizationSection(
                         new Organization("Organization11", "http://Organization11.ru",
                                 new Organization.Position(2005, Month.JANUARY, "position1", "content1"),
@@ -83,10 +82,9 @@ public abstract class AbstractStorageTest {
     @Test
     public void update() {
         Resume resume = new Resume(UUID_1, "New Name1");
-        resume.setContacts(R1.getContacts());
-        R1.addContact(ContactType.MAIL, "pilipenko@gmail.com");
-        storage.update(R1);
-        assertEquals(R1, storage.get(UUID_1));
+        resume.addContact(ContactType.MAIL, "pilipenko@gmail.com");
+        storage.update(resume);
+        assertEquals(resume, storage.get(UUID_1));
     }
 
     @Test(expected = NotExistStorageException.class)
