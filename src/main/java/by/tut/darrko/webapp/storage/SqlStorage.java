@@ -86,8 +86,16 @@ public class SqlStorage implements Storage {
                         }
                         return new Resume(uuid, resultSet.getString("full_name"));
                     });
-            resume.setContacts(loadContacts(uuid, connection));
-            resume.setSections(loadSections(uuid, connection));
+
+            Map<ContactType, String> contactMap = loadContacts(uuid, connection);
+            if (contactMap != null) {
+                resume.setContacts(contactMap);
+            }
+
+            Map<SectionType, Section> sectionMap = loadSections(uuid, connection);
+            if (sectionMap != null) {
+                resume.setSections(sectionMap);
+            }
             return resume;
         });
     }
@@ -112,34 +120,13 @@ public class SqlStorage implements Storage {
                     execute("select uuid, contact_type, value from contact order by uuid", connection,
                             preparedStatement -> {
                                 ResultSet resultSet = preparedStatement.executeQuery();
-                                Map<String, Map<ContactType, String>> map = new HashMap<>();
-                                while (resultSet.next()) {
-                                    String uuid = resultSet.getString("uuid");
-                                    Map<ContactType, String> contactsMap =
-                                            map.getOrDefault(uuid,
-                                                    new EnumMap<>(ContactType.class));
-                                    contactsMap.put(ContactType.valueOf(resultSet.getString("contact_type")),
-                                            resultSet.getString("value"));
-                                    map.put(uuid, contactsMap);
-                                }
-                                return map;
+                                return getContactsMap(resultSet);
                             });
             Map<String, Map<SectionType, Section>> sections =
                     execute("select uuid, section_type, value from section order by uuid", connection,
                             preparedStatement -> {
                                 ResultSet resultSet = preparedStatement.executeQuery();
-                                Map<String, Map<SectionType, Section>> map = new HashMap<>();
-                                while (resultSet.next()) {
-                                    String uuid = resultSet.getString("uuid");
-                                    Map<SectionType, Section> sectionsMap =
-                                            map.getOrDefault(uuid,
-                                                    new EnumMap<>(SectionType.class));
-                                    SectionType sectionType = SectionType.valueOf(resultSet.getString("section_type"));
-                                    sectionsMap.putIfAbsent(sectionType, createSection(sectionType,
-                                            resultSet.getString("value")));
-                                    map.put(uuid, sectionsMap);
-                                }
-                                return map;
+                                return getSectionsMap(resultSet);
                             });
             return execute("select uuid, full_name from resume order by full_name, uuid", connection,
                     preparedStatement -> {
@@ -161,6 +148,35 @@ public class SqlStorage implements Storage {
                         return list;
                     });
         });
+    }
+
+    private Map<String, Map<SectionType, Section>> getSectionsMap(ResultSet resultSet) throws SQLException {
+        Map<String, Map<SectionType, Section>> map = new HashMap<>();
+        while (resultSet.next()) {
+            String uuid = resultSet.getString("uuid");
+            Map<SectionType, Section> sectionsMap =
+                    map.getOrDefault(uuid,
+                            new EnumMap<>(SectionType.class));
+            SectionType sectionType = SectionType.valueOf(resultSet.getString("section_type"));
+            sectionsMap.putIfAbsent(sectionType, createSection(sectionType,
+                    resultSet.getString("value")));
+            map.put(uuid, sectionsMap);
+        }
+        return map;
+    }
+
+    private Map<String, Map<ContactType, String>> getContactsMap(ResultSet resultSet) throws SQLException {
+        Map<String, Map<ContactType, String>> map = new HashMap<>();
+        while (resultSet.next()) {
+            String uuid = resultSet.getString("uuid");
+            Map<ContactType, String> contactsMap =
+                    map.getOrDefault(uuid,
+                            new EnumMap<>(ContactType.class));
+            contactsMap.put(ContactType.valueOf(resultSet.getString("contact_type")),
+                    resultSet.getString("value"));
+            map.put(uuid, contactsMap);
+        }
+        return map;
     }
 
     @Override
@@ -243,7 +259,7 @@ public class SqlStorage implements Storage {
                             }
                             case ACHIEVEMENT:
                             case QUALIFICATIONS: {
-                                preparedStatement.setString(3, String.join(",",
+                                preparedStatement.setString(3, String.join("\n",
                                         ((ListSection) entry.getValue()).getItems()));
                                 break;
                             }
@@ -261,7 +277,7 @@ public class SqlStorage implements Storage {
                 });
     }
 
-    public Section createSection(SectionType sectionType, String value) {
+    private Section createSection(SectionType sectionType, String value) {
         switch (sectionType) {
             case PERSONAL:
             case OBJECTIVE: {
@@ -269,7 +285,7 @@ public class SqlStorage implements Storage {
             }
             case ACHIEVEMENT:
             case QUALIFICATIONS: {
-                return new ListSection(Arrays.asList(value.split("\\s*,\\s*")));
+                return new ListSection(Arrays.asList(value.split("\\s*\n\\s*")));
             }
             case EXPERIENCE:
             case EDUCATION: {
@@ -291,30 +307,21 @@ public class SqlStorage implements Storage {
     }
 
     private Map<SectionType, Section> loadSections(String uuid, Connection connection) throws SQLException {
-        return execute("select section_type, value from section where uuid = ?", connection,
+        return execute("select uuid, section_type, value from section where uuid = ?", connection,
                 (preparedStatement) -> {
                     preparedStatement.setString(1, uuid);
-                    ResultSet resultSet1 = preparedStatement.executeQuery();
-                    Map<SectionType, Section> map = new EnumMap<>(SectionType.class);
-                    while (resultSet1.next()) {
-                        SectionType sectionType = SectionType.valueOf(resultSet1.getString("section_type"));
-                        map.putIfAbsent(sectionType, createSection(sectionType, resultSet1.getString("value")));
-                    }
-                    return map;
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    return getSectionsMap(resultSet).get(uuid);
                 });
     }
 
+
     private Map<ContactType, String> loadContacts(String uuid, Connection connection) throws SQLException {
-        return execute("select contact_type, value from contact where uuid = ?", connection,
+        return execute("select uuid, contact_type, value from contact where uuid = ?", connection,
                 (preparedStatement) -> {
                     preparedStatement.setString(1, uuid);
-                    ResultSet resultSet1 = preparedStatement.executeQuery();
-                    Map<ContactType, String> map = new EnumMap<>(ContactType.class);
-                    while (resultSet1.next()) {
-                        map.putIfAbsent(ContactType.valueOf(resultSet1.getString("contact_type")),
-                                resultSet1.getString("value"));
-                    }
-                    return map;
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    return getContactsMap(resultSet).get(uuid);
                 });
     }
 

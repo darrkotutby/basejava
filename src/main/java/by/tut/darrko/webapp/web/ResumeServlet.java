@@ -4,6 +4,8 @@ import by.tut.darrko.webapp.exception.NotExistStorageException;
 import by.tut.darrko.webapp.model.*;
 import by.tut.darrko.webapp.storage.SqlStorage;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +14,18 @@ import java.util.List;
 import java.util.Map;
 
 public class ResumeServlet extends HttpServlet {
+    private SqlStorage sqlStorage;
+
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        String user = getServletContext().getInitParameter("dbUser");
+        String password = getServletContext().getInitParameter("dbPassword");
+        String url = getServletContext().getInitParameter("dbURL");
+
+        sqlStorage = new SqlStorage(url, user, password);
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
     }
 
@@ -21,7 +35,6 @@ public class ResumeServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
         String uuid = request.getParameter("uuid");
-        SqlStorage sqlStorage = new SqlStorage("jdbc:postgresql://localhost:5432/resumes", "postgres", "postgres");
         response.getWriter().write("<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head>\n" +
