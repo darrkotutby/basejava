@@ -57,6 +57,10 @@ public class Resume implements Comparable<Resume>, Serializable {
         return sections;
     }
 
+    public void setSections(Map<SectionType, Section> sections) {
+        this.sections = sections;
+    }
+
     public String getContact(ContactType type) {
         return contacts.get(type);
     }
