@@ -89,12 +89,24 @@ public class SqlStorage implements Storage {
                         return new Resume(uuid, resultSet.getString("full_name"));
                     });
 
-            Map<ContactType, String> contactMap = loadContacts(uuid, connection);
+            Map<ContactType, String> contactMap =
+                    sqlHelper.execute("select uuid, contact_type, value from contact where uuid = ?", connection,
+                            (preparedStatement) -> {
+                                preparedStatement.setString(1, uuid);
+                                ResultSet resultSet = preparedStatement.executeQuery();
+                                return getContactsMap(resultSet).get(uuid);
+                            });
             if (contactMap != null) {
                 resume.setContacts(contactMap);
             }
 
-            Map<SectionType, Section> sectionMap = loadSections(uuid, connection);
+            Map<SectionType, Section> sectionMap =
+                    sqlHelper.execute("select uuid, section_type, value from section where uuid = ?", connection,
+                            (preparedStatement) -> {
+                                preparedStatement.setString(1, uuid);
+                                ResultSet resultSet = preparedStatement.executeQuery();
+                                return getSectionsMap(resultSet).get(uuid);
+                            });
             if (sectionMap != null) {
                 resume.setSections(sectionMap);
             }
@@ -186,15 +198,6 @@ public class SqlStorage implements Storage {
                 });
     }
 
-    private Map<ContactType, String> loadContacts(String uuid, Connection connection) throws SQLException {
-        return sqlHelper.execute("select uuid, contact_type, value from contact where uuid = ?", connection,
-                (preparedStatement) -> {
-                    preparedStatement.setString(1, uuid);
-                    ResultSet resultSet = preparedStatement.executeQuery();
-                    return getContactsMap(resultSet).get(uuid);
-                });
-    }
-
     private Map<String, Map<ContactType, String>> getContactsMap(ResultSet resultSet) throws SQLException {
         Map<String, Map<ContactType, String>> map = new HashMap<>();
         while (resultSet.next()) {
@@ -283,14 +286,5 @@ public class SqlStorage implements Storage {
             map.put(uuid, sectionsMap);
         }
         return map;
-    }
-
-    private Map<SectionType, Section> loadSections(String uuid, Connection connection) throws SQLException {
-        return sqlHelper.execute("select uuid, section_type, value from section where uuid = ?", connection,
-                (preparedStatement) -> {
-                    preparedStatement.setString(1, uuid);
-                    ResultSet resultSet = preparedStatement.executeQuery();
-                    return getSectionsMap(resultSet).get(uuid);
-                });
     }
 }
