@@ -39,7 +39,7 @@ public class ResumeServlet extends HttpServlet {
                 "<html>\n" +
                 "<head>\n" +
                 "    <meta charset=\"UTF-8\">\n" +
-                "    <link rel=\"stylesheet\" href=\"" + getServletContext().getContextPath() + "/css/style.css\">\n" +
+                "    <link rel=\"stylesheet\" href=\"css/style.css\">\n" +
                 "    <title>Курс JavaSE + Web.</title>\n" +
                 "</head>\n" +
                 "<body>");
@@ -67,12 +67,12 @@ public class ResumeServlet extends HttpServlet {
                 response.getWriter().write("not exist any resumes");
             } else {
                 response.getWriter().write("<table>");
-
                 response.getWriter().write("<thead><tr><th>UUID</th><th>Full name</th></tr></thead>");
                 response.getWriter().write("<tbody>");
                 for (Resume resume : list) {
                     response.getWriter().write("<tr>");
-                    response.getWriter().write("<td>" + resume.getUuid() + "</td>");
+                    response.getWriter().write("<td>" + "<a href=\"" + request.getRequestURL().toString() +
+                            "?uuid=" + resume.getUuid() + "\">" + resume.getUuid() + "</a> " + "</td>");
                     response.getWriter().write("<td>" + resume.getFullName() + "</td>");
                     response.getWriter().write("</tr>");
                 }
