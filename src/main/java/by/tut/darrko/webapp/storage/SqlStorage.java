@@ -238,4 +238,12 @@ public class SqlStorage implements Storage {
         }
         return map;
     }
+
+    private <T, V, B> Map<T, Map<V, B>> getSectionsMap1(ResultSet resultSet) throws SQLException {
+        Map<String, Map<SectionType, Section>> map = new LinkedHashMap<>();
+
+        return null;
+    }
+
+
 }

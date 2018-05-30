@@ -30,8 +30,44 @@ public class ResumeServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        request.setCharacterEncoding("UTF-8");
+            throws IOException, ServletException {
+
+        String uuid = request.getParameter("uuid");
+        String action = request.getParameter("action");
+
+        if ( action== null) {
+            List<Resume> list = sqlStorage.getAllSorted();
+
+            request.setAttribute("resumes", list);
+            request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
+        }
+
+        Resume resume;
+        switch (action.toUpperCase()) {
+            case "DELETE": {
+                sqlStorage.delete(uuid);
+                response.sendRedirect("resume");
+                return;
+            }
+            case "VIEW":
+            case "EDIT":
+                {
+                resume = sqlStorage.get(uuid);
+                break;
+            }
+
+            default: {
+                throw new IllegalArgumentException("Action "+action+" is illegal");
+            }
+        }
+        request.setAttribute("resume", resume);
+        request.getRequestDispatcher(action.equalsIgnoreCase("VIEW")
+                        ? "/WEB-INF/jsp/view.jsp"
+                        : "/WEB-INF/jsp/edit.jsp").forward(request, response);
+
+
+
+     /*   request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
         String uuid = request.getParameter("uuid");
@@ -81,7 +117,11 @@ public class ResumeServlet extends HttpServlet {
             }
         }
         response.getWriter().write("</body>\n" +
-                "</html>");
+                "</html>");*/
+
+
+
+
     }
 
     public void printSection(HttpServletResponse response, SectionType sectionType, Section section) throws IOException {
