@@ -18,6 +18,11 @@
         <param-value>jdbc:postgresql://localhost:5432/resumes</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>log4j-init-location</param-name>
+        <param-value>WEB-INF\log4j.properties</param-value>
+    </context-param>
+
 
     <servlet>
         <servlet-name>resumeServlet</servlet-name>

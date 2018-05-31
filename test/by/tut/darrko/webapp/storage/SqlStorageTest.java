@@ -1,18 +1,15 @@
 package by.tut.darrko.webapp.storage;
 
 import by.tut.darrko.webapp.Config;
-import by.tut.darrko.webapp.exception.StorageException;
 import by.tut.darrko.webapp.model.ContactType;
 import by.tut.darrko.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 public class SqlStorageTest extends AbstractStorageTest {
 
     public SqlStorageTest() {
-        super(Config.get().getSqlStorage());
+        super(Config.get().getStorage());
     }
 
     @Test(expected = IllegalStateException.class)
