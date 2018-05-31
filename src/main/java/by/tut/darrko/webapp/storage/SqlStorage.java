@@ -39,6 +39,11 @@ public class SqlStorage implements Storage {
     @Override
     public void update(Resume r) {
         sqlHelper.executeTransactional(connection -> {
+
+            Resume dbResume = getResumeLazy(r.getUuid(), connection);
+            if (dbResume.getRevision() > r.getRevision()) {
+                throw new IllegalStateException("Resume with uuid=" + r.getUuid() + " was changed");
+            }
             sqlHelper.execute("update resume set full_name = ? where uuid = ?", connection,
                     preparedStatement -> {
                         preparedStatement.setString(1, r.getFullName());
@@ -83,15 +88,7 @@ public class SqlStorage implements Storage {
     @Override
     public Resume get(String uuid) {
         return sqlHelper.executeTransactional(connection -> {
-            Resume resume = sqlHelper.execute("select uuid, full_name from resume where uuid = ?", connection,
-                    (preparedStatement) -> {
-                        preparedStatement.setString(1, uuid);
-                        ResultSet resultSet = preparedStatement.executeQuery();
-                        if (!resultSet.next()) {
-                            throw new NotExistStorageException(uuid);
-                        }
-                        return new Resume(uuid, resultSet.getString("full_name"));
-                    });
+            Resume resume = getResumeLazy(uuid, connection);
             Map<ContactType, String> contactMap =
                     sqlHelper.execute("select uuid, contact_type, value from contact where uuid = ?", connection,
                             (preparedStatement) -> {
@@ -117,6 +114,18 @@ public class SqlStorage implements Storage {
         });
     }
 
+    private Resume getResumeLazy(String uuid, Connection connection) throws SQLException {
+        return sqlHelper.execute("select uuid, full_name, revision from resume where uuid = ?", connection,
+                (preparedStatement) -> {
+                    preparedStatement.setString(1, uuid);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    if (!resultSet.next()) {
+                        throw new NotExistStorageException(uuid);
+                    }
+                    return new Resume(uuid, resultSet.getString("full_name"),
+                            resultSet.getInt("revision"));
+                });
+    }
 
     @Override
     public void delete(String uuid) {
@@ -145,13 +154,14 @@ public class SqlStorage implements Storage {
                                 ResultSet resultSet = preparedStatement.executeQuery();
                                 return getSectionsMap(resultSet);
                             });
-            return sqlHelper.execute("select uuid, full_name from resume order by full_name, uuid", connection,
-                    preparedStatement -> {
+            return sqlHelper.execute("select uuid, full_name, revision from resume order by full_name, uuid",
+                    connection, preparedStatement -> {
                         ResultSet resultSet = preparedStatement.executeQuery();
                         List<Resume> list = new ArrayList<>();
                         while (resultSet.next()) {
                             Resume resume = new Resume(resultSet.getString("uuid"),
-                                    resultSet.getString("full_name"));
+                                    resultSet.getString("full_name"),
+                                    resultSet.getInt("revision"));
                             Map<ContactType, String> contactsMap = contacts.get(resume.getUuid());
                             if (contactsMap != null) {
                                 resume.setContacts(contactsMap);
@@ -238,12 +248,5 @@ public class SqlStorage implements Storage {
         }
         return map;
     }
-
-    private <T, V, B> Map<T, Map<V, B>> getSectionsMap1(ResultSet resultSet) throws SQLException {
-        Map<String, Map<SectionType, Section>> map = new LinkedHashMap<>();
-
-        return null;
-    }
-
 
 }
