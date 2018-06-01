@@ -1,8 +1,6 @@
 package by.tut.darrko.webapp.web;
 
-import by.tut.darrko.webapp.Config;
-import by.tut.darrko.webapp.model.ContactType;
-import by.tut.darrko.webapp.model.Resume;
+import by.tut.darrko.webapp.model.*;
 import by.tut.darrko.webapp.storage.SqlStorage;
 import by.tut.darrko.webapp.storage.Storage;
 
@@ -12,8 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class ResumeServlet extends HttpServlet {
 
@@ -32,20 +32,76 @@ public class ResumeServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        String cancelEdit = request.getParameter("CancelEdit");
+        if (cancelEdit!=null) {
+            response.sendRedirect("resume");
+            return;
+        }
+
+        String save = request.getParameter("save");
+        String addAchievement = request.getParameter("addACHIEVEMENT");
+        String addQualifications = request.getParameter("addQUALIFICATIONS");
+
         String uuid = request.getParameter("uuid");
+        Integer revision = Integer.parseInt(request.getParameter("revision"));
         String fullName = request.getParameter("fullName");
-        Resume r = storage.get(uuid);
-        r.setFullName(fullName);
+        Resume r = new Resume(uuid, fullName, revision);
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
             if (value != null && value.trim().length() != 0) {
                 r.addContact(type, value);
-            } else {
-                r.getContacts().remove(type);
             }
         }
-        storage.update(r);
-        response.sendRedirect("resume");
+
+        for (SectionType type : SectionType.values()) {
+
+            switch (type) {
+                case PERSONAL:
+                case OBJECTIVE: {
+                    String content = request.getParameter(type.toString());
+                    if (content!=null) {
+                        r.addSection(type, new TextSection(content));
+                    }
+                    break;
+                }
+                case ACHIEVEMENT:
+                case QUALIFICATIONS: {
+                    String[] items = request.getParameterValues(type.toString());
+                    if (items != null) {
+                        r.addSection(type, new ListSection(Arrays.asList(items)));
+                    }
+
+                    break;
+                }
+                case EXPERIENCE:
+                case EDUCATION: {
+                    break;
+                }
+                default:
+                    throw new IllegalArgumentException("Unknown section type:" + type);
+            }
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+        if (save!=null) {
+            if (revision != -1) {
+                storage.update(r);
+            } else {
+                storage.save(r);
+            }
+            response.sendRedirect("resume");
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
@@ -62,6 +118,9 @@ public class ResumeServlet extends HttpServlet {
                 storage.delete(uuid);
                 response.sendRedirect("resume");
                 return;
+            case "new":
+                r = new Resume();
+                break;
             case "view":
             case "edit":
                 r = storage.get(uuid);

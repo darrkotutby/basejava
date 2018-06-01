@@ -6,12 +6,18 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <title>Список всех резюме</title>
 </head>
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <table border="1" cellpadding="8" cellspacing="0">
+    <div class="align-items-center">
+
+        <a href="resume?action=new"><img src="img/add.png"> Add new resume</a>
+        <p>
+
+    <table border="1" cellpadding="8" cellspacing="0" >
         <tr>
             <th>Имя</th>
             <th>Email</th>
@@ -29,6 +35,9 @@
             </tr>
         </c:forEach>
     </table>
+
+    </div>
+
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

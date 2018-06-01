@@ -21,14 +21,16 @@ public class Resume implements Comparable<Resume>, Serializable {
     private int revision;
 
     public Resume() {
+        this.uuid = UUID.randomUUID().toString();
+        this.revision = -1;
     }
 
     public Resume(String fullName) {
-        this(UUID.randomUUID().toString(), fullName, 0);
+        this(UUID.randomUUID().toString(), fullName, -1);
     }
 
     public Resume(String uuid, String fullName) {
-        this(uuid, fullName, 0);
+        this(uuid, fullName, -1);
     }
 
     public Resume(String uuid, String fullName, int revision) {
@@ -79,31 +81,8 @@ public class Resume implements Comparable<Resume>, Serializable {
         this.revision = revision;
     }
 
-    public Section getDefaultSection(SectionType sectionType) {
-        Section section;
-        switch (sectionType) {
-            case ACHIEVEMENT:
-            case QUALIFICATIONS:
-                section = new ListSection();
-                break;
-            case EXPERIENCE:
-            case EDUCATION:
-                section = new OrganizationSection();
-                break;
-            case PERSONAL:
-            case OBJECTIVE:
-                section = new TextSection();
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown section type:" + sectionType);
-
-        }
-        sections.put(sectionType, section);
-        return section;
-    }
-
     public Section getSection(SectionType type) {
-        return sections.getOrDefault(type, getDefaultSection(type));
+        return sections.get(type);
     }
 
     public void addContact(ContactType type, String value) {
