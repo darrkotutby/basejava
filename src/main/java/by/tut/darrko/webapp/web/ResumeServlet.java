@@ -10,10 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
 
@@ -33,14 +30,13 @@ public class ResumeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String cancelEdit = request.getParameter("CancelEdit");
-        if (cancelEdit!=null) {
+        if (cancelEdit != null) {
             response.sendRedirect("resume");
             return;
         }
 
         String save = request.getParameter("save");
-        String addAchievement = request.getParameter("addACHIEVEMENT");
-        String addQualifications = request.getParameter("addQUALIFICATIONS");
+
 
         String uuid = request.getParameter("uuid");
         Integer revision = Integer.parseInt(request.getParameter("revision"));
@@ -59,7 +55,7 @@ public class ResumeServlet extends HttpServlet {
                 case PERSONAL:
                 case OBJECTIVE: {
                     String content = request.getParameter(type.toString());
-                    if (content!=null) {
+                    if (content != null) {
                         r.addSection(type, new TextSection(content));
                     }
                     break;
@@ -82,19 +78,10 @@ public class ResumeServlet extends HttpServlet {
             }
 
 
-
-
         }
 
 
-
-
-
-
-
-
-
-        if (save!=null) {
+        if (save != null) {
             if (revision != -1) {
                 storage.update(r);
             } else {
@@ -107,6 +94,9 @@ public class ResumeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         String uuid = request.getParameter("uuid");
         String action = request.getParameter("action");
+        String revision = request.getParameter("revision");
+        String sectionType = request.getParameter("sectionType");
+        String organization = request.getParameter("organization");
         if (action == null) {
             request.setAttribute("resumes", storage.getAllSorted());
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
@@ -124,11 +114,14 @@ public class ResumeServlet extends HttpServlet {
             case "view":
             case "edit":
                 r = storage.get(uuid);
+                request.setAttribute("resume", r);
+                request.setAttribute("revision", revision);
                 break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");
         }
-        request.setAttribute("resume", r);
+
+
         request.getRequestDispatcher(
                 ("view".equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")
         ).forward(request, response);

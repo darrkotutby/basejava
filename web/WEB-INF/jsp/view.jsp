@@ -23,14 +23,16 @@
             <jsp:useBean id="sectionEntry"
                          type="java.util.Map.Entry<by.tut.darrko.webapp.model.SectionType, by.tut.darrko.webapp.model.Section>"/>
     <p>
-    <H3>${sectionEntry.key.title}</H3>
+
     <c:choose>
         <c:when test="${sectionEntry.key eq SectionType.PERSONAL
                                 || sectionEntry.key eq SectionType.OBJECTIVE }">
+    <H3>${sectionEntry.key.title}</H3>
             ${sectionEntry.value}
         </c:when>
         <c:when test="${sectionEntry.key eq SectionType.ACHIEVEMENT
             || sectionEntry.key eq SectionType.QUALIFICATIONS }">
+            <H3>${sectionEntry.key.title}</H3>
             <c:set var="listSection" scope="request" value="${sectionEntry.value}"/>
             <jsp:useBean id="listSection" scope="request"
                          type="by.tut.darrko.webapp.model.ListSection"/>
@@ -41,6 +43,13 @@
         </c:when>
         <c:when test="${sectionEntry.key eq SectionType.EXPERIENCE
             || sectionEntry.key eq SectionType.EDUCATION }">
+
+            <H3>${sectionEntry.key.title}
+            <a href="resume?uuid=${resume.uuid}&action=editOrganizationSection&sectionType=${sectionEntry.key}">
+            <img src="img/pencil.png"></a>
+            </H3>
+
+
             <c:set var="organizationSection" scope="request" value="${sectionEntry.value}"/>
             <jsp:useBean id="organizationSection" scope="request"
                          type="by.tut.darrko.webapp.model.OrganizationSection"/>
