@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class ResumeServlet extends HttpServlet {
 
@@ -71,6 +73,11 @@ public class ResumeServlet extends HttpServlet {
                 }
                 case EXPERIENCE:
                 case EDUCATION: {
+                    OrganizationSection section = getOrganizationSectionFromRequest(request, type);
+                    if (section.getOrganizations().size()!=0) {
+                        r.addSection(type, section);
+                    }
+
                     break;
                 }
                 default:
@@ -126,4 +133,41 @@ public class ResumeServlet extends HttpServlet {
                 ("view".equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")
         ).forward(request, response);
     }
-} 
+
+    public OrganizationSection getOrganizationSectionFromRequest(HttpServletRequest request, SectionType type) {
+        OrganizationSection section = new OrganizationSection();
+
+        SortedMap<String, String[]> sortedMap = new TreeMap<>(request.getParameterMap()).subMap(type.name(), type.name() + Character.MAX_VALUE);
+
+        for (String s : sortedMap.keySet()) {
+           if (s.endsWith("name")) {
+                String name = sortedMap.get(s)[0];
+                String organization = s.replace("_1name", "");
+                String url = sortedMap.getOrDefault(organization + "_2url", new String[]{null})[0];
+                Organization organization1 = new Organization(name, url);
+                SortedMap<String, String[]> sortedMap1 = sortedMap.subMap(organization + "_position", organization + "_position" + Character.MAX_VALUE);
+                if (sortedMap1.size() != 0) {
+                    List<Organization.Position> list = new ArrayList<>();
+                    for (String s1 : sortedMap1.keySet()) {
+                        if (s1.endsWith("title")) {
+                            String title = sortedMap.get(s1)[0];
+                            String position = s1.replace("_1title", "");
+                            String startD = sortedMap1.get(position + "_2startDate")[0];
+                            String endD = sortedMap1.get(position + "_3endDate")[0];
+                            String description = sortedMap1.get(position + "_4description")[0];
+                            if (title != null) {
+                                list.add(new Organization.Position(LocalDate.parse(startD, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                                        LocalDate.parse(endD, DateTimeFormatter.ofPattern("yyyy-MM-dd")), title, description));
+                            }
+                        }
+                    }
+                    if (list.size() != 0) {
+                        organization1.setPositions(list);
+                    }
+                }
+                section.getOrganizations().add(organization1);
+            }
+        }
+        return section;
+    }
+}

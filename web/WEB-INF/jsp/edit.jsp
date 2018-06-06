@@ -39,13 +39,13 @@
                 "<dl>" +
                 "<dt>URL</dt>" +
                 "<dd>" +
-                "<input type=\"text\" name=\""+ elementName +"_organization"+ s +"_url\" size=30>" +
+                "<input type=\"text\" name=\""+ elementName +"_organization"+ s +"_1url\" size=30>" +
                 "</dd>" +
                 "</dl>" +
                 "<dl>" +
                 "<dt>Name</dt>" +
                 "<dd>" +
-                "<input type=\"text\" name=\""+ elementName +"_organization"+ s +"_name\" size=30>" +
+                "<input type=\"text\" name=\""+ elementName +"_organization"+ s +"_2name\" size=30>" +
                 "</dd>" +
                 "</dl>" +
 
@@ -53,7 +53,7 @@
                     "<br>" +
 
 
-                "<a id=\"myLink1\" href=\"#\" onclick=\"javascript:addPosition('"+ elementName +"_organization"+ s + "', 'div', '"+ elementName +"_organization"+ s +"');return false;\"><img src=\"img/add.png\"> Add new organization</a>" +
+                "<a id=\"myLink1\" href=\"#\" onclick=\"javascript:addPosition('"+ elementName +"_organization"+ s + "', 'div', '"+ elementName +"_organization"+ s +"');return false;\"><img src=\"img/add.png\"> Add new position</a>" +
 
 
 
@@ -86,25 +86,25 @@
                 "<dl>" +
                 "<dt>Title</dt>" +
                 "<dd>" +
-                "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_title\" size=30>" +
+                "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_1title\" size=30>" +
                 "</dd>" +
                 "</dl>" +
                 "<dl>" +
                 "<dt>Started</dt>" +
                 "<dd>" +
-                "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_startDate\" size=30>" +
+                "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_2startDate\" size=30>" +
                 "</dd>" +
                 "</dl>" +
             "<dl>" +
             "<dt>Ended</dt>" +
             "<dd>" +
-            "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_endDate\" size=30>" +
+            "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_3endDate\" size=30>" +
             "</dd>" +
             "</dl>" +
                 "<dl>" +
                 "<dt>Description</dt>" +
                 "<dd>" +
-                "<input type=\"text\" name=\""+ elementName +"_description"+ s +"_endDate\" size=30>" +
+                "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_4description\" size=30>" +
                 "</dd>" +
                 "</dl>" +
                 "</fieldset>" ;
@@ -222,17 +222,17 @@
 
                         <dl>
                             <dt>URL</dt>
-                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_url" size=30 value="${organization.homePage.url}"></dd>
+                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_2url" size=30 value="${organization.homePage.url}"></dd>
                         </dl>
                         <dl>
                             <dt>Name</dt>
-                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_name" size=30 value="${organization.homePage.name}"></dd>
+                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_1name" size=30 value="${organization.homePage.name}"></dd>
                         </dl>
 
 
                     <br>
 
-                        <a id="myLink1" href="#" onclick="javascript:addPosition('${sectionType.name()}_organization${organizationCounter}', 'div', '${sectionType.name()}_organization${organizationCounter}');return false;"><img src="img/add.png"> Add new organization</a>
+                        <a id="myLink1" href="#" onclick="javascript:addPosition('${sectionType.name()}_organization${organizationCounter}', 'div', '${sectionType.name()}_organization${organizationCounter}');return false;"><img src="img/add.png"> Add new position</a>
                     <p>
 
                     <c:forEach var="position" items="${organization.positions}">
@@ -242,19 +242,19 @@
                         <fieldset id="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}">
                         <dl>
                             <dt>Title</dt>
-                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_title" size=30 value="${position.title}"></dd>
+                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_1title" size=30 value="${position.title}"></dd>
                         </dl>
                         <dl>
                             <dt>Started</dt>
-                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_startDate" size=30 value="${position.startDate}"></dd>
+                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_2startDate" size=30 value="${position.startDate}"></dd>
                         </dl>
                         <dl>
                             <dt>Ended</dt>
-                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_endDate" size=30 value="${position.endDate}"></dd>
+                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_3endDate" size=30 value="${position.endDate}"></dd>
                         </dl>
                         <dl>
                             <dt>Description</dt>
-                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_description" size=30 value="${position.description}"></dd>
+                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_4description" size=30 value="${position.description}"></dd>
                         </dl>
 
                         <br>
