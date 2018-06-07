@@ -10,11 +10,11 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="css/style.css">
-    <jsp:useBean id="resume" type="by.tut.darrko.webapp.model.Resume" scope="request"/>
+    <jsp:useBean id="resume" class="by.tut.darrko.webapp.model.Resume" scope="request"/>
     <c:set var="organizationCounter" value="${0}" scope="request" />
     <c:set var="positionCounter" value="${0}" scope="request" />
 
-    <title>Резюме ${resume.fullName}</title>
+    <title>Resume ${resume.fullName}</title>
 
     <script type="text/javascript">
         function addElement(parentId, elementTag, elementName, html) {
@@ -34,23 +34,24 @@
 
 
             var s = parseInt(document.getElementById('organizationCounter').value);
+            newElement.setAttribute('id', elementName+ "_organization"+s);
 
-            var html1 = "<fieldset id=\""+ elementName + "_organization"+s+"\">" +
+            var html1 =
+                "<dl>" +
+                "<dt>Name*</dt>" +
+                "<dd>" +
+                "<input type=\"text\" name=\""+ elementName +"_organization"+ s +"_1name\" size=30>" +
+                "</dd>" +
+                "</dl>" +
                 "<dl>" +
                 "<dt>URL</dt>" +
                 "<dd>" +
-                "<input type=\"text\" name=\""+ elementName +"_organization"+ s +"_1url\" size=30>" +
-                "</dd>" +
-                "</dl>" +
-                "<dl>" +
-                "<dt>Name</dt>" +
-                "<dd>" +
-                "<input type=\"text\" name=\""+ elementName +"_organization"+ s +"_2name\" size=30>" +
+                "<input type=\"text\" name=\""+ elementName +"_organization"+ s +"_2url\" size=30>" +
                 "</dd>" +
                 "</dl>" +
 
 
-                    "<br>" +
+                "<br>" +
 
 
                 "<a id=\"myLink1\" href=\"#\" onclick=\"javascript:addPosition('"+ elementName +"_organization"+ s + "', 'div', '"+ elementName +"_organization"+ s +"');return false;\"><img src=\"img/add.png\"> Add new position</a>" +
@@ -60,9 +61,7 @@
 
 
 
-                "<p>" +
-
-                "</fieldset>" ;
+                "<p>"  ;
 
 
 
@@ -84,13 +83,13 @@
 
             var html1 = "<fieldset id=\""+ elementName + "_position"+s+"\">" +
                 "<dl>" +
-                "<dt>Title</dt>" +
+                "<dt>Title*</dt>" +
                 "<dd>" +
                 "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_1title\" size=30>" +
                 "</dd>" +
                 "</dl>" +
                 "<dl>" +
-                "<dt>Started</dt>" +
+                "<dt>Started*</dt>" +
                 "<dd>" +
                 "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_2startDate\" size=30>" +
                 "</dd>" +
@@ -135,17 +134,17 @@
 
 
         <dl>
-            <dt>Имя:</dt>
+            <dt>Full name*</dt>
             <dd><input type="text" name="fullName" size=50 value="${resume.fullName}"></dd>
         </dl>
-        <h3>Контакты:</h3>
+        <h3>Contacts:</h3>
         <c:forEach var="type" items="${ContactType.values()}">
             <dl>
                 <dt>${type.title}</dt>
                 <dd><input type="text" name="${type.name()}" size=30 value="${resume.getContact(type)}"></dd>
             </dl>
         </c:forEach>
-        <h3>Секции:</h3>
+        <h3>Sections:</h3>
         <c:forEach var="sectionType" items="${SectionType.values()}">
 
 
@@ -207,27 +206,32 @@
 
                 <div id="${sectionType.name()}">
 
-                    <a id="myLink" href="#" onclick="javascript:addOrganization('${sectionType.name()}', 'div', '${sectionType.name()}');return false;"><img src="img/add.png"> Add new organization</a>
+                    <a id="myLink" href="#" onclick="javascript:addOrganization('${sectionType.name()}', 'fieldset', '${sectionType.name()}');return false;"><img src="img/add.png"> Add new organization</a>
                     <p>
 
 
 
                 <c:set var="organizationSection" scope="request" value="${resume.sections.get(sectionType)}"/>
+
+
+
                 <jsp:useBean id="organizationSection" scope="request"
-                             type="by.tut.darrko.webapp.model.OrganizationSection"/>
+                             class="by.tut.darrko.webapp.model.OrganizationSection"/>
                 <c:forEach var="organization" items="${organizationSection.organizations}">
 
-                    <div>
+
                     <fieldset  id="${sectionType.name()}_organization${organizationCounter}">
+
+                        <dl>
+                            <dt>Name*</dt>
+                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_1name" size=30 value="${organization.homePage.name}"></dd>
+                        </dl>
 
                         <dl>
                             <dt>URL</dt>
                             <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_2url" size=30 value="${organization.homePage.url}"></dd>
                         </dl>
-                        <dl>
-                            <dt>Name</dt>
-                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_1name" size=30 value="${organization.homePage.name}"></dd>
-                        </dl>
+
 
 
                     <br>
@@ -241,11 +245,11 @@
 
                         <fieldset id="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}">
                         <dl>
-                            <dt>Title</dt>
+                            <dt>Title*</dt>
                             <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_1title" size=30 value="${position.title}"></dd>
                         </dl>
                         <dl>
-                            <dt>Started</dt>
+                            <dt>Started*</dt>
                             <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_2startDate" size=30 value="${position.startDate}"></dd>
                         </dl>
                         <dl>
@@ -264,7 +268,7 @@
                     </c:forEach>
 
                     </fieldset>
-                    </div>
+
 
                     <br>
 

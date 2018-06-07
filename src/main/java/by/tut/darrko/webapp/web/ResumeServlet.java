@@ -3,6 +3,7 @@ package by.tut.darrko.webapp.web;
 import by.tut.darrko.webapp.model.*;
 import by.tut.darrko.webapp.storage.SqlStorage;
 import by.tut.darrko.webapp.storage.Storage;
+import by.tut.darrko.webapp.util.DateUtil;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+
 
 public class ResumeServlet extends HttpServlet {
 
@@ -74,7 +77,7 @@ public class ResumeServlet extends HttpServlet {
                 case EXPERIENCE:
                 case EDUCATION: {
                     OrganizationSection section = getOrganizationSectionFromRequest(request, type);
-                    if (section.getOrganizations().size() != 0) {
+                    if (section!=null && section.getOrganizations().size() != 0) {
                         r.addSection(type, section);
                     }
 
@@ -139,31 +142,49 @@ public class ResumeServlet extends HttpServlet {
 
         SortedMap<String, String[]> sortedMap = new TreeMap<>(request.getParameterMap()).subMap(type.name(), type.name() + Character.MAX_VALUE);
 
-        sortedMap.keySet().stream().filter(s -> s.endsWith("name")).forEach(s -> {
-            String name = sortedMap.get(s)[0];
-            String organization = s.replace("_1name", "");
-            String url = sortedMap.getOrDefault(organization + "_2url", new String[]{null})[0];
-            Organization organization1 = new Organization(name, url);
-            SortedMap<String, String[]> sortedMap1 = sortedMap.subMap(organization + "_position", organization + "_position" + Character.MAX_VALUE);
-            if (sortedMap1.size() != 0) {
-                List<Organization.Position> list = new ArrayList<>();
-                sortedMap1.keySet().stream().filter(s1 -> s1.endsWith("title")).forEach(s1 -> {
-                    String title = sortedMap.get(s1)[0];
-                    String position = s1.replace("_1title", "");
-                    String startD = sortedMap1.get(position + "_2startDate")[0];
-                    String endD = sortedMap1.get(position + "_3endDate")[0];
-                    String description = sortedMap1.getOrDefault(position + "_4description", new String[]{null})[0];
-                    if (title != null) {
-                        list.add(new Organization.Position(LocalDate.parse(startD, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                                LocalDate.parse(endD, DateTimeFormatter.ofPattern("yyyy-MM-dd")), title, description));
+        if (sortedMap.size() != 0) {
+
+            Iterator<String> iterator = sortedMap.keySet().iterator();
+            String name = null;
+            String url = null;
+            String organizationTag = null;
+            Organization organization = null;
+            List<Organization.Position> positions = null;
+
+            while (iterator.hasNext()) {
+                String key = iterator.next();
+                if (key.endsWith("1name")) {
+                    if (organizationTag != null) {
+                        organization = new Organization(name, url);
+                        if (positions.size() != 0) {
+                            organization.setPositions(positions);
+                        }
+                        section.getOrganizations().add(organization);
                     }
-                });
-                if (list.size() != 0) {
-                    organization1.setPositions(list);
+                    name = sortedMap.get(key)[0];
+                    url = sortedMap.getOrDefault(iterator.next(), new String[]{null})[0];
+                    positions = new ArrayList<>();
+                    organizationTag = key.replace("_1name", "");
+                }
+                if (key.endsWith("1title")) {
+                    String title = sortedMap.get(key)[0];
+                    String startD = sortedMap.get(iterator.next())[0];
+                    String endD = sortedMap.getOrDefault(iterator.next(), new String[]{DateUtil.NOW.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))})[0];
+                    String description = sortedMap.getOrDefault(iterator.next(), new String[]{null})[0];
+                    if (positions == null) {
+                        positions = new ArrayList<>();
+                    }
+                    positions.add(new Organization.Position(LocalDate.parse(startD, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                            LocalDate.parse(endD, DateTimeFormatter.ofPattern("yyyy-MM-dd")), title, description));
                 }
             }
-            section.getOrganizations().add(organization1);
-        });
-        return section;
+            organization = new Organization(name, url);
+            if (positions != null && positions.size() != 0) {
+                organization.setPositions(positions);
+            }
+            section.getOrganizations().add(organization);
+            return section;
+        }
+        return null;
     }
 }
