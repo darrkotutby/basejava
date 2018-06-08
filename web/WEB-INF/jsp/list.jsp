@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <title>Список всех резюме</title>
+    <title>List of resumes</title>
 </head>
 <body>
 <jsp:include page="fragments/header.jsp"/>
@@ -19,7 +19,7 @@
 
     <table border="1" cellpadding="8" cellspacing="0" >
         <tr>
-            <th>Имя</th>
+            <th>Full name</th>
             <th>Email</th>
             <th></th>
             <th></th>

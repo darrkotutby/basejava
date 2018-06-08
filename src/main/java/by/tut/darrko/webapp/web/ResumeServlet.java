@@ -16,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
-
 public class ResumeServlet extends HttpServlet {
 
     private Storage storage; // = Config.get().getStorage();
@@ -77,7 +76,7 @@ public class ResumeServlet extends HttpServlet {
                 case EXPERIENCE:
                 case EDUCATION: {
                     OrganizationSection section = getOrganizationSectionFromRequest(request, type);
-                    if (section!=null && section.getOrganizations().size() != 0) {
+                    if (section != null && section.getOrganizations().size() != 0) {
                         r.addSection(type, section);
                     }
 
@@ -170,6 +169,9 @@ public class ResumeServlet extends HttpServlet {
                     String title = sortedMap.get(key)[0];
                     String startD = sortedMap.get(iterator.next())[0];
                     String endD = sortedMap.getOrDefault(iterator.next(), new String[]{DateUtil.NOW.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))})[0];
+                    if (endD.equals("")) {
+                        endD = DateUtil.NOW.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    }
                     String description = sortedMap.getOrDefault(iterator.next(), new String[]{null})[0];
                     if (positions == null) {
                         positions = new ArrayList<>();

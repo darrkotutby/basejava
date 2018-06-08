@@ -1,40 +1,40 @@
 package by.tut.darrko.webapp.model;
 
 public enum ContactType {
-    PHONE("Тел."),
-    MOBILE("Мобильный"),
-    HOME_PHONE("Домашний тел."),
+    PHONE("Phone."),
+    MOBILE("Mobile phone"),
+    HOME_PHONE("Home phone"),
     SKYPE("Skype") {
         @Override
         public String toHtml0(String value) {
             return getTitle() + ": " + toLink("skype:" + value, value);
         }
     },
-    MAIL("Почта") {
+    MAIL("E-mail") {
         @Override
         public String toHtml0(String value) {
             return getTitle() + ": " + toLink("mailto:" + value, value);
         }
     },
-    LINKEDIN("Профиль LinkedIn") {
+    LINKEDIN("LinkedIn") {
         @Override
         public String toHtml0(String value) {
             return toLink(value);
         }
     },
-    GITHUB("Профиль GitHub") {
+    GITHUB("GitHub") {
         @Override
         public String toHtml0(String value) {
             return toLink(value);
         }
     },
-    STATCKOVERFLOW("Профиль Stackoverflow") {
+    STATCKOVERFLOW("Stackoverflow") {
         @Override
         public String toHtml0(String value) {
             return toLink(value);
         }
     },
-    HOME_PAGE("Домашняя страница") {
+    HOME_PAGE("Site") {
         @Override
         public String toHtml0(String value) {
             return toLink(value);

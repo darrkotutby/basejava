@@ -45,8 +45,6 @@
             || sectionEntry.key eq SectionType.EDUCATION }">
 
             <H3>${sectionEntry.key.title}
-            <a href="resume?uuid=${resume.uuid}&action=editOrganizationSection&sectionType=${sectionEntry.key}">
-            <img src="img/pencil.png"></a>
             </H3>
 
 

@@ -18,7 +18,6 @@
 
     <script type="text/javascript">
         function addElement(parentId, elementTag, elementName, html) {
-            // Adds an element to the document
             var div = document.getElementById(parentId);
             var newElement = document.createElement(elementTag);
             newElement.setAttribute('id', elementName);
@@ -28,19 +27,16 @@
 
 
         function addOrganization(parentId, elementTag, elementName) {
-            // Adds an element to the document
             var div = document.getElementById(parentId);
             var newElement = document.createElement(elementTag);
-
-
             var s = parseInt(document.getElementById('organizationCounter').value);
             newElement.setAttribute('id', elementName+ "_organization"+s);
-
             var html1 =
+                "<a id=\"myLink4\" href=\"#\" onclick=\"javascript:deleteElement('"+elementName+ "_organization"+s+"');return false;\"><img src=\"img/delete.png\"> Delete organization</a>" +
                 "<dl>" +
                 "<dt>Name*</dt>" +
                 "<dd>" +
-                "<input type=\"text\" name=\""+ elementName +"_organization"+ s +"_1name\" size=30>" +
+                "<input type=\"text\" name=\""+ elementName +"_organization"+ s +"_1name\" size=30 required>" +
                 "</dd>" +
                 "</dl>" +
                 "<dl>" +
@@ -49,64 +45,48 @@
                 "<input type=\"text\" name=\""+ elementName +"_organization"+ s +"_2url\" size=30>" +
                 "</dd>" +
                 "</dl>" +
-
-
                 "<br>" +
-
-
-                "<a id=\"myLink1\" href=\"#\" onclick=\"javascript:addPosition('"+ elementName +"_organization"+ s + "', 'div', '"+ elementName +"_organization"+ s +"');return false;\"><img src=\"img/add.png\"> Add new position</a>" +
-
-
-
-
-
-
+                "<a id=\"myLink1\" href=\"#\" onclick=\"javascript:addPosition('"+ elementName +"_organization"+ s + "', 'fieldset', '"+ elementName +"_organization"+ s +"');return false;\"><img src=\"img/add.png\"> Add new position</a>" +
                 "<p>"  ;
-
-
-
-
             newElement.innerHTML = html1;
             div.appendChild(newElement);
-
             document.getElementById('organizationCounter').value = s + 1;
         }
 
 
         function addPosition(parentId, elementTag, elementName) {
-            // Adds an element to the document
             var div = document.getElementById(parentId);
             var newElement = document.createElement(elementTag);
-
-
             var s = parseInt(document.getElementById('positionCounter').value);
+            newElement.setAttribute('id', elementName+ "_position"+s);
+            var html1 =
 
-            var html1 = "<fieldset id=\""+ elementName + "_position"+s+"\">" +
+
+                "<a id=\"myLink4\" href=\"#\" onclick=\"javascript:deleteElement('"+elementName+ "_position"+s+"');return false;\"><img src=\"img/delete.png\"> Delete position</a>" +
                 "<dl>" +
                 "<dt>Title*</dt>" +
                 "<dd>" +
-                "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_1title\" size=30>" +
+                "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_1title\" size=30 required>" +
                 "</dd>" +
                 "</dl>" +
                 "<dl>" +
                 "<dt>Started*</dt>" +
                 "<dd>" +
-                "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_2startDate\" size=30>" +
+                "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_2startDate\" size=30 pattern=\"(19|20|30)\\d\\d[- -.](0[1-9]|[12][0-9]|3[01])[- -.](0[1-9]|1[012])\" required title=\"YYYY-MM-DD\" >" +
                 "</dd>" +
                 "</dl>" +
-            "<dl>" +
-            "<dt>Ended</dt>" +
-            "<dd>" +
-            "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_3endDate\" size=30>" +
-            "</dd>" +
-            "</dl>" +
+                "<dl>" +
+                "<dt>Ended</dt>" +
+                "<dd>" +
+                "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_3endDate\" size=30 pattern=\"(19|20|30)\\d\\d[- -.](0[1-9]|[12][0-9]|3[01])[- -.](0[1-9]|1[012])\" title=\"YYYY-MM-DD\">" +
+                "</dd>" +
+                "</dl>" +
                 "<dl>" +
                 "<dt>Description</dt>" +
                 "<dd>" +
                 "<input type=\"text\" name=\""+ elementName +"_position"+ s +"_4description\" size=30>" +
                 "</dd>" +
-                "</dl>" +
-                "</fieldset>" ;
+                "</dl>"  ;
 
 
 
@@ -115,6 +95,10 @@
             div.appendChild(newElement);
 
             document.getElementById('positionCounter').value = s + 1;
+        }
+
+        function deleteElement(elementId) {
+            document.getElementById(elementId).remove();
         }
 
 
@@ -135,7 +119,7 @@
 
         <dl>
             <dt>Full name*</dt>
-            <dd><input type="text" name="fullName" size=50 value="${resume.fullName}"></dd>
+            <dd><input type="text" name="fullName" size=50 value="${resume.fullName}" required></dd>
         </dl>
         <h3>Contacts:</h3>
         <c:forEach var="type" items="${ContactType.values()}">
@@ -221,10 +205,12 @@
 
 
                     <fieldset  id="${sectionType.name()}_organization${organizationCounter}">
+                        <a id="myLink2" href="#" onclick="javascript:deleteElement('${sectionType.name()}_organization${organizationCounter}');return false;"><img src="img/delete.png"> Delete organization</a>
+                        <p>
 
                         <dl>
                             <dt>Name*</dt>
-                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_1name" size=30 value="${organization.homePage.name}"></dd>
+                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_1name" size=30 value="${organization.homePage.name}" required></dd>
                         </dl>
 
                         <dl>
@@ -236,7 +222,7 @@
 
                     <br>
 
-                        <a id="myLink1" href="#" onclick="javascript:addPosition('${sectionType.name()}_organization${organizationCounter}', 'div', '${sectionType.name()}_organization${organizationCounter}');return false;"><img src="img/add.png"> Add new position</a>
+                        <a id="myLink1" href="#" onclick="javascript:addPosition('${sectionType.name()}_organization${organizationCounter}', 'fieldset', '${sectionType.name()}_organization${organizationCounter}');return false;"><img src="img/add.png"> Add new position</a>
                     <p>
 
                     <c:forEach var="position" items="${organization.positions}">
@@ -244,24 +230,29 @@
 
 
                         <fieldset id="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}">
-                        <dl>
+
+                            <a id="myLink3" href="#" onclick="javascript:deleteElement('${sectionType.name()}_organization${organizationCounter}_position${positionCounter}');return false;"><img src="img/delete.png"> Delete position</a>
+                            <p>
+
+
+                    <dl>
                             <dt>Title*</dt>
-                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_1title" size=30 value="${position.title}"></dd>
+                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_1title" size=30 value="${position.title}" required></dd>
                         </dl>
                         <dl>
                             <dt>Started*</dt>
-                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_2startDate" size=30 value="${position.startDate}"></dd>
+                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_2startDate" size=30 value="${position.startDate}" pattern="(19|20|30)\d\d[- -.](0[1-9]|[12][0-9]|3[01])[- -.](0[1-9]|1[012])" required title="YYYY-MM-DD"></dd>
                         </dl>
                         <dl>
                             <dt>Ended</dt>
-                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_3endDate" size=30 value="${position.endDate}"></dd>
+                            <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_3endDate" size=30 value="${position.endDate}" pattern="(19|20|30)\d\d[- -.](0[1-9]|[12][0-9]|3[01])[- -.](0[1-9]|1[012])" title="YYYY-MM-DD"></dd>
                         </dl>
                         <dl>
                             <dt>Description</dt>
                             <dd><input type="text" name="${sectionType.name()}_organization${organizationCounter}_position${positionCounter}_4description" size=30 value="${position.description}"></dd>
                         </dl>
 
-                        <br>
+
 
                         <c:set var="positionCounter" value="${positionCounter + 1}" scope="request"/>
                         </fieldset>
@@ -291,8 +282,8 @@
             <input type="hidden" id="organizationCounter" name="organizationCounter" value="${organizationCounter}">
             <input type="hidden" id="positionCounter" name="positionCounter" value="${positionCounter}">
 
-        <button type="submit" name="save" value="1">Сохранить</button>
-        <button onclick="window.history.back()" name="CancelEdit" value="1">Отменить</button>
+        <button type="submit" name="save" value="1">Save</button>
+        <button onclick="window.history.back()" name="CancelEdit" value="1">Cancel</button>
     </form>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
