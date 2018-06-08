@@ -7,15 +7,15 @@
 
     <context-param>
         <param-name>dbUser</param-name>
-        <param-value>postgres</param-value>
+        <param-value>hqsslvuawozrjk</param-value>
     </context-param>
     <context-param>
         <param-name>dbPassword</param-name>
-        <param-value>postgres</param-value>
+        <param-value>31cf9b993a0d110f3b4a70135ddd4730dcd99b9b557e470b60edca951cb65867</param-value>
     </context-param>
     <context-param>
         <param-name>dbURL</param-name>
-        <param-value>jdbc:postgresql://localhost:5432/resumes</param-value>
+        <param-value>jdbc:postgresql://ec2-54-246-96-76.eu-west-1.compute.amazonaws.com:5432/d4rb7oetm6c5nn?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory</param-value>
     </context-param>
 
     <context-param>
