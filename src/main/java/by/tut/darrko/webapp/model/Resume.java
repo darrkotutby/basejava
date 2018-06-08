@@ -18,19 +18,27 @@ public class Resume implements Comparable<Resume>, Serializable {
     // Unique identifier
     private String uuid;
     private String fullName;
+    private int revision;
 
     public Resume() {
+        this.uuid = UUID.randomUUID().toString();
+        this.revision = -1;
     }
 
     public Resume(String fullName) {
-        this(UUID.randomUUID().toString(), fullName);
+        this(UUID.randomUUID().toString(), fullName, -1);
     }
 
     public Resume(String uuid, String fullName) {
+        this(uuid, fullName, -1);
+    }
+
+    public Resume(String uuid, String fullName, int revision) {
         Objects.requireNonNull(uuid, "uuid must not be null");
         Objects.requireNonNull(fullName, "fullName must not be null");
         this.uuid = uuid;
         this.fullName = fullName;
+        this.revision = revision;
     }
 
     public String getUuid() {
@@ -65,31 +73,16 @@ public class Resume implements Comparable<Resume>, Serializable {
         return contacts.get(type);
     }
 
-    public Section getDefaultSection(SectionType sectionType) {
-        Section section;
-        switch (sectionType) {
-            case ACHIEVEMENT:
-            case QUALIFICATIONS:
-                section = new ListSection();
-                break;
-            case EXPERIENCE:
-            case EDUCATION:
-                section = new OrganizationSection();
-                break;
-            case PERSONAL:
-            case OBJECTIVE:
-                section = new TextSection();
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown section type:" + sectionType);
+    public int getRevision() {
+        return revision;
+    }
 
-        }
-        sections.put(sectionType, section);
-        return section;
+    public void setRevision(int revision) {
+        this.revision = revision;
     }
 
     public Section getSection(SectionType type) {
-        return sections.getOrDefault(type, getDefaultSection(type));
+        return sections.get(type);
     }
 
     public void addContact(ContactType type, String value) {
@@ -124,6 +117,7 @@ public class Resume implements Comparable<Resume>, Serializable {
         return "Resume{" +
                 "uuid='" + uuid + '\'' +
                 ", fullName='" + fullName + '\'' +
+                ", revision=" + revision +
                 ", contacts=" + contacts +
                 ", sections=" + sections +
                 '}';

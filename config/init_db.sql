@@ -2,12 +2,19 @@ drop table if exists contact;
 drop table if exists section;
 drop table if exists resume;
 
+drop function if exists resumerevisionfunction();
+drop sequence if exists revisionsq;
+
+-- we don't know how to generate database resumes (class Database) :(
+create sequence revisionsq;
+
 create table resume
 (
   uuid      varchar(36) not null
     constraint resume_pkey
     primary key,
-  full_name text        not null
+  full_name text        not null,
+  revision  integer
 );
 
 create index resume_uuid_full_name_index
@@ -43,13 +50,27 @@ create table section
   unique (uuid, section_type)
 );
 
+create function resumerevisionfunction()
+  returns trigger
+language plpgsql
+as $$
+BEGIN
+  New.Revision := nextval('RevisionSq');
+  Return NEW;
+END;
+$$;
 
+create trigger resumerevisioninserttrigger
+  before insert
+  on resume
+  for each row
+execute procedure resumerevisionfunction();
 
-
-
-
-
-
+create trigger resumerevisionupdatetrigger
+  before update
+  on resume
+  for each row
+execute procedure resumerevisionfunction();
 
 
 
