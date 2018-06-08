@@ -8,16 +8,20 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <title>List of resumes</title>
+    <style>
+        td {border: 1px solid #808080;}
+        th {border: 1px solid #808080;}
+    </style>
 </head>
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <div class="align-items-center">
-
-        <a href="resume?action=new"><img src="img/add.png"> Add new resume</a>
-        <p>
-
-    <table border="1" cellpadding="8" cellspacing="0" >
+    <table cellpadding="8" cellspacing="0" align=center>
+        <tr>
+            <td style="border: 0px solid #808080;">
+                <a href="resume?action=new"><img src="img/add.png"> Add new resume</a>
+            </td>
+        </tr>
         <tr>
             <th>Full name</th>
             <th>Email</th>
@@ -35,9 +39,6 @@
             </tr>
         </c:forEach>
     </table>
-
-    </div>
-
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
